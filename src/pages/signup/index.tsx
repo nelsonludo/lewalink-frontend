@@ -1,9 +1,9 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { CreateAccountFormType } from "../types/forms";
-import { useSignUp } from "../api/AuthApi";
+import { CreateAccountFormType } from "../../types/forms";
+import { useSignUp } from "../../api/AuthApi";
 
-const CreateAccount = () => {
+const Signup = () => {
   const {
     register,
     handleSubmit,
@@ -193,4 +193,4 @@ const CreateAccount = () => {
   );
 };
 
-export default CreateAccount;
+export default Signup;

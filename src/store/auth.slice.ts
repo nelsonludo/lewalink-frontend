@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { User } from "../types/entities";
+import { User } from "../types/entities/user";
 
 export type AuthInitialStateType = {
   user: User | null;

@@ -1,9 +1,8 @@
-import { SUCCESS_CODE } from "./error-codes";
+import { SUCCESS_CODE } from "../enums/error-codes";
 
 export type SingleItemResponseType<T> = {
   data: T;
   code: SUCCESS_CODE;
-  yo: string;
 };
 
 export type SimpleSuccessResponseType = {

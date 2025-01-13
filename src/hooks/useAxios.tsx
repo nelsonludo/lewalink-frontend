@@ -3,8 +3,8 @@ import axiosMain, {
   AxiosRequestConfig,
   AxiosResponse,
 } from "axios";
-import { ErrorResponseType } from "../types/error-response-type";
-import { CODE, SUCCESS_CODE } from "../types/error-codes";
+import { ErrorResponseType } from "../types/response/error-response-type";
+import { CODE, SUCCESS_CODE } from "../types/enums/error-codes";
 import { useRefreshToken } from "../api/AuthApi";
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {

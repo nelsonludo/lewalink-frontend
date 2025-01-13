@@ -1,21 +1,21 @@
 import { useState } from "react";
 import { CreateAccountFormType, LoginFormType } from "../types/forms";
 import { failedToast, successToast } from "../utils/toasts";
-import { ErrorResponseType } from "../types/error-response-type";
+import { ErrorResponseType } from "../types/response/error-response-type";
 import {
   SimpleSuccessResponseType,
   SingleItemResponseType,
-} from "../types/success-response-types";
-import { User } from "../types/entities";
+} from "../types/response/success-response-types";
+import { User } from "../types/entities/user";
 import { AxiosError } from "axios";
-import { CODE, SUCCESS_CODE } from "../types/error-codes";
+import { CODE, SUCCESS_CODE } from "../types/enums/error-codes";
 import { setUser } from "../store/auth.slice";
 import { useDispatch } from "react-redux";
 import useAxios from "../hooks/useAxios";
 import axiosMain from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "/api/v1/create";
+const API_URL = "/api/auth/v1";
 
 export const useSignUp = () => {
   const [loading, setLoading] = useState(false);
@@ -25,9 +25,12 @@ export const useSignUp = () => {
   const signUp = async (userFormData: CreateAccountFormType) => {
     try {
       setLoading(true);
-      const { data } = await axios.post<SingleItemResponseType<User>>(API_URL, {
-        ...userFormData,
-      });
+      const { data } = await axios.post<SingleItemResponseType<User>>(
+        `${API_URL}/create`,
+        {
+          ...userFormData,
+        }
+      );
 
       if (data.code === SUCCESS_CODE.SUCCESS) {
         successToast("Check your email to activate your account");
