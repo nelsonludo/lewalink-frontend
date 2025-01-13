@@ -3,6 +3,7 @@ import { SUCCESS_CODE } from "./error-codes";
 export type SingleItemResponseType<T> = {
   data: T;
   code: SUCCESS_CODE;
+  yo: string;
 };
 
 export type SimpleSuccessResponseType = {
