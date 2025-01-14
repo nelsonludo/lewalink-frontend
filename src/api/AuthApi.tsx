@@ -22,19 +22,17 @@ export const useSignUp = () => {
   const navigate = useNavigate();
   const { axios } = useAxios();
 
-  const signUp = async (userFormData: CreateAccountFormType) => {
+  const signUp = async ({ name, email, password }: CreateAccountFormType) => {
     try {
       setLoading(true);
       const { data } = await axios.post<SingleItemResponseType<User>>(
         `${API_URL}/create`,
-        {
-          ...userFormData,
-        }
+        { name, email, password }
       );
 
       if (data.code === SUCCESS_CODE.SUCCESS) {
         successToast("Check your email to activate your account");
-        navigate("/signin");
+        navigate("/activate");
       } else {
         throw new Error();
       }
@@ -58,6 +56,7 @@ export const useSignUp = () => {
           failedToast(
             "Your account has been created already, check your email to activate it."
           );
+
           break;
         default:
           failedToast("Something went wrong");
