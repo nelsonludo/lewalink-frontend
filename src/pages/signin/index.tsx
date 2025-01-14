@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { LoginFormType } from "../../types/forms";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSignin } from "../../api/AuthApi";
-// import LoadingLargeButton from "../components/loading/LoadingLargeButton";
+import LoadingLargeButton from "../../components/loading/LoadingLargeButton";
 import { useEffect } from "react";
 import { AuthInitialStateType } from "../../store/auth.slice";
 import { useSelector } from "react-redux";
@@ -137,8 +137,7 @@ export default function Signin() {
 
             <div>
               {loading ? (
-                // <LoadingLargeButton />
-                <button>loading</button>
+                <LoadingLargeButton />
               ) : (
                 <button
                   type="submit"

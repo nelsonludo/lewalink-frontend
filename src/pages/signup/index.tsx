@@ -2,6 +2,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { CreateAccountFormType } from "../../types/forms";
 import { useSignUp } from "../../api/AuthApi";
+import LoadingLargeButton from "../../components/loading/LoadingLargeButton";
 
 const Signup = () => {
   const {
@@ -165,8 +166,7 @@ const Signup = () => {
 
             <div>
               {loading ? (
-                // <LoadingLargeButton />
-                <button>loading</button>
+                <LoadingLargeButton />
               ) : (
                 <button
                   type="submit"
