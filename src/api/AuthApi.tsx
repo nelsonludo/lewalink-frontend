@@ -19,20 +19,18 @@ const API_URL = "/api/auth/v1";
 
 export const useSignUp = () => {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const { axios } = useAxios();
 
   const signUp = async ({ name, email, password }: CreateAccountFormType) => {
     try {
       setLoading(true);
-      const { data } = await axios.post<SingleItemResponseType<User>>(
+      const { data } = await axios.post<SimpleSuccessResponseType>(
         `${API_URL}/create`,
         { name, email, password }
       );
 
       if (data.code === SUCCESS_CODE.SUCCESS) {
         successToast("Check your email to activate your account");
-        navigate("/activate");
       } else {
         throw new Error();
       }
