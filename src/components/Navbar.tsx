@@ -1,4 +1,4 @@
-// import { useState } from "react";
+import { useState } from "react";
 // import { Dialog, DialogPanel } from "@headlessui/react";
 // import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 // import { NavLink, Link } from "react-router-dom";
@@ -7,6 +7,7 @@
 // import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 // import { useLogout } from "../api/AuthApi";
 // import { displayInitials } from "../utils/display-initials";
+
 
 // type Navigation = {
 //   name: string;
@@ -26,6 +27,12 @@
 // ];
 
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false); // State to control mobile menu visibility
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen); // Toggle the state
+  };
+
   //   const { user }: AuthInitialStateType = useSelector(
   //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   //     (state: any) => state.authSlice as AuthInitialStateType
@@ -203,7 +210,73 @@ const Navbar = () => {
     //         </DialogPanel>
     //       </Dialog>
     //     </header>
-    <>Navbar</>
+    <>
+      <nav className="bg-green-600 text-white py-4">
+        <div className="container mx-auto px-4 flex justify-between items-center">
+          {/* Logo */}
+          <div className="text-2xl font-bold">
+            LEWA-LINK
+          </div>
+
+          {/* Navigation Links for desktop */}
+          <ul className="hidden md:flex space-x-8">
+            <li className="hover:text-green-200 transition">
+              <a href="#">Home</a>
+            </li>
+            <li className="hover:text-green-200 transition">
+              <a href="#">About</a>
+            </li>
+            <li className="hover:text-green-200 transition">
+              <a href="#">Schools</a>
+            </li>
+            <li className="hover:text-green-200 transition">
+              <a href="#">Contact</a>
+            </li>
+          </ul>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-white focus:outline-none"
+            onClick={toggleMenu}
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h16m-7 6h7"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobile Navigation Links */}
+        <ul
+          className={`md:hidden space-y-4 px-4 pt-4 pb-2 bg-green-600 ${isOpen ? 'block' : 'hidden'
+            }`}
+        >
+          <li className="hover:text-green-200 transition">
+            <a href="#">Home</a>
+          </li>
+          <li className="hover:text-green-200 transition">
+            <a href="#">About</a>
+          </li>
+          <li className="hover:text-green-200 transition">
+            <a href="#">Schools</a>
+          </li>
+          <li className="hover:text-green-200 transition">
+            <a href="#">Contact</a>
+          </li>
+        </ul>
+      </nav>
+    </>
+
   );
 };
 
