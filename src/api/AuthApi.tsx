@@ -119,6 +119,9 @@ export const useSignin = () => {
 
       if (data.code === SUCCESS_CODE.SUCCESS) {
         dispatch(setUser(data.data));
+        //checking for access token in the response and storing it with the storetoken function
+        if(data.data.accessToken && data.data.refreshToken)
+          storeTokens(data.data.accessToken, data.data.refreshToken);
         navigate(urlParam);
       } else {
         throw new Error();
