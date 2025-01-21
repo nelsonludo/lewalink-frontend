@@ -1,4 +1,4 @@
-import Hero from "../../components/HomeComponents/hero";
+import Hero from "./components/Hero";
 import Navbar from "../../components/Navbar";
 
 const Home = () => {
@@ -8,7 +8,6 @@ const Home = () => {
       <div className="min-h-screen">
         <Hero />
       </div>
-
     </>
   );
 };
