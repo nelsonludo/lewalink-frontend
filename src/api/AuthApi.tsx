@@ -14,13 +14,9 @@ import { useDispatch } from "react-redux";
 import useAxios from "../hooks/useAxios";
 import axiosMain from "axios";
 import { useNavigate } from "react-router-dom";
-import { storeTokens } from "../utils/storages";
-
-
+import { TokenHelper } from "../utils/tokensHelper";
 
 const API_URL = "/api/auth/v1";
-
-
 
 export const useSignUp = () => {
   const [loading, setLoading] = useState(false);
@@ -89,11 +85,17 @@ export const useSignin = () => {
         }
       );
 
-      if (data.code === SUCCESS_CODE.SUCCESS) {
+      if (
+        data.code === SUCCESS_CODE.SUCCESS &&
+        data.data.accessToken &&
+        data.data.refreshToken
+      ) {
+        const tokenHelper = new TokenHelper();
+        tokenHelper.setTokens(data.data.accessToken, data.data.refreshToken);
+        const userState = data.data;
+        userState.refreshToken = undefined;
+        userState.accessToken = undefined;
         dispatch(setUser(data.data));
-        //checking for access token in the response and storing it with the storetoken function
-        if(data.data.accessToken && data.data.refreshToken)
-          storeTokens(data.data.accessToken, data.data.refreshToken);
         navigate(urlParam);
       } else {
         throw new Error();
