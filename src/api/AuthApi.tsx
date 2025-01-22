@@ -14,41 +14,13 @@ import { useDispatch } from "react-redux";
 import useAxios from "../hooks/useAxios";
 import axiosMain from "axios";
 import { useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
+import { storeTokens } from "../utils/storages";
+
 
 
 const API_URL = "/api/auth/v1";
 
-//i'm not sure this is what is supposed to happen here but here's a prototype function
-export const storeTokens = (refresh: string, access: string) => {
-  const refreshArray = refresh.split(".");
-  const accessArray = access.split(".");
 
-  //temporary names for the localstorage
-  localStorage.setItem('refresh1', refreshArray[0]);
-  localStorage.setItem('access1', accessArray[0]);
-
-  // Get the secret key from environment variables
-  const secretKey = process.env.SECRET_KEY;
-
-  // Check if the secret key exists (optional step, to prevent errors)
-  if (!secretKey) {
-    console.error("SECRET_KEY is not defined in the environment.");
-    return;
-  }
-
-  // Store the parts of the tokens securely in cookies
-  // We can also encrypt the values, but for simplicity, we'll just store them raw here.
-  // Add the secure flags for production environments
-  
-  Cookies.set('refresh2', refreshArray[1], { expires: 7, secure: true, sameSite: 'Strict' });
-  Cookies.set('refresh3', refreshArray[2], { expires: 7, secure: true, sameSite: 'Strict' });
-
-  
-  Cookies.set('access2', accessArray[1], { expires: 7, secure: true, sameSite: 'Strict' });
-  Cookies.set('access3', accessArray[2], { expires: 7, secure: true, sameSite: 'Strict' });
-
-}
 
 export const useSignUp = () => {
   const [loading, setLoading] = useState(false);
