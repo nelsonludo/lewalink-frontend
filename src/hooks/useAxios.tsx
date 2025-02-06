@@ -6,6 +6,7 @@ import axiosMain, {
 import { ErrorResponseType } from "../types/response/error-response-type";
 import { CODE, SUCCESS_CODE } from "../types/enums/error-codes";
 import { useRefreshToken } from "../api/AuthApi";
+import { TokenHelper } from "../utils/tokensHelper";
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   _retry?: boolean;
@@ -16,8 +17,20 @@ const useAxios = () => {
 
   const axios = axiosMain.create({
     baseURL: "http://localhost:3000/",
-    withCredentials: true,
   });
+
+  axios.interceptors.request.use(
+    (config) => {
+      const tokenHelper = new TokenHelper();
+      const { accessToken } = tokenHelper.getTokens();
+
+      if (!config.headers["Authorization"]) {
+        config.headers["Authorization"] = `Bearer ${accessToken}`;
+      }
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );
 
   axios.interceptors.response.use(
     function (response: AxiosResponse): AxiosResponse {
@@ -31,6 +44,12 @@ const useAxios = () => {
       if (code === CODE.ACCESS_TOKEN_EXPIRED && !originalRequest._retry) {
         // WAIT UNTIL YOU REFRESH THE TOKEN
         const response = await refreshToken();
+
+        if (!originalRequest.headers) {
+          originalRequest.headers = {}; // Ensure headers object exists
+        }
+
+        originalRequest.headers.Authorization = `Bearer ${response?.data.accessToken}`;
 
         // RETRY THE REQUEST BUT DON'T RETURN AN ERROR, AS SUCH THE CATCH BLOCKS WILL NOT BE EXECUTED.
         // BUT THE ERROR WILL BE DISPLAYED ON THE CONSOLE (IN THE LINE WHERE THE REQUEST IS SENT NOT IN THE CATCH BLOCK) AND ON THE NETWORK SECTION, BUT IT WON'T TRIGGER ACTIONS ON THE CATCH BLOCK

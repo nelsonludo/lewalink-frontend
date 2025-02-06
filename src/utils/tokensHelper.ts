@@ -57,7 +57,17 @@ export class TokenHelper {
     );
   }
 
-  getTokens() {}
+  getTokens() {
+    const accessToken = `${localStorage.getItem(
+      this.VITE_ACCESS_TOKEN_PART_ONE
+    )}.${Cookies.get(this.VITE_ACCESS_TOKEN_PART_TWO)}`;
+
+    const refreshToken = `${localStorage.getItem(
+      this.VITE_REFRESH_TOKEN_PART_ONE
+    )}.${Cookies.get(this.VITE_REFRESH_TOKEN_PART_TWO)}`;
+
+    return { accessToken, refreshToken };
+  }
 
   deleteTokens() {}
 }

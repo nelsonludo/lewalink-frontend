@@ -9,7 +9,7 @@ import {
 import { User } from "../types/entities/user";
 import { AxiosError } from "axios";
 import { CODE, SUCCESS_CODE } from "../types/enums/error-codes";
-import { setUser } from "../store/auth.slice";
+import { setLoadingUser, setUser } from "../store/auth.slice";
 import { useDispatch } from "react-redux";
 import useAxios from "../hooks/useAxios";
 import axiosMain from "axios";
@@ -92,10 +92,10 @@ export const useSignin = () => {
       ) {
         const tokenHelper = new TokenHelper();
         tokenHelper.setTokens(data.data.accessToken, data.data.refreshToken);
-        const userState = data.data;
+        const userState = { ...data.data };
         userState.refreshToken = undefined;
         userState.accessToken = undefined;
-        dispatch(setUser(data.data));
+        dispatch(setUser(userState));
         navigate(urlParam);
       } else {
         throw new Error();
@@ -125,29 +125,29 @@ export const useSignin = () => {
   return { loading, signIn };
 };
 
-// export const useGetProfile = () => {
-//   const dispatch = useDispatch();
-//   const { axios } = useAxios();
+export const useGetProfile = () => {
+  const dispatch = useDispatch();
+  const { axios } = useAxios();
 
-//   const getProfile = async () => {
-//     dispatch(setLoadingUser(true));
-//     try {
-//       const { data } = await axios.get<SingleItemResponseType<User>>(
-//         `${API_URL}/profile`
-//       );
-//       if (data.code === SUCCESS_CODE.SUCCESS) {
-//         dispatch(setUser(data.data));
-//       }
-//     } catch (err) {
-//       const error = err as AxiosError<ErrorResponseType>;
-//       console.log(error);
-//     } finally {
-//       dispatch(setLoadingUser(false));
-//     }
-//   };
+  const getProfile = async () => {
+    dispatch(setLoadingUser(true));
+    try {
+      const { data } = await axios.get<SingleItemResponseType<User>>(
+        `${API_URL}/profile`
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        dispatch(setUser(data.data));
+      }
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      console.log(error);
+    } finally {
+      dispatch(setLoadingUser(false));
+    }
+  };
 
-//   return { getProfile };
-// };
+  return { getProfile };
+};
 
 // export const useLogout = () => {
 //   const dispatch = useDispatch();
@@ -280,18 +280,42 @@ export const useSignin = () => {
 // };
 
 export const useRefreshToken = () => {
-  // This axios is to avoid an infinite loop as our custom axios is also using this hook.
   const axios = axiosMain.create({
-    withCredentials: true,
+    baseURL: "http://localhost:3000/",
   });
   const dispatch = useDispatch();
 
+  const tokenHelper = new TokenHelper();
+  const { refreshToken: token } = tokenHelper.getTokens();
+
   const refreshToken = async () => {
     try {
-      const { data } = await axios.post<SimpleSuccessResponseType>(
-        `${API_URL}/token`
+      const { data } = await axios.post<SingleItemResponseType<User>>(
+        `${API_URL}/token`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      return data;
+
+      if (
+        data.code === SUCCESS_CODE.SUCCESS &&
+        data.data.accessToken &&
+        data.data.refreshToken
+      ) {
+        const tokenHelper = new TokenHelper();
+        tokenHelper.setTokens(data.data.accessToken, data.data.refreshToken);
+        const userState = { ...data.data };
+        userState.refreshToken = undefined;
+        userState.accessToken = undefined;
+        dispatch(setUser(userState));
+
+        return data;
+      } else {
+        throw new Error();
+      }
     } catch (err) {
       const error = err as AxiosError<ErrorResponseType>;
       console.log(error);

@@ -1,19 +1,29 @@
 // import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Router from "./Router";
+import { AuthInitialStateType } from "./store/auth.slice";
+import { useGetProfile } from "./api/AuthApi";
+import { useEffect } from "react";
 // import { AuthInitialStateType } from "./store/auth.slice";
 
 function LewalinkApp() {
-  // const { loadingUser }: AuthInitialStateType = useSelector(
-  //   (state: any) => state.authSlice
-  // );
+  const { loadingUser }: AuthInitialStateType = useSelector(
+    (state: any) => state.authSlice
+  );
 
-  // // This is where all the major initial requests should be made like get the current logged in user. Create an async function for that
+  const { getProfile } = useGetProfile();
 
-  // const loadInitialAppData = async () => {};
+  const loadInitialAppData = async () => {
+    getProfile();
+  };
 
-  // if (loadingUser) {
-  //   return <h1>This should be a full page loading</h1>;
-  // }
+  useEffect(() => {
+    loadInitialAppData();
+  }, []);
+
+  if (loadingUser) {
+    return <h1>This should be a full page loading</h1>;
+  }
 
   return <Router />;
 }
