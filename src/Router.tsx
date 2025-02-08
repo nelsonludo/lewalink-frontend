@@ -9,6 +9,7 @@ import Home from "./pages/home";
 import OnlyPublic from "./protect-routes/OnlyPublic";
 import Dashboard from "./pages/dashboard";
 import OnlySuperUsers from "./protect-routes/OnlySuperUsers";
+import CourseList from "./pages/courses/pages/CourseList";
 
 const Router = () => {
   return (
@@ -41,7 +42,7 @@ const Router = () => {
           <Route path="statistics" element={<h1>Statistices page</h1>} />
           <Route path="users" element={<h1>Users page</h1>} />
           <Route path="courses">
-            <Route index element={<h1>Courses list</h1>} />
+            <Route index element={<CourseList />} />
             <Route path="new" element={<h1>New course list</h1>} />
           </Route>
           <Route path="programs" element={<h1>Programs page</h1>} />

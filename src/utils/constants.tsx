@@ -1,11 +1,12 @@
 import { IconType } from "react-icons";
 import { MdAutoGraph } from "react-icons/md";
+import { UserType } from "../types/entities/user";
 
 type Navigation = {
   name: string;
   href: string;
   icon: IconType;
-  current: boolean;
+  access: UserType[];
 };
 
 export const navigation: Navigation[] = [
@@ -13,30 +14,30 @@ export const navigation: Navigation[] = [
     name: "Statistics",
     href: "/dashboard/statistics",
     icon: MdAutoGraph,
-    current: true,
+    access: [UserType.Admin, UserType.Editor],
   },
   {
     name: "Users",
     href: "/dashboard/users",
     icon: MdAutoGraph,
-    current: false,
+    access: [UserType.Admin],
   },
   {
     name: "Courses",
     href: "/dashboard/courses",
     icon: MdAutoGraph,
-    current: false,
+    access: [UserType.Admin, UserType.Editor],
   },
   {
     name: "Programs",
     href: "/dashboard/programs",
     icon: MdAutoGraph,
-    current: false,
+    access: [UserType.Admin, UserType.Editor],
   },
   {
     name: "Schools",
     href: "/dashboard/schools",
     icon: MdAutoGraph,
-    current: false,
+    access: [UserType.Admin, UserType.Editor],
   },
 ];
