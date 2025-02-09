@@ -12,8 +12,12 @@ const OnlyAdmins = ({ children }: Props) => {
     (state: any) => state.authSlice as AuthInitialStateType
   );
 
+  if (user === null) {
+    return <Navigate to={"/signin"} replace />;
+  }
+
   if (user?.type !== UserType.Admin) {
-    return <Navigate to={"/home"} replace />;
+    return <Navigate to={"/unauthorized"} replace />;
   }
 
   return children;

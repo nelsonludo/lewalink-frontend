@@ -11,5 +11,3 @@ createRoot(document.getElementById("root")!).render(
     <LewalinkApp />
   </Provider>
 );
-
-// Work on the sidebar permisions and make sure that it is the same on the router.
