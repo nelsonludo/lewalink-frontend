@@ -1,18 +1,12 @@
 import { Link } from "react-router-dom";
-import Navbar from "../../components/Navbar";
 
 export default function NotFound() {
   return (
     <>
-      <Navbar />
       <main className="grid min-h-full place-items-center px-6 lg:px-8">
         <section className="text-center flex items-center justify-center flex-col">
           <div className="w-3/4 sm:w-1/2 md:w-1/3 lg:w-1/4">
-            <img
-              src="/images/404.png"
-              alt="Error 404: Page not found"
-              onError={(e) => (e.target.src = '/images/fallback-404.png')}
-            />
+            <img src="/images/404.png" alt="Error 404: Page not found" />
           </div>
           <h1 className="mt-4 text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
             Page not found
