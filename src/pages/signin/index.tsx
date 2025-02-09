@@ -6,6 +6,7 @@ import LoadingLargeButton from "../../components/loading/LoadingLargeButton";
 import { useEffect } from "react";
 import { AuthInitialStateType } from "../../store/auth.slice";
 import { useSelector } from "react-redux";
+import { FcGoogle } from "react-icons/fc";
 
 export default function Signin() {
   const {
@@ -19,7 +20,7 @@ export default function Signin() {
     (state: any) => state.authSlice as AuthInitialStateType
   );
 
-  const { loading, signIn } = useSignin();
+  const { loading, signIn, googleSignIn } = useSignin();
 
   const navigate = useNavigate();
 
@@ -139,12 +140,22 @@ export default function Signin() {
               {loading ? (
                 <LoadingLargeButton />
               ) : (
-                <button
-                  type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Sign in
-                </button>
+                <div className="grid gap-3">
+                  <button
+                    type="submit"
+                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Sign in
+                  </button>
+                  {/* Google Button */}
+                  <button
+                    className="w-full flex items-center justify-center py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition"
+                    onClick={googleSignIn}
+                  >
+                    <FcGoogle className="mr-2 text-lg" />
+                    Connexion avec Google
+                  </button>
+                </div>
               )}
             </div>
           </form>

@@ -15,6 +15,7 @@ import useAxios from "../hooks/useAxios";
 import axiosMain from "axios";
 import { useNavigate } from "react-router-dom";
 import { TokenHelper } from "../utils/tokensHelper";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const API_URL = "/api/auth/v1";
 
@@ -122,7 +123,30 @@ export const useSignin = () => {
     }
   };
 
-  return { loading, signIn };
+  //signin with google
+  const googleSignIn = useGoogleLogin({
+    flow: "auth-code",
+    redirect_uri: "http://localhost:3000",
+    onSuccess: async (response) => {
+      console.log("Authorization Code:", response.code);
+
+      alert(response.code);
+      // // Send the code to the backend
+      // try {
+      //   const { data } = await axios.post("http://localhost:5000/auth/google", {
+      //     code: response.code,
+      //   });
+      //   console.log("User Data:", data);
+      // } catch (error) {
+      //   console.error("Error:", error);
+      // }
+    },
+    onError: () => {
+      console.error("Login Failed");
+    },
+  });
+
+  return { loading, signIn, googleSignIn };
 };
 
 export const useGetProfile = () => {
