@@ -14,3 +14,8 @@ createRoot(document.getElementById("root")!).render(
     </Provider>
   </GoogleOAuthProvider>
 );
+
+// Restore and delete course routes on the course list page.
+// View single course page with delete, update and restore button.
+// Create course page.
+// Update course page.

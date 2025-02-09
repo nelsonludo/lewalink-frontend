@@ -8,7 +8,7 @@ import {
 import { Fragment } from "react/jsx-runtime";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
-import LoadingDelete from "./Buttons/LoadingDelete";
+import LoadingButton from "./Buttons/LoadingButton";
 
 type Props = {
   data: {
@@ -52,7 +52,11 @@ const ConfirmModal = ({
         as="div"
         className="relative z-50"
         initialFocus={cancelButtonRef}
-        onClose={() => setData({ data: undefined, show: false })}
+        onClose={() => {
+          if (!loading) {
+            setData({ data: undefined, show: false });
+          }
+        }}
       >
         <TransitionChild
           as={Fragment}
@@ -101,13 +105,14 @@ const ConfirmModal = ({
                 </div>
                 <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                   {loading ? (
-                    <LoadingDelete />
+                    <span className=" ml-4">
+                      <LoadingButton />
+                    </span>
                   ) : (
                     <button
                       type="button"
                       className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto"
                       onClick={() => {
-                        // setData({ data: undefined, show: false });
                         onConfirm();
                       }}
                     >
@@ -118,10 +123,14 @@ const ConfirmModal = ({
                   <button
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                    onClick={() => setData({ data: undefined, show: false })}
+                    onClick={() => {
+                      if (!loading) {
+                        setData({ data: undefined, show: false });
+                      }
+                    }}
                     ref={cancelButtonRef}
                   >
-                    cancel
+                    Cancel
                   </button>
                 </div>
               </DialogPanel>

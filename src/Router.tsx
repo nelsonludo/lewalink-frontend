@@ -53,9 +53,9 @@ const Router = () => {
           />
           <Route path="courses">
             <Route index element={<CourseList />} />
-            <Route path="new" element={<h1>New course list</h1>} />
-            <Route path="update/:id" element={<h1>Update course list</h1>} />
-            <Route path=":id" element={<h1>View course list</h1>} />
+            <Route path="new" element={<h1>New course</h1>} />
+            <Route path="update/:id" element={<h1>Update course </h1>} />
+            <Route path=":id" element={<h1>View course </h1>} />
           </Route>
           <Route path="programs" element={<h1>Programs page</h1>} />
           <Route path="schools" element={<h1>Schools page</h1>} />

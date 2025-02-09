@@ -3,7 +3,7 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { classNames } from "../../utils/smallFunctions";
 import { NavLink, Outlet } from "react-router-dom";
-import { navigation } from "../../utils/constants";
+import { navigation } from "../../utils/constants.tsx";
 import { AuthInitialStateType } from "../../store/auth.slice";
 import { useSelector } from "react-redux";
 import { UserType } from "../../types/entities/user";
