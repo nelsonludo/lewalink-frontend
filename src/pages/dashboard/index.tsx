@@ -6,6 +6,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { navigation } from "../../utils/constants";
 import { AuthInitialStateType } from "../../store/auth.slice";
 import { useSelector } from "react-redux";
+import { UserType } from "../../types/entities/user";
 
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -46,27 +47,31 @@ export default function Dashboard() {
                   <ul role="list" className="flex flex-1 flex-col gap-y-7">
                     <li>
                       <ul role="list" className="-mx-2 space-y-1">
-                        {navigation.map((item) => (
-                          <li key={item.name}>
-                            <NavLink
-                              to={item.href}
-                              className={({ isActive }) =>
-                                classNames(
-                                  isActive
-                                    ? "bg-gray-800 text-white"
-                                    : "text-gray-400 hover:bg-gray-800 hover:text-white",
-                                  "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold"
-                                )
-                              }
-                            >
-                              <item.icon
-                                aria-hidden="true"
-                                className="size-6 shrink-0"
-                              />
-                              {item.name}
-                            </NavLink>
-                          </li>
-                        ))}
+                        {navigation
+                          .filter((item) =>
+                            item.access.includes(user?.type as UserType)
+                          )
+                          .map((item) => (
+                            <li key={item.name}>
+                              <NavLink
+                                to={item.href}
+                                className={({ isActive }) =>
+                                  classNames(
+                                    isActive
+                                      ? "bg-gray-800 text-white"
+                                      : "text-gray-400 hover:bg-gray-800 hover:text-white",
+                                    "group flex items-center gap-x-3 rounded-md p-2 text-sm/6 font-semibold"
+                                  )
+                                }
+                              >
+                                <item.icon
+                                  aria-hidden="true"
+                                  className="w-5 h-5 shrink-0"
+                                />
+                                {item.name}
+                              </NavLink>
+                            </li>
+                          ))}
                       </ul>
                     </li>
                   </ul>
@@ -91,27 +96,31 @@ export default function Dashboard() {
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <li>
                   <ul role="list" className="-mx-2 space-y-1">
-                    {navigation.map((item) => (
-                      <li key={item.name}>
-                        <NavLink
-                          to={item.href}
-                          className={({ isActive }) =>
-                            classNames(
-                              isActive
-                                ? "bg-gray-800 text-white"
-                                : "text-gray-400 hover:bg-gray-800 hover:text-white",
-                              "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold"
-                            )
-                          }
-                        >
-                          <item.icon
-                            aria-hidden="true"
-                            className="size-6 shrink-0"
-                          />
-                          {item.name}
-                        </NavLink>
-                      </li>
-                    ))}
+                    {navigation
+                      .filter((item) =>
+                        item.access.includes(user?.type as UserType)
+                      )
+                      .map((item) => (
+                        <li key={item.name}>
+                          <NavLink
+                            to={item.href}
+                            className={({ isActive }) =>
+                              classNames(
+                                isActive
+                                  ? "bg-gray-800 text-white"
+                                  : "text-gray-400 hover:bg-gray-800 hover:text-white",
+                                "group flex items-center gap-x-3 rounded-md p-2 text-sm/6 font-semibold"
+                              )
+                            }
+                          >
+                            <item.icon
+                              aria-hidden="true"
+                              className=" w-5 h-5 shrink-0"
+                            />
+                            {item.name}
+                          </NavLink>
+                        </li>
+                      ))}
                   </ul>
                 </li>
 

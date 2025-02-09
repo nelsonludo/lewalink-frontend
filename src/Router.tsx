@@ -10,6 +10,7 @@ import OnlyPublic from "./protect-routes/OnlyPublic";
 import Dashboard from "./pages/dashboard";
 import OnlySuperUsers from "./protect-routes/OnlySuperUsers";
 import CourseList from "./pages/courses/pages/CourseList";
+import OnlyAdmins from "./protect-routes/OnlyAdmins";
 
 const Router = () => {
   return (
@@ -19,6 +20,7 @@ const Router = () => {
         <Route path="/signin" element={<Signin />} />
         <Route path="/activate" element={<ActivateAccount />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/unauthorized" element={<h1>Unauthorized</h1>} />
         <Route path="/" element={<Navigate to={"/home"} />} />
 
         {/* ONLY LOGGED OUT ROUTES  */}
@@ -41,10 +43,19 @@ const Router = () => {
           }
         >
           <Route path="statistics" element={<h1>Statistices page</h1>} />
-          <Route path="users" element={<h1>Users page</h1>} />
+          <Route
+            path="users"
+            element={
+              <OnlyAdmins>
+                <h1>Users page</h1>
+              </OnlyAdmins>
+            }
+          />
           <Route path="courses">
             <Route index element={<CourseList />} />
             <Route path="new" element={<h1>New course list</h1>} />
+            <Route path="update/:id" element={<h1>Update course list</h1>} />
+            <Route path=":id" element={<h1>View course list</h1>} />
           </Route>
           <Route path="programs" element={<h1>Programs page</h1>} />
           <Route path="schools" element={<h1>Schools page</h1>} />

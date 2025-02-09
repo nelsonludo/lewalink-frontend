@@ -14,5 +14,3 @@ createRoot(document.getElementById("root")!).render(
     </Provider>
   </GoogleOAuthProvider>
 );
-
-// Work on the sidebar permisions and make sure that it is the same on the router.

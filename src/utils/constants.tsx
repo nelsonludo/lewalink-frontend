@@ -1,6 +1,9 @@
 import { IconType } from "react-icons";
-import { MdAutoGraph } from "react-icons/md";
+import { MdLibraryBooks } from "react-icons/md";
+import { RiBookShelfLine } from "react-icons/ri";
 import { UserType } from "../types/entities/user";
+import { FaBuildingColumns, FaUsers } from "react-icons/fa6";
+import { BsFileBarGraph } from "react-icons/bs";
 
 type Navigation = {
   name: string;
@@ -13,31 +16,31 @@ export const navigation: Navigation[] = [
   {
     name: "Statistics",
     href: "/dashboard/statistics",
-    icon: MdAutoGraph,
+    icon: BsFileBarGraph,
     access: [UserType.Admin, UserType.Editor],
   },
   {
     name: "Users",
     href: "/dashboard/users",
-    icon: MdAutoGraph,
+    icon: FaUsers,
     access: [UserType.Admin],
   },
   {
     name: "Courses",
     href: "/dashboard/courses",
-    icon: MdAutoGraph,
+    icon: MdLibraryBooks,
     access: [UserType.Admin, UserType.Editor],
   },
   {
     name: "Programs",
     href: "/dashboard/programs",
-    icon: MdAutoGraph,
+    icon: RiBookShelfLine,
     access: [UserType.Admin, UserType.Editor],
   },
   {
     name: "Schools",
     href: "/dashboard/schools",
-    icon: MdAutoGraph,
+    icon: FaBuildingColumns,
     access: [UserType.Admin, UserType.Editor],
   },
 ];
