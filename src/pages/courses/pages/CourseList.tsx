@@ -238,11 +238,11 @@ const CourseList = () => {
                           <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6">
                             {course.code}
                           </td>
-                          <Link to={`/dashboard/courses/${course.id}`}>
-                            <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                          <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                            <Link to={`/dashboard/courses/${course.id}`}>
                               {course.title}
-                            </td>
-                          </Link>
+                            </Link>
+                          </td>
                           <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                             {course.credits}
                           </td>

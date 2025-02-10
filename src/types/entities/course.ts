@@ -4,8 +4,8 @@ export type Course = {
   id: string;
   code: string;
   title: string;
-  description: true;
-  credits: true;
+  description: string;
+  credits: number;
   createdAt: Date;
   updatedAt: Date;
   isDeleted?: boolean;

@@ -48,7 +48,6 @@ const SingleCourse = () => {
     });
 
     if (!deletedCourse) return;
-    // superUserGetsCourse({ id });
 
     setCourse(deletedCourse);
     setOpenDeleteCourse({
@@ -65,8 +64,6 @@ const SingleCourse = () => {
     });
 
     if (!restoredCourse) return;
-
-    // superUserGetsCourse({ id });
 
     setCourse(restoredCourse);
     setOpenRestoreCourse({
@@ -174,6 +171,18 @@ const SingleCourse = () => {
             className="rounded-md bg-indigo-50 px-2.5 py-1.5 text-sm font-semibold text-indigo-600 shadow-xs hover:bg-indigo-100"
           >
             Back
+          </Link>
+          <Link
+            to={`/dashboard/courses/update/${course.id}`}
+            className="rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            onClick={() =>
+              setOpenDeleteCourse({
+                data: course,
+                show: true,
+              })
+            }
+          >
+            Update
           </Link>
           {course.isDeleted && (
             <button

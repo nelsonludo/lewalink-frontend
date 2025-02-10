@@ -165,7 +165,7 @@ export default function Dashboard() {
           </a>
         </div>
 
-        <main className="py-10 lg:pl-72">
+        <main className="py-10 lg:pl-72 bg-gray-50 min-h-[100vh]">
           <div className="px-4 sm:px-6 lg:px-8">
             <Outlet />
           </div>

@@ -12,6 +12,8 @@ import OnlySuperUsers from "./protect-routes/OnlySuperUsers";
 import CourseList from "./pages/courses/pages/CourseList";
 import OnlyAdmins from "./protect-routes/OnlyAdmins";
 import SingleCourse from "./pages/courses/pages/SingleCourse";
+import NewCourse from "./pages/courses/pages/NewCourse";
+import UpdateCourse from "./pages/courses/pages/UpdateCourse";
 
 const Router = () => {
   return (
@@ -54,8 +56,8 @@ const Router = () => {
           />
           <Route path="courses">
             <Route index element={<CourseList />} />
-            <Route path="new" element={<h1>New course</h1>} />
-            <Route path="update/:id" element={<h1>Update course </h1>} />
+            <Route path="new" element={<NewCourse />} />
+            <Route path="update/:id" element={<UpdateCourse />} />
             <Route path=":id" element={<SingleCourse />} />
           </Route>
           <Route path="programs" element={<h1>Programs page</h1>} />

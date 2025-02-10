@@ -1,31 +1,72 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { CourseFormType } from "../../../types/forms";
-import { useSuperUserCreatesCourse } from "../../../api/CourseApi";
+import {
+  useSuperUserGetsCourse,
+  useSuperUserUpdatesCourse,
+} from "../../../api/CourseApi";
 import LoadingButton from "../../../components/Buttons/LoadingButton";
+import BigSectionLoading from "../../../components/BigSectionLoading";
+import NothingSelected from "../../../components/NothingSelected";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
 
-const NewCourse = () => {
+const UpdateCourse = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-
-    reset,
+    setValue,
   } = useForm<CourseFormType>();
+  const { id } = useParams();
+  const { loading, course, notFound, superUserGetsCourse } =
+    useSuperUserGetsCourse();
+  const navigate = useNavigate();
 
-  const { loading, superUserCreatesCourse } = useSuperUserCreatesCourse();
+  const { loading: loadingUpdateCourse, superUserUpdatesCourse } =
+    useSuperUserUpdatesCourse();
 
   const onSubmit: SubmitHandler<CourseFormType> = async (data) => {
     const formData = data;
     formData.credits = Number(formData.credits);
 
-    const course = await superUserCreatesCourse({
-      formData,
-    });
+    console.log(formData);
 
-    if (course) {
-      reset();
-    }
+    await superUserUpdatesCourse({
+      formData,
+      id,
+    });
   };
+
+  useEffect(() => {
+    superUserGetsCourse({
+      id,
+    });
+  }, [id]);
+
+  useEffect(() => {
+    if (course) {
+      setValue("code", course.code);
+      setValue("title", course.title);
+      setValue("credits", course.credits);
+      setValue("description", course.description);
+    }
+  }, [course]);
+
+  if (loading) {
+    return <BigSectionLoading />;
+  }
+
+  if (notFound || !course) {
+    return (
+      <NothingSelected
+        bg=" bg-gray-100"
+        title="Course does not exist"
+        description="Course information will be displayed here"
+        buttonText="New course"
+        action={() => navigate("/dashboard/courses/new")}
+      />
+    );
+  }
 
   return (
     <section className=" px-10">
@@ -184,21 +225,20 @@ const NewCourse = () => {
         </div>
 
         <div className="mt-6 flex items-center justify-end gap-x-6">
-          <button
-            type="button"
-            onClick={() => reset()}
-            className="text-sm/6 font-semibold text-gray-900"
+          <Link
+            to={"/dashboard/courses"}
+            className="rounded-md bg-indigo-50 px-2.5 py-1.5 text-sm font-semibold text-indigo-600 shadow-xs hover:bg-indigo-100"
           >
-            Reset
-          </button>
-          {loading ? (
+            Back
+          </Link>
+          {loadingUpdateCourse ? (
             <LoadingButton />
           ) : (
             <button
               type="submit"
               className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Save
+              Update
             </button>
           )}
         </div>
@@ -207,4 +247,4 @@ const NewCourse = () => {
   );
 };
 
-export default NewCourse;
+export default UpdateCourse;

@@ -9,6 +9,7 @@ import { ErrorResponseType } from "../types/response/error-response-type";
 import useAxios from "../hooks/useAxios";
 import { CODE, SUCCESS_CODE } from "../types/enums/error-codes";
 import { failedToast, successToast } from "../utils/toasts";
+import { CourseFormType } from "../types/forms";
 
 const API_URL = "/api/course/v1";
 
@@ -18,6 +19,8 @@ type Payload = {
   itemsPerPage?: number;
   name?: string;
 };
+
+type PayloadForm<T> = Payload & { formData?: T };
 
 export const useSuperUserGetCourses = () => {
   const [loading, setLoading] = useState(false);
@@ -149,4 +152,69 @@ export const useSuperUserGetsCourse = () => {
     notFound,
     setCourse,
   };
+};
+
+export const useSuperUserCreatesCourse = () => {
+  const [loading, setLoading] = useState(false);
+
+  const { axios } = useAxios();
+
+  const superUserCreatesCourse = async ({
+    formData,
+  }: PayloadForm<CourseFormType>) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post<SingleItemResponseType<Course>>(
+        `${API_URL}`,
+        { ...formData }
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("Course created successfully");
+
+        return data.data;
+      }
+
+      return data.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { superUserCreatesCourse, loading };
+};
+
+export const useSuperUserUpdatesCourse = () => {
+  const [loading, setLoading] = useState(false);
+
+  const { axios } = useAxios();
+
+  const superUserUpdatesCourse = async ({
+    formData,
+    id,
+  }: PayloadForm<CourseFormType>) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.patch<SingleItemResponseType<Course>>(
+        `${API_URL}/${id}`,
+        { ...formData }
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("Course updated successfully");
+
+        return data.data;
+      }
+
+      return data.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { superUserUpdatesCourse, loading };
 };

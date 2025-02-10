@@ -15,6 +15,5 @@ createRoot(document.getElementById("root")!).render(
   </Provider>
 );
 
-// View single course page with delete, update and restore button.
-// Create course page.
-// Update course page.
+// Manage all the possible errors on the course api.
+// Start working on the programs management.
