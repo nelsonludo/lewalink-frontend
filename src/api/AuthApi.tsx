@@ -15,7 +15,6 @@ import useAxios from "../hooks/useAxios";
 import axiosMain from "axios";
 import { useNavigate } from "react-router-dom";
 import { TokenHelper } from "../utils/tokensHelper";
-import { useGoogleLogin } from "@react-oauth/google";
 
 const API_URL = "/api/auth/v1";
 
@@ -123,30 +122,66 @@ export const useSignin = () => {
     }
   };
 
-  //signin with google
-  const googleSignIn = useGoogleLogin({
-    flow: "auth-code",
-    redirect_uri: "http://localhost:3000",
-    onSuccess: async (response) => {
-      console.log("Authorization Code:", response.code);
+  return { loading, signIn };
+};
 
-      alert(response.code);
-      // // Send the code to the backend
-      // try {
-      //   const { data } = await axios.post("http://localhost:5000/auth/google", {
-      //     code: response.code,
-      //   });
-      //   console.log("User Data:", data);
-      // } catch (error) {
-      //   console.error("Error:", error);
-      // }
-    },
-    onError: () => {
-      console.error("Login Failed");
-    },
-  });
+export const useGoogleAuth = () => {
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { axios } = useAxios();
+  const navigate = useNavigate();
 
-  return { loading, signIn, googleSignIn };
+  const googleAuth = async (code: string, urlParam: string) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post<SingleItemResponseType<User>>(
+        `${API_URL}/oauth-google`,
+        {
+          code,
+        }
+      );
+
+      if (
+        data.code === SUCCESS_CODE.SUCCESS &&
+        data.data.accessToken &&
+        data.data.refreshToken
+      ) {
+        const tokenHelper = new TokenHelper();
+        tokenHelper.setTokens(data.data.accessToken, data.data.refreshToken);
+        const userState = { ...data.data };
+        userState.refreshToken = undefined;
+        userState.accessToken = undefined;
+        dispatch(setUser(userState));
+        navigate(urlParam);
+      } else {
+        throw new Error();
+      }
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      switch (code) {
+        case CODE.UNABLE_TO_LOGIN:
+          failedToast("Unable to login");
+          break;
+        case CODE.CLIENT_ONLY:
+          failedToast("Super users cannot use this method to login");
+          break;
+        case CODE.UNEXPECTED_ERROR:
+          failedToast("Unexpected error occured");
+          break;
+        default:
+          failedToast("Something went wrong");
+          break;
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { loading, googleAuth };
 };
 
 export const useGetProfile = () => {

@@ -1,12 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import { LoginFormType } from "../../types/forms";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useSignin } from "../../api/AuthApi";
+import { useGoogleAuth, useSignin } from "../../api/AuthApi";
 import LoadingLargeButton from "../../components/loading/LoadingLargeButton";
 import { useEffect } from "react";
 import { AuthInitialStateType } from "../../store/auth.slice";
 import { useSelector } from "react-redux";
 import { FcGoogle } from "react-icons/fc";
+import { useGoogleLogin } from "@react-oauth/google";
+import { failedToast } from "../../utils/toasts";
 
 export default function Signin() {
   const {
@@ -20,12 +22,32 @@ export default function Signin() {
     (state: any) => state.authSlice as AuthInitialStateType
   );
 
-  const { loading, signIn, googleSignIn } = useSignin();
+  const { loading, signIn } = useSignin();
+  const { loading: loadingGoogleAuth, googleAuth } = useGoogleAuth();
 
   const navigate = useNavigate();
 
   const queryParams = new URLSearchParams(window.location.search);
   const urlParam = queryParams.get("url") as string; // Extract the 'url' query parameter
+
+  const initiateGooglePopup = useGoogleLogin({
+    flow: "auth-code",
+    redirect_uri: "http://localhost:5173",
+    onSuccess: async (response) => {
+      let redirect: string;
+
+      if (!urlParam || urlParam === "/signin" || urlParam === "signup") {
+        redirect = "/home";
+      } else {
+        redirect = urlParam;
+      }
+
+      await googleAuth(response.code, redirect);
+    },
+    onError: () => {
+      failedToast("Something went wrong");
+    },
+  });
 
   const onSubmit: SubmitHandler<LoginFormType> = async (data) => {
     let redirect: string;
@@ -143,14 +165,25 @@ export default function Signin() {
                 <div className="grid gap-3">
                   <button
                     type="submit"
+                    disabled={loadingGoogleAuth ? true : false}
                     className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     Sign in
                   </button>
-                  {/* Google Button */}
+                </div>
+              )}
+            </div>
+
+            <div>
+              {loadingGoogleAuth ? (
+                <LoadingLargeButton />
+              ) : (
+                <div className="grid gap-3">
                   <button
+                    type="button"
+                    disabled={loading ? true : false}
                     className="w-full flex items-center justify-center py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition"
-                    onClick={googleSignIn}
+                    onClick={initiateGooglePopup}
                   >
                     <FcGoogle className="mr-2 text-lg" />
                     Connexion avec Google

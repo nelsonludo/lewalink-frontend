@@ -7,12 +7,12 @@ import store from "./store/index.ts";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 createRoot(document.getElementById("root")!).render(
-  <GoogleOAuthProvider clientId="310823759335-k5eskag8mo8g8l1svhvo9rl87ea379ut.apps.googleusercontent.com">
-    <Provider store={store}>
+  <Provider store={store}>
+    <GoogleOAuthProvider clientId="310823759335-k5eskag8mo8g8l1svhvo9rl87ea379ut.apps.googleusercontent.com">
       <ToastContainer />
       <LewalinkApp />
-    </Provider>
-  </GoogleOAuthProvider>
+    </GoogleOAuthProvider>
+  </Provider>
 );
 
 // Restore and delete course routes on the course list page.
