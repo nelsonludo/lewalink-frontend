@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import TablePagination from "@mui/material/TablePagination";
-import { useSuperUserGetCourses } from "../../../api/CourseApi";
+import {
+  useSuperUserDeletesCourse,
+  useSuperUserGetCourses,
+  useSuperUserRestoresDeletedCourse,
+} from "../../../api/CourseApi";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import { Link, useNavigate } from "react-router-dom";
@@ -33,8 +37,16 @@ const CourseList = () => {
     data: undefined,
   });
 
-  const { loading, courses, superUserGetCourses, totalPages } =
+  const { loading, courses, superUserGetCourses, totalPages, setCourses } =
     useSuperUserGetCourses();
+
+  const {
+    loading: loadingSuperUserRestoresDeletedCourse,
+    superUserRestoresDeletedCourse,
+  } = useSuperUserRestoresDeletedCourse();
+
+  const { loading: loadingSuperUserDeletesCourse, superUserDeletesCourse } =
+    useSuperUserDeletesCourse();
 
   const navigate = useNavigate();
 
@@ -52,16 +64,24 @@ const CourseList = () => {
     setPage(0);
   };
 
-  const doConfirmRejectApplication = async () => {
-    // if (!openRejectApplication.data) return;
+  const doConfirmDeleteCourse = async () => {
+    if (!openDeleteCourse.data) return;
 
-    // const cancelledApplication = await rejectApplication(
-    //   openRejectApplication.data.id
-    // );
+    const deletedCourse = await superUserDeletesCourse({
+      id: openDeleteCourse.data.id,
+    });
 
-    // if (!cancelledApplication) return;
+    if (!deletedCourse) return;
 
-    // await getTenderCall(tenderCall.id);
+    const newCourses = courses.map((course) => {
+      if (course.id === openDeleteCourse?.data?.id) {
+        return deletedCourse;
+      }
+
+      return course;
+    });
+
+    setCourses(newCourses);
 
     setOpenDeleteCourse({
       show: false,
@@ -69,16 +89,24 @@ const CourseList = () => {
     });
   };
 
-  const doConfirmAcceptApplication = async () => {
-    // if (!openRestoreCourse.data) return;
+  const doConfirmRestoreDeletedCourse = async () => {
+    if (!openRestoreCourse.data) return;
 
-    // const acceptedApplication = await acceptApplication(
-    //   openRestoreCourse.data.id
-    // );
+    const restoredCourse = await superUserRestoresDeletedCourse({
+      id: openRestoreCourse.data.id,
+    });
 
-    // if (!acceptedApplication) return;
+    if (!restoredCourse) return;
 
-    // await getTenderCall(tenderCall.id);
+    const newCourses = courses.map((course) => {
+      if (course.id === openRestoreCourse?.data?.id) {
+        return restoredCourse;
+      }
+
+      return course;
+    });
+
+    setCourses(newCourses);
 
     setOpenRestoreCourse({
       show: false,
@@ -330,17 +358,17 @@ const CourseList = () => {
 
       <DeleteModal
         data={openDeleteCourse}
-        onConfirmDelete={doConfirmRejectApplication}
+        onConfirmDelete={doConfirmDeleteCourse}
         setData={setOpenDeleteCourse}
         title={`Are you sure you want to delete the course ${openDeleteCourse.data?.title} ?`}
-        loading={false}
+        loading={loadingSuperUserDeletesCourse}
       />
       <ConfirmModal
         data={openRestoreCourse}
-        onConfirm={doConfirmAcceptApplication}
+        onConfirm={doConfirmRestoreDeletedCourse}
         setData={setOpenRestoreCourse}
         title={`Are you sure you want to restore the course ${openRestoreCourse.data?.title} ?`}
-        loading={false}
+        loading={loadingSuperUserRestoresDeletedCourse}
       />
     </section>
   );
