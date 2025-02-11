@@ -1,3 +1,5 @@
+import { ProgramFieldType, ProgramType } from "./entities/program";
+
 export type CreateAccountFormType = {
   name: string;
   email: string;
@@ -24,4 +26,12 @@ export type ForgotPasswordFormType = {
 export type ResetPasswordFormType = {
   password: string;
   confirmPassword: string;
+};
+
+export type ProgramFormType = {
+  name: string;
+  description: string;
+  type: ProgramType;
+  field: ProgramFieldType;
+  duration: number;
 };

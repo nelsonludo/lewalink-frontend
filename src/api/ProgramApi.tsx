@@ -3,33 +3,40 @@ import {
   MultipleItemsResponseType,
   SingleItemResponseType,
 } from "../types/response/success-response-types";
-import { Course } from "../types/entities/course";
 import { AxiosError } from "axios";
 import { ErrorResponseType } from "../types/response/error-response-type";
 import useAxios from "../hooks/useAxios";
 import { CODE, SUCCESS_CODE } from "../types/enums/error-codes";
-import { failedToast, successToast } from "../utils/toasts";
-import { CourseFormType } from "../types/forms";
+
 import { displayErrorToastBasedOnCode } from "../utils/display-error-toast-based-on-code";
 import { Payload, PayloadForm } from "../types/general";
+import { Program } from "../types/entities/program";
+import { failedToast, successToast } from "../utils/toasts";
+import { ProgramFormType } from "../types/forms";
 
-const API_URL = "/api/course/v1";
+const API_URL = "/api/program/v1";
 
-export const useSuperUserGetCourses = () => {
+export const useSuperUserGetPrograms = () => {
   const [loading, setLoading] = useState(false);
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [programs, setPrograms] = useState<Program[]>([]);
   const [totalPages, setTotalPages] = useState(0);
 
   const { axios } = useAxios();
 
-  const superUserGetCourses = async ({ name, page, itemsPerPage }: Payload) => {
+  const superUserGetPrograms = async ({
+    name,
+    page,
+    itemsPerPage,
+    type,
+    field,
+  }: Payload) => {
     try {
       setLoading(true);
-      const { data } = await axios.get<MultipleItemsResponseType<Course>>(
-        `${API_URL}/super-user-get-courses?name=${name}&page=${page}&itemsPerPage=${itemsPerPage}`
+      const { data } = await axios.get<MultipleItemsResponseType<Program>>(
+        `${API_URL}/super-user-get-programs?name=${name}&type=${type}&field=${field}&page=${page}&itemsPerPage=${itemsPerPage}`
       );
       if (data.code === SUCCESS_CODE.SUCCESS) {
-        setCourses(data.data);
+        setPrograms(data.data);
         setTotalPages(data.totalPages);
       }
     } catch (err) {
@@ -44,53 +51,22 @@ export const useSuperUserGetCourses = () => {
     }
   };
 
-  return { superUserGetCourses, loading, totalPages, courses, setCourses };
+  return { superUserGetPrograms, loading, totalPages, programs, setPrograms };
 };
 
-export const useSuperUserRestoresDeletedCourse = () => {
+export const useSuperUserDeletesProgram = () => {
   const [loading, setLoading] = useState(false);
 
   const { axios } = useAxios();
 
-  const superUserRestoresDeletedCourse = async ({ id }: Payload) => {
+  const superUserDeletesProgram = async ({ id }: Payload) => {
     try {
       setLoading(true);
-      const { data } = await axios.post<SingleItemResponseType<Course>>(
-        `${API_URL}/restore/${id}`
-      );
-      if (data.code === SUCCESS_CODE.SUCCESS) {
-        successToast("Course restored successfully");
-      }
-
-      return data.data;
-    } catch (err) {
-      const error = err as AxiosError<ErrorResponseType>;
-      const code = error.response?.data.code;
-
-      console.log(error);
-
-      displayErrorToastBasedOnCode(code);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return { superUserRestoresDeletedCourse, loading };
-};
-
-export const useSuperUserDeletesCourse = () => {
-  const [loading, setLoading] = useState(false);
-
-  const { axios } = useAxios();
-
-  const superUserDeletesCourse = async ({ id }: Payload) => {
-    try {
-      setLoading(true);
-      const { data } = await axios.delete<SingleItemResponseType<Course>>(
+      const { data } = await axios.delete<SingleItemResponseType<Program>>(
         `${API_URL}/${id}`
       );
       if (data.code === SUCCESS_CODE.SUCCESS) {
-        successToast("Course restored successfully");
+        successToast("Program restored successfully");
       }
 
       return data.data;
@@ -106,25 +82,92 @@ export const useSuperUserDeletesCourse = () => {
     }
   };
 
-  return { superUserDeletesCourse, loading };
+  return { superUserDeletesProgram, loading };
 };
 
-export const useSuperUserGetsCourse = () => {
+export const useSuperUserRestoresDeletedProgram = () => {
   const [loading, setLoading] = useState(false);
-  const [course, setCourse] = useState<Course | null>(null);
+
+  const { axios } = useAxios();
+
+  const superUserRestoresDeletedProgram = async ({ id }: Payload) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post<SingleItemResponseType<Program>>(
+        `${API_URL}/restore/${id}`
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("Program restored successfully");
+      }
+
+      return data.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      displayErrorToastBasedOnCode(code);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { superUserRestoresDeletedProgram, loading };
+};
+
+export const useSuperUserCreatesProgram = () => {
+  const [loading, setLoading] = useState(false);
+
+  const { axios } = useAxios();
+
+  const superUserCreatesProgram = async ({
+    formData,
+  }: PayloadForm<ProgramFormType>) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post<SingleItemResponseType<Program>>(
+        `${API_URL}`,
+        { ...formData }
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("Program created successfully");
+
+        return data.data;
+      }
+
+      return data.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      displayErrorToastBasedOnCode(code);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { superUserCreatesProgram, loading };
+};
+
+export const useSuperUserGetsProgram = () => {
+  const [loading, setLoading] = useState(false);
+  const [program, setProgram] = useState<Program | null>(null);
   const [notFound, setNotFound] = useState(false);
 
   const { axios } = useAxios();
 
-  const superUserGetsCourse = async ({ id }: Payload) => {
+  const superUserGetsProgram = async ({ id }: Payload) => {
     setNotFound(false);
     try {
       setLoading(true);
-      const { data } = await axios.get<SingleItemResponseType<Course>>(
-        `${API_URL}/super-user-get-course/${id}`
+      const { data } = await axios.get<SingleItemResponseType<Program>>(
+        `${API_URL}/super-user-get-program/${id}`
       );
       if (data.code === SUCCESS_CODE.SUCCESS) {
-        setCourse(data.data);
+        setProgram(data.data);
       }
 
       return data.data;
@@ -135,7 +178,7 @@ export const useSuperUserGetsCourse = () => {
       console.log(error);
 
       if (code === CODE.NOT_FOUND) {
-        failedToast("Course does not exist");
+        failedToast("Program does not exist");
         setNotFound(true);
         return;
       }
@@ -147,67 +190,31 @@ export const useSuperUserGetsCourse = () => {
   };
 
   return {
-    superUserGetsCourse,
+    superUserGetsProgram,
     loading,
-    course,
+    program,
     notFound,
-    setCourse,
+    setProgram,
   };
 };
 
-export const useSuperUserCreatesCourse = () => {
+export const useSuperUserUpdatesProgram = () => {
   const [loading, setLoading] = useState(false);
 
   const { axios } = useAxios();
 
-  const superUserCreatesCourse = async ({
-    formData,
-  }: PayloadForm<CourseFormType>) => {
-    try {
-      setLoading(true);
-      const { data } = await axios.post<SingleItemResponseType<Course>>(
-        `${API_URL}`,
-        { ...formData }
-      );
-      if (data.code === SUCCESS_CODE.SUCCESS) {
-        successToast("Course created successfully");
-
-        return data.data;
-      }
-
-      return data.data;
-    } catch (err) {
-      const error = err as AxiosError<ErrorResponseType>;
-      const code = error.response?.data.code;
-
-      console.log(error);
-
-      displayErrorToastBasedOnCode(code);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return { superUserCreatesCourse, loading };
-};
-
-export const useSuperUserUpdatesCourse = () => {
-  const [loading, setLoading] = useState(false);
-
-  const { axios } = useAxios();
-
-  const superUserUpdatesCourse = async ({
+  const superUserUpdatesProgram = async ({
     formData,
     id,
-  }: PayloadForm<CourseFormType>) => {
+  }: PayloadForm<ProgramFormType>) => {
     try {
       setLoading(true);
-      const { data } = await axios.patch<SingleItemResponseType<Course>>(
+      const { data } = await axios.patch<SingleItemResponseType<Program>>(
         `${API_URL}/${id}`,
         { ...formData }
       );
       if (data.code === SUCCESS_CODE.SUCCESS) {
-        successToast("Course updated successfully");
+        successToast("Program updated successfully");
 
         return data.data;
       }
@@ -225,5 +232,5 @@ export const useSuperUserUpdatesCourse = () => {
     }
   };
 
-  return { superUserUpdatesCourse, loading };
+  return { superUserUpdatesProgram, loading };
 };

@@ -6,13 +6,9 @@ export type SchoolRating = {
   stars: number;
   message: string;
   schoolId: string;
-
   client: Pick<User, "name">;
-
   createdAt: Date;
   updatedAt: Date;
   isDeleted?: boolean;
   creator?: Creator;
 };
-
-// mamadou mounirou

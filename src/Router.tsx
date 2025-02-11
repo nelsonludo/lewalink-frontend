@@ -16,6 +16,10 @@ import NewCourse from "./pages/courses/pages/NewCourse";
 import UpdateCourse from "./pages/courses/pages/UpdateCourse";
 import ForgotPassword from "./pages/forgotPassword";
 import ResetPassword from "./pages/resetPassword";
+import ProgramsList from "./pages/programs/pages/ProgramsList";
+import NewProgram from "./pages/programs/pages/NewProgram";
+import SingleProgram from "./pages/programs/pages/SingleProgram";
+import UpdateProgram from "./pages/programs/pages/UpdateProgram";
 
 const Router = () => {
   return (
@@ -64,7 +68,12 @@ const Router = () => {
             <Route path="update/:id" element={<UpdateCourse />} />
             <Route path=":id" element={<SingleCourse />} />
           </Route>
-          <Route path="programs" element={<h1>Programs page</h1>} />
+          <Route path="programs">
+            <Route index element={<ProgramsList />} />
+            <Route path="new" element={<NewProgram />} />
+            <Route path="update/:id" element={<UpdateProgram />} />
+            <Route path=":id" element={<SingleProgram />} />
+          </Route>
           <Route path="schools" element={<h1>Schools page</h1>} />
         </Route>
 

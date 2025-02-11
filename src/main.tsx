@@ -15,5 +15,5 @@ createRoot(document.getElementById("root")!).render(
   </Provider>
 );
 
-// Manage all the possible errors on the course api.
-// Start working on the programs management.
+// Remove course to program (confirmation modal).
+// Add course to program (In a modal).
