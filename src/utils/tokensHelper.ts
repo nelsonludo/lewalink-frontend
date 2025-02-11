@@ -69,5 +69,13 @@ export class TokenHelper {
     return { accessToken, refreshToken };
   }
 
-  deleteTokens() {}
+  deleteTokens() {
+    // Remove from localStorage
+    localStorage.removeItem(this.VITE_ACCESS_TOKEN_PART_ONE);
+    localStorage.removeItem(this.VITE_REFRESH_TOKEN_PART_ONE);
+
+    // Remove from Cookies
+    Cookies.remove(this.VITE_ACCESS_TOKEN_PART_TWO);
+    Cookies.remove(this.VITE_REFRESH_TOKEN_PART_TWO);
+  }
 }

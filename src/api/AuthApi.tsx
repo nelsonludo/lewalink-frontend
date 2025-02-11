@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { CreateAccountFormType, LoginFormType } from "../types/forms";
+import {
+  CreateAccountFormType,
+  ForgotPasswordFormType,
+  LoginFormType,
+  ResetPasswordFormType,
+} from "../types/forms";
 import { failedToast, successToast } from "../utils/toasts";
 import { ErrorResponseType } from "../types/response/error-response-type";
 import {
@@ -125,6 +130,50 @@ export const useSignin = () => {
   return { loading, signIn };
 };
 
+export const useLogout = () => {
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { axios } = useAxios();
+
+  const logout = async () => {
+    try {
+      dispatch(setLoadingUser(true));
+      const { data } = await axios.post<SimpleSuccessResponseType>(
+        `${API_URL}/logout`
+      );
+
+      console.log("data", data);
+
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        const tokenHelper = new TokenHelper();
+        tokenHelper.deleteTokens();
+        dispatch(setUser(null));
+        navigate("/signin");
+      }
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      console.log(error);
+
+      const code = error.response?.data.code;
+      switch (code) {
+        case CODE.UNEXPECTED_ERROR:
+          failedToast("Unable to logout");
+          break;
+        default:
+          failedToast("Something went wrong");
+          break;
+      }
+    } finally {
+      dispatch(setLoadingUser(false));
+      setLoading(false);
+    }
+  };
+
+  return { loading, logout };
+};
+
 export const useGoogleAuth = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -209,40 +258,7 @@ export const useGetProfile = () => {
 };
 
 // export const useLogout = () => {
-//   const dispatch = useDispatch();
-//   const { axios } = useAxios();
-
-//   const logout = async () => {
-//     try {
-//       dispatch(setLoadingUser(true));
-//       const { data } = await axios.post<SimpleSuccessResponseType>(
-//         `${API_URL}/logout`
-//       );
-
-//       console.log("data", data);
-
-//       if (data.code === SUCCESS_CODE.SUCCESS) {
-//         dispatch(setUser(null));
-//       }
-//     } catch (err) {
-//       const error = err as AxiosError<ErrorResponseType>;
-//       console.log(error);
-
-//       const code = error.response?.data.code;
-//       switch (code) {
-//         case CODE.UNEXPECTED_ERROR:
-//           failedToast("Unable to logout");
-//           break;
-//         default:
-//           failedToast("Something went wrong");
-//           break;
-//       }
-//     } finally {
-//       dispatch(setLoadingUser(false));
-//     }
-//   };
-
-//   return { logout };
+//
 // };
 
 // export const useUpdateAccount = () => {
@@ -443,110 +459,110 @@ export const useActivateAccount = () => {
   return { activateAccount };
 };
 
-// export const useForgotPassword = () => {
-//   const [loading, setLoading] = useState(false);
-//   const { axios } = useAxios();
+export const useForgotPassword = () => {
+  const [loading, setLoading] = useState(false);
+  const { axios } = useAxios();
 
-//   const forgotPassword = async (userFormData: ForgotPasswordFormType) => {
-//     try {
-//       setLoading(true);
+  const forgotPassword = async (userFormData: ForgotPasswordFormType) => {
+    try {
+      setLoading(true);
 
-//       const { data } = await axios.post<SimpleSuccessResponseType>(
-//         `${API_URL}/forgot-password`,
-//         {
-//           ...userFormData,
-//         }
-//       );
+      const { data } = await axios.post<SimpleSuccessResponseType>(
+        `${API_URL}/forgot-password`,
+        {
+          ...userFormData,
+        }
+      );
 
-//       if (data.code === SUCCESS_CODE.SUCCESS) {
-//         successToast("Check your email to reset your password");
-//       } else {
-//         throw new Error();
-//       }
-//     } catch (err) {
-//       const error = err as AxiosError<ErrorResponseType>;
-//       const code = error.response?.data.code;
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("Check your email to reset your password");
+      } else {
+        throw new Error();
+      }
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
 
-//       console.log(error);
+      console.log(error);
 
-//       switch (code) {
-//         case CODE.NOT_FOUND:
-//           failedToast("Account does not exist");
-//           break;
-//         case CODE.VALIDATION_REQUEST_ERROR:
-//           failedToast("Make sure you enter the correct info");
-//           break;
-//         case CODE.ACCOUNT_NOT_ACTIVATED:
-//           failedToast("First check your email to activate your account");
-//           break;
-//         case CODE.UNEXPECTED_ERROR:
-//           failedToast("Unexpected error occured");
-//           break;
-//         default:
-//           failedToast("Something went wrong");
-//           break;
-//       }
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+      switch (code) {
+        case CODE.NOT_FOUND:
+          failedToast("Account does not exist");
+          break;
+        case CODE.VALIDATION_REQUEST_ERROR:
+          failedToast("Make sure you enter the correct info");
+          break;
+        case CODE.ACCOUNT_NOT_ACTIVATED:
+          failedToast("First check your email to activate your account");
+          break;
+        case CODE.UNEXPECTED_ERROR:
+          failedToast("Unexpected error occured");
+          break;
+        default:
+          failedToast("Something went wrong");
+          break;
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   return { loading, forgotPassword };
-// };
+  return { loading, forgotPassword };
+};
 
-// export const useResetPassword = () => {
-//   const [loading, setLoading] = useState(false);
-//   const { axios } = useAxios();
-//   const navigate = useNavigate();
+export const useResetPassword = () => {
+  const [loading, setLoading] = useState(false);
+  const { axios } = useAxios();
+  const navigate = useNavigate();
 
-//   const resetPassword = async (
-//     userFormData: ResetPasswordFormType,
-//     code: string
-//   ) => {
-//     try {
-//       setLoading(true);
+  const resetPassword = async (
+    userFormData: ResetPasswordFormType,
+    code: string
+  ) => {
+    try {
+      setLoading(true);
 
-//       const { data } = await axios.post<SimpleSuccessResponseType>(
-//         `${API_URL}/reset-password`,
-//         {
-//           code,
-//           password: userFormData.password,
-//         }
-//       );
+      const { data } = await axios.post<SimpleSuccessResponseType>(
+        `${API_URL}/reset-password`,
+        {
+          code,
+          password: userFormData.password,
+        }
+      );
 
-//       if (data.code === SUCCESS_CODE.SUCCESS) {
-//         successToast("Password has been reset successfully");
-//         navigate("/signin");
-//       } else {
-//         throw new Error();
-//       }
-//     } catch (err) {
-//       const error = err as AxiosError<ErrorResponseType>;
-//       const code = error.response?.data.code;
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("Password has been reset successfully");
+        navigate("/signin");
+      } else {
+        throw new Error();
+      }
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
 
-//       console.log(error);
+      console.log(error);
 
-//       switch (code) {
-//         case CODE.NOT_FOUND:
-//           failedToast("Account does not exist");
-//           break;
-//         case CODE.VALIDATION_REQUEST_ERROR:
-//           failedToast("Make sure you enter the correct info");
-//           break;
-//         case CODE.ACCOUNT_NOT_ACTIVATED:
-//           failedToast("First check your email to activate your account");
-//           break;
-//         case CODE.UNEXPECTED_ERROR:
-//           failedToast("Unexpected error occured");
-//           break;
-//         default:
-//           failedToast("Something went wrong");
-//           break;
-//       }
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+      switch (code) {
+        case CODE.NOT_FOUND:
+          failedToast("Account does not exist");
+          break;
+        case CODE.VALIDATION_REQUEST_ERROR:
+          failedToast("Make sure you enter the correct info");
+          break;
+        case CODE.ACCOUNT_NOT_ACTIVATED:
+          failedToast("First check your email to activate your account");
+          break;
+        case CODE.UNEXPECTED_ERROR:
+          failedToast("Unexpected error occured");
+          break;
+        default:
+          failedToast("Something went wrong");
+          break;
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   return { loading, resetPassword };
-// };
+  return { loading, resetPassword };
+};

@@ -16,3 +16,12 @@ export type CourseFormType = {
   description: string;
   credits: number;
 };
+
+export type ForgotPasswordFormType = {
+  email: string;
+};
+
+export type ResetPasswordFormType = {
+  password: string;
+  confirmPassword: string;
+};

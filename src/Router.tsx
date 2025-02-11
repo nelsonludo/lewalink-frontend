@@ -14,6 +14,8 @@ import OnlyAdmins from "./protect-routes/OnlyAdmins";
 import SingleCourse from "./pages/courses/pages/SingleCourse";
 import NewCourse from "./pages/courses/pages/NewCourse";
 import UpdateCourse from "./pages/courses/pages/UpdateCourse";
+import ForgotPassword from "./pages/forgotPassword";
+import ResetPassword from "./pages/resetPassword";
 
 const Router = () => {
   return (
@@ -25,6 +27,8 @@ const Router = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/unauthorized" element={<h1>Unauthorized</h1>} />
         <Route path="/" element={<Navigate to={"/home"} />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset" element={<ResetPassword />} />
 
         {/* ONLY LOGGED OUT ROUTES  */}
         <Route
