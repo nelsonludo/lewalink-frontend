@@ -6,11 +6,11 @@ import {
 import { AxiosError } from "axios";
 import { ErrorResponseType } from "../types/response/error-response-type";
 import useAxios from "../hooks/useAxios";
-import { CODE, SUCCESS_CODE } from "../types/enums/error-codes";
+import { SUCCESS_CODE } from "../types/enums/error-codes";
 
 import { displayErrorToastBasedOnCode } from "../utils/display-error-toast-based-on-code";
-import { Payload, PayloadForm } from "../types/general";
-import { failedToast, successToast } from "../utils/toasts";
+import { Payload } from "../types/general";
+import { successToast } from "../utils/toasts";
 import { ProgramCourse } from "../types/entities/program-course";
 
 const API_URL = "/api/program-course/v1";
@@ -57,4 +57,66 @@ export const useSuperUserGetProgramCourses = () => {
     programCourses,
     setProgramCourses,
   };
+};
+
+export const useSuperUserDeletesProgramCourse = () => {
+  const [loading, setLoading] = useState(false);
+
+  const { axios } = useAxios();
+
+  const superUserDeletesProgramCourse = async ({ id }: Payload) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.delete<
+        SingleItemResponseType<ProgramCourse>
+      >(`${API_URL}/${id}`);
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("Course deleted successfully");
+      }
+
+      return data.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      displayErrorToastBasedOnCode(code);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { superUserDeletesProgramCourse, loading };
+};
+
+export const useSuperUserRestoresDeletedProgramCourse = () => {
+  const [loading, setLoading] = useState(false);
+
+  const { axios } = useAxios();
+
+  const superUserRestoresDeletedProgramCourse = async ({ id }: Payload) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post<SingleItemResponseType<ProgramCourse>>(
+        `${API_URL}/restore/${id}`
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("Course restored successfully");
+      }
+
+      return data.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      displayErrorToastBasedOnCode(code);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { superUserRestoresDeletedProgramCourse, loading };
 };

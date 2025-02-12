@@ -12,11 +12,12 @@ import {
   useSuperUserGetsProgram,
   useSuperUserRestoresDeletedProgram,
 } from "../../../api/ProgramApi";
-
-import { classNames, getInitials } from "../../../utils/smallFunctions";
-import { XMarkIcon } from "@heroicons/react/24/outline";
-import { useSuperUserGetProgramCourses } from "../../../api/ProgramCourseApi";
-import { randomBgs } from "../../../utils/constants";
+import {
+  useSuperUserDeletesProgramCourse,
+  useSuperUserGetProgramCourses,
+  useSuperUserRestoresDeletedProgramCourse,
+} from "../../../api/ProgramCourseApi";
+import { ProgramCourse } from "../../../types/entities/program-course";
 
 const SingleProgram = () => {
   const { id } = useParams();
@@ -25,7 +26,7 @@ const SingleProgram = () => {
   const {
     loading: loadingCourses,
     programCourses,
-    // setProgramCourses,
+    setProgramCourses,
     superUserGetProgramCourses,
   } = useSuperUserGetProgramCourses();
   const navigate = useNavigate();
@@ -38,8 +39,25 @@ const SingleProgram = () => {
   const { loading: loadingSuperUserDeletesProgram, superUserDeletesProgram } =
     useSuperUserDeletesProgram();
 
+  const {
+    loading: loadingSuperUserRestoresDeletedProgramCourse,
+    superUserRestoresDeletedProgramCourse,
+  } = useSuperUserRestoresDeletedProgramCourse();
+
+  const {
+    loading: loadingSuperUserDeleteProgramCourse,
+    superUserDeletesProgramCourse,
+  } = useSuperUserDeletesProgramCourse();
+
   const [openDeleteProgram, setOpenDeleteProgram] = useState<
     ViewOrUpdateOrDeleteType<Program | undefined>
+  >({
+    show: false,
+    data: undefined,
+  });
+
+  const [openDeleteProgramCourse, setOpenDeleteProgramCourse] = useState<
+    ViewOrUpdateOrDeleteType<ProgramCourse | undefined>
   >({
     show: false,
     data: undefined,
@@ -52,7 +70,14 @@ const SingleProgram = () => {
     data: undefined,
   });
 
-  const doConfirmDeleteCourse = async () => {
+  const [openRestoreProgramCourse, setOpenRestoreProgramCourse] = useState<
+    ViewOrUpdateOrDeleteType<ProgramCourse | undefined>
+  >({
+    show: false,
+    data: undefined,
+  });
+
+  const doConfirmDeleteProgram = async () => {
     if (!openDeleteProgram.data) return;
 
     const deletedProgram = await superUserDeletesProgram({
@@ -68,7 +93,31 @@ const SingleProgram = () => {
     });
   };
 
-  const doConfirmRestoreDeletedCourse = async () => {
+  const doConfirmDeleteProgramCourse = async () => {
+    if (!openDeleteProgramCourse.data) return;
+
+    const deletedProgramCourse = await superUserDeletesProgramCourse({
+      id: openDeleteProgramCourse.data.id,
+    });
+
+    if (!deletedProgramCourse) return;
+
+    const newProgramCourses = programCourses.map((programCourse) => {
+      if (programCourse.id === openDeleteProgramCourse?.data?.id) {
+        return deletedProgramCourse;
+      }
+
+      return programCourse;
+    });
+
+    setProgramCourses(newProgramCourses);
+    setOpenDeleteProgramCourse({
+      show: false,
+      data: undefined,
+    });
+  };
+
+  const doConfirmRestoreDeletedProgram = async () => {
     if (!openRestoreProgram.data) return;
 
     const restoredProgram = await superUserRestoresDeletedProgram({
@@ -79,6 +128,30 @@ const SingleProgram = () => {
 
     setProgram(restoredProgram);
     setOpenRestoreProgram({
+      show: false,
+      data: undefined,
+    });
+  };
+
+  const doConfirmRestoreProgramCourse = async () => {
+    if (!openRestoreProgramCourse.data) return;
+
+    const restoredProgramCourse = await superUserRestoresDeletedProgramCourse({
+      id: openRestoreProgramCourse.data.id,
+    });
+
+    if (!restoredProgramCourse) return;
+
+    const newProgramCourses = programCourses.map((programCourse) => {
+      if (programCourse.id === openRestoreProgramCourse?.data?.id) {
+        return restoredProgramCourse;
+      }
+
+      return programCourse;
+    });
+
+    setProgramCourses(newProgramCourses);
+    setOpenRestoreProgramCourse({
       show: false,
       data: undefined,
     });
@@ -181,64 +254,105 @@ const SingleProgram = () => {
               Associated courses
             </dt>
             <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-4 sm:mt-0">
-              <ul
-                role="list"
-                className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
-              >
-                {programCourses.map((programCourse) => {
-                  const course = programCourse.course;
-                  return (
-                    <li
-                      key={course.code}
-                      className={`col-span-1 flex   shadow-xs   ${
-                        course.isDeleted &&
-                        "border-4 rounded-xl border-red-600 line-through"
-                      }`}
-                    >
-                      <div
-                        className={classNames(
-                          `${
-                            randomBgs[
-                              Math.floor(Math.random() * randomBgs.length)
-                            ]
-                          }`,
-                          "flex w-16 shrink-0 items-center justify-center  text-sm font-medium text-white rounded-l-lg"
-                        )}
+              {programCourses.length > 0 ? (
+                <ul role="list" className="divide-y divide-gray-100">
+                  {programCourses.map((programCourse) => {
+                    const course = programCourse.course;
+
+                    return (
+                      <li
+                        key={course.id}
+                        className={`flex items-center justify-between gap-x-6 py-5  mb-2 rounded-lg `}
                       >
-                        {getInitials(course.title)}
-                      </div>
-                      <div className="flex flex-1 items-center justify-between truncate  border-t border-r border-b border-gray-200 bg-white rounded-r-lg">
-                        <div className="flex-1 truncate px-4 py-2 text-sm">
-                          <Link to={`/dashboard/courses/${course.id}`}>
-                            <span>{course.code}</span>
-                          </Link>
-                          <p className="text-gray-500">
-                            {course.title.slice(0, 20)}{" "}
-                          </p>
+                        <div className="min-w-0">
+                          <div className="flex items-start gap-x-3">
+                            <p className="text-sm/6 font-semibold text-gray-900">
+                              {course.title} ( {course.code} )
+                            </p>
+                            {programCourse.isDeleted ? (
+                              <span className="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-600/10 ring-inset">
+                                Deleted asscociation
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-green-600/20 ring-inset">
+                                Active asscociation
+                              </span>
+                            )}
+
+                            {course.isDeleted ? (
+                              <span className="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-600/10 ring-inset">
+                                Deleted course
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-green-600/20 ring-inset">
+                                Active course
+                              </span>
+                            )}
+                          </div>
+                          <div className="mt-1 flex items-center gap-x-2 text-xs/5 text-gray-500">
+                            <p className="whitespace-nowrap">
+                              Due on{" "}
+                              <time dateTime={String(course.createdAt)}>
+                                {String(course.createdAt)}
+                              </time>
+                            </p>
+                            <svg
+                              viewBox="0 0 2 2"
+                              className="size-0.5 fill-current"
+                            >
+                              <circle r={1} cx={1} cy={1} />
+                            </svg>
+                            <p className="truncate">
+                              Created by {course.creator?.name},{" "}
+                              {course.creator?.email}
+                            </p>
+                          </div>
                         </div>
-                        <div className="shrink-0 pr-2">
-                          <button
-                            type="button"
-                            className="inline-flex size-8 items-center justify-center rounded-full bg-transparent bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
-                            title={`Remove the course asdf`}
+                        <div className="flex flex-none items-center gap-x-4">
+                          <Link
+                            to={`/dashboard/courses/${course.id}`}
+                            className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50 sm:block"
                           >
-                            <span className="sr-only">Open options</span>
-                            <XMarkIcon
-                              aria-hidden="true"
-                              className="size-5 text-red-600 hover:text-red-500"
-                            />
-                          </button>
+                            View course
+                          </Link>
+                          {programCourse.isDeleted ? (
+                            <button
+                              className="hidden rounded-md bg-indigo-600 hover:bg-indigo-500 px-2.5 py-1.5 text-sm font-semibold text-white ring-1 shadow-xs ring-gray-300 ring-inset  sm:block"
+                              onClick={() =>
+                                setOpenRestoreProgramCourse({
+                                  show: true,
+                                  data: programCourse,
+                                })
+                              }
+                            >
+                              Restore
+                            </button>
+                          ) : (
+                            <button
+                              className="hidden rounded-md bg-indigo-600 hover:bg-indigo-500 px-2.5 py-1.5 text-sm font-semibold text-white ring-1 shadow-xs ring-gray-300 ring-inset  sm:block"
+                              onClick={() =>
+                                setOpenDeleteProgramCourse({
+                                  show: true,
+                                  data: programCourse,
+                                })
+                              }
+                            >
+                              Delete
+                            </button>
+                          )}
                         </div>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                "No course associated"
+              )}
             </dd>
           </div>
         </dl>
       </div>
-      <div className=" flex items-center justify-end mt-10">
+      <div className=" flex items-center justify-end mt-5">
         <div className=" flex items-center gap-5">
           <Link
             to={"/dashboard/programs"}
@@ -295,17 +409,31 @@ const SingleProgram = () => {
 
       <DeleteModal
         data={openDeleteProgram}
-        onConfirmDelete={doConfirmDeleteCourse}
+        onConfirmDelete={doConfirmDeleteProgram}
         setData={setOpenDeleteProgram}
         title={`Are you sure you want to delete the program ${openDeleteProgram.data?.name} ?`}
         loading={loadingSuperUserDeletesProgram}
       />
+      <DeleteModal
+        data={openDeleteProgramCourse}
+        onConfirmDelete={doConfirmDeleteProgramCourse}
+        setData={setOpenDeleteProgramCourse}
+        title={`Are you sure you want to remove the course ${openDeleteProgramCourse.data?.course.title} ?`}
+        loading={loadingSuperUserDeleteProgramCourse}
+      />
       <ConfirmModal
         data={openRestoreProgram}
-        onConfirm={doConfirmRestoreDeletedCourse}
+        onConfirm={doConfirmRestoreDeletedProgram}
         setData={setOpenRestoreProgram}
         title={`Are you sure you want to restore the program ${openRestoreProgram.data?.name} ?`}
         loading={loadingSuperUserRestoresDeletedProgram}
+      />
+      <ConfirmModal
+        data={openRestoreProgramCourse}
+        onConfirm={doConfirmRestoreProgramCourse}
+        setData={setOpenRestoreProgramCourse}
+        title={`Are you sure you want to restore the course ${openRestoreProgramCourse.data?.course.title} ?`}
+        loading={loadingSuperUserRestoresDeletedProgramCourse}
       />
     </div>
   );

@@ -15,5 +15,4 @@ createRoot(document.getElementById("root")!).render(
   </Provider>
 );
 
-// Remove course to program (confirmation modal).
 // Add course to program (In a modal).
