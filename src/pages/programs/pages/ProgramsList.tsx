@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import TablePagination from "@mui/material/TablePagination";
-import {
-  useSuperUserDeletesCourse,
-  useSuperUserGetCourses,
-  useSuperUserRestoresDeletedCourse,
-} from "../../../api/CourseApi";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,40 +8,53 @@ import BigSectionLoading from "../../../components/BigSectionLoading";
 import NothingSelected from "../../../components/NothingSelected";
 import { useDebounce } from "use-debounce";
 import DeleteModal from "../../../components/DeleteModal";
-import { Course } from "../../../types/entities/course";
 import { ViewOrUpdateOrDeleteType } from "../../../types/general";
 import ConfirmModal from "../../../components/ConfirmModal";
+import {
+  Program,
+  ProgramFieldType,
+  ProgramType,
+} from "../../../types/entities/program";
+import { getEnumValues } from "../../../utils/smallFunctions";
+import {
+  useSuperUserDeletesProgram,
+  useSuperUserGetPrograms,
+  useSuperUserRestoresDeletedProgram,
+} from "../../../api/ProgramApi";
 
-const CourseList = () => {
+const ProgramsList = () => {
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [field, setField] = useState("");
+
   const [search] = useDebounce(name, 1000);
 
-  const [openDeleteCourse, setOpenDeleteCourse] = useState<
-    ViewOrUpdateOrDeleteType<Course | undefined>
+  const [openDeleteProgram, setOpenDeleteProgram] = useState<
+    ViewOrUpdateOrDeleteType<Program | undefined>
   >({
     show: false,
     data: undefined,
   });
 
-  const [openRestoreCourse, setOpenRestoreCourse] = useState<
-    ViewOrUpdateOrDeleteType<Course | undefined>
+  const [openRestoreProgram, setOpenRestoreProgram] = useState<
+    ViewOrUpdateOrDeleteType<Program | undefined>
   >({
     show: false,
     data: undefined,
   });
 
-  const { loading, courses, superUserGetCourses, totalPages, setCourses } =
-    useSuperUserGetCourses();
+  const { loading, programs, superUserGetPrograms, totalPages, setPrograms } =
+    useSuperUserGetPrograms();
 
   const {
-    loading: loadingSuperUserRestoresDeletedCourse,
-    superUserRestoresDeletedCourse,
-  } = useSuperUserRestoresDeletedCourse();
+    loading: loadingSuperUserRestoresDeletedProgram,
+    superUserRestoresDeletedProgram,
+  } = useSuperUserRestoresDeletedProgram();
 
-  const { loading: loadingSuperUserDeletesCourse, superUserDeletesCourse } =
-    useSuperUserDeletesCourse();
+  const { loading: loadingSuperUserDeletesProgram, superUserDeletesProgram } =
+    useSuperUserDeletesProgram();
 
   const navigate = useNavigate();
 
@@ -64,89 +72,129 @@ const CourseList = () => {
     setPage(0);
   };
 
-  const doConfirmDeleteCourse = async () => {
-    if (!openDeleteCourse.data) return;
+  const doConfirmDeleteProgram = async () => {
+    if (!openDeleteProgram.data) return;
 
-    const deletedCourse = await superUserDeletesCourse({
-      id: openDeleteCourse.data.id,
+    const deletedProgram = await superUserDeletesProgram({
+      id: openDeleteProgram.data.id,
     });
 
-    if (!deletedCourse) return;
+    if (!deletedProgram) return;
 
-    const newCourses = courses.map((course) => {
-      if (course.id === openDeleteCourse?.data?.id) {
-        return deletedCourse;
+    const newPrograms = programs.map((program) => {
+      if (program.id === openDeleteProgram?.data?.id) {
+        return deletedProgram;
       }
 
-      return course;
+      return program;
     });
 
-    setCourses(newCourses);
+    setPrograms(newPrograms);
 
-    setOpenDeleteCourse({
+    setOpenDeleteProgram({
       show: false,
       data: undefined,
     });
   };
 
-  const doConfirmRestoreDeletedCourse = async () => {
-    if (!openRestoreCourse.data) return;
+  const doConfirmRestoreDeletedProgram = async () => {
+    if (!openRestoreProgram.data) return;
 
-    const restoredCourse = await superUserRestoresDeletedCourse({
-      id: openRestoreCourse.data.id,
+    const restoredProgram = await superUserRestoresDeletedProgram({
+      id: openRestoreProgram.data.id,
     });
 
-    if (!restoredCourse) return;
+    if (!restoredProgram) return;
 
-    const newCourses = courses.map((course) => {
-      if (course.id === openRestoreCourse?.data?.id) {
-        return restoredCourse;
+    const newPrograms = programs.map((program) => {
+      if (program.id === openRestoreProgram?.data?.id) {
+        return restoredProgram;
       }
 
-      return course;
+      return program;
     });
 
-    setCourses(newCourses);
+    setPrograms(newPrograms);
 
-    setOpenRestoreCourse({
+    setOpenRestoreProgram({
       show: false,
       data: undefined,
     });
   };
 
   useEffect(() => {
-    superUserGetCourses({ name: search, page: page + 1, itemsPerPage });
-  }, [search, page, itemsPerPage]);
+    superUserGetPrograms({
+      name: search,
+      page: page + 1,
+      itemsPerPage,
+      type,
+      field,
+    });
+  }, [search, page, itemsPerPage, type, field]);
 
   return (
     <section>
       <div>
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
-            <h1 className="text-base font-semibold text-gray-900">Courses</h1>
+            <h1 className="text-base font-semibold text-gray-900">Programs</h1>
             <p className="mt-2 text-sm text-gray-700">
-              A list of all the courses.
+              A list of all the programs.
             </p>
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
             <Link
-              to={`/dashboard/courses/new`}
+              to={`/dashboard/programs/new`}
               className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Add course
+              Add program
             </Link>
           </div>
         </div>
-        <div className="relative mt-4 w-full">
+        <div className="relative mt-4 w-full  flex items-center gap-3">
           <input
             id="search"
             name="search"
             type="text"
-            placeholder="Search for a course using the title"
-            className="block w-full  py-2 pr-3 pl-9 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6 border rounded-lg flex-grow"
+            placeholder="Search for a program"
+            className="block  py-2 pr-3 pl-9 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6 border rounded-lg flex-grow"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
+
+          <select
+            id="duration-type"
+            autoComplete="duration-type-name"
+            className="block  py-3 px-3  text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6 border rounded-lg bg-white text-left"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+          >
+            <option value="">Select a program type</option>
+            {getEnumValues(ProgramType).map((item) => {
+              return (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              );
+            })}
+          </select>
+
+          <select
+            id="duration-type"
+            autoComplete="duration-type-name"
+            className="block  py-3 px-3  text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6 border rounded-lg bg-white text-left"
+            value={field}
+            onChange={(e) => setField(e.target.value)}
+          >
+            <option value="">Select a program field</option>
+            {getEnumValues(ProgramFieldType).map((item) => {
+              return (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              );
+            })}
+          </select>
 
           <FiSearch
             size={16}
@@ -159,18 +207,18 @@ const CourseList = () => {
           </div>
         )}
 
-        {!loading && courses.length === 0 && (
+        {!loading && programs.length === 0 && (
           <div className=" mt-4">
             <NothingSelected
-              title="No course"
-              description="All courses will be displayed here"
-              buttonText="New course"
-              action={() => navigate("/dashboard/courses/new")}
+              title="No program"
+              description="All programs will be displayed here"
+              buttonText="New program"
+              action={() => navigate("/dashboard/programs/new")}
             />
           </div>
         )}
 
-        {!loading && courses.length > 0 && (
+        {!loading && programs.length > 0 && (
           <div className="mt-4">
             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -182,19 +230,25 @@ const CourseList = () => {
                           scope="col"
                           className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                         >
-                          Code
+                          Name
                         </th>
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          Title
+                          Type
                         </th>
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          Credits
+                          Field
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        >
+                          Duration
                         </th>
                         <th
                           scope="col"
@@ -232,32 +286,35 @@ const CourseList = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 bg-white  ">
-                      {courses.map((course) => (
-                        <tr key={course.id}>
+                      {programs.map((program) => (
+                        <tr key={program.id}>
                           <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6">
-                            <Link to={`/dashboard/courses/${course.id}`}>
-                              {course.code}
+                            <Link to={`/dashboard/programs/${program.id}`}>
+                              {program.name}
                             </Link>
                           </td>
                           <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                            {course.title}
+                            {program.type}
                           </td>
                           <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                            {course.credits}
+                            {program.field}
                           </td>
                           <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                            {course?.creator?.name}
+                            {program.duration} years
+                          </td>
+                          <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                            {program?.creator?.name}
                           </td>
 
                           <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                            {String(course?.createdAt)}
+                            {String(program?.createdAt)}
                           </td>
 
                           <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                            {String(course?.updatedAt)}
+                            {String(program?.updatedAt)}
                           </td>
                           <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                            {course.isDeleted ? (
+                            {program.isDeleted ? (
                               <span className="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-600/10 ring-inset">
                                 Deleted
                               </span>
@@ -285,7 +342,7 @@ const CourseList = () => {
                                 <div className="py-1">
                                   <MenuItem>
                                     <Link
-                                      to={`/dashboard/courses/${course.id}`}
+                                      to={`/dashboard/programs/${program.id}`}
                                       className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden hover:bg-gray-50 w-full text-left "
                                     >
                                       View
@@ -293,18 +350,18 @@ const CourseList = () => {
                                   </MenuItem>
                                   <MenuItem>
                                     <Link
-                                      to={`/dashboard/courses/update/${course.id}`}
+                                      to={`/dashboard/programs/update/${program.id}`}
                                       className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden hover:bg-gray-50 w-full text-left "
                                     >
                                       Edit
                                     </Link>
                                   </MenuItem>
-                                  {course.isDeleted ? (
+                                  {program.isDeleted ? (
                                     <MenuItem>
                                       <button
                                         onClick={() =>
-                                          setOpenRestoreCourse({
-                                            data: course,
+                                          setOpenRestoreProgram({
+                                            data: program,
                                             show: true,
                                           })
                                         }
@@ -317,8 +374,8 @@ const CourseList = () => {
                                     <MenuItem>
                                       <button
                                         onClick={() =>
-                                          setOpenDeleteCourse({
-                                            data: course,
+                                          setOpenDeleteProgram({
+                                            data: program,
                                             show: true,
                                           })
                                         }
@@ -356,21 +413,21 @@ const CourseList = () => {
       )}
 
       <DeleteModal
-        data={openDeleteCourse}
-        onConfirmDelete={doConfirmDeleteCourse}
-        setData={setOpenDeleteCourse}
-        title={`Are you sure you want to delete the course ${openDeleteCourse.data?.title} ?`}
-        loading={loadingSuperUserDeletesCourse}
+        data={openDeleteProgram}
+        onConfirmDelete={doConfirmDeleteProgram}
+        setData={setOpenDeleteProgram}
+        title={`Are you sure you want to delete the program ${openDeleteProgram.data?.name} ?`}
+        loading={loadingSuperUserDeletesProgram}
       />
       <ConfirmModal
-        data={openRestoreCourse}
-        onConfirm={doConfirmRestoreDeletedCourse}
-        setData={setOpenRestoreCourse}
-        title={`Are you sure you want to restore the course ${openRestoreCourse.data?.title} ?`}
-        loading={loadingSuperUserRestoresDeletedCourse}
+        data={openRestoreProgram}
+        onConfirm={doConfirmRestoreDeletedProgram}
+        setData={setOpenRestoreProgram}
+        title={`Are you sure you want to restore the program ${openRestoreProgram.data?.name} ?`}
+        loading={loadingSuperUserRestoresDeletedProgram}
       />
     </section>
   );
 };
 
-export default CourseList;
+export default ProgramsList;
