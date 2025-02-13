@@ -18,6 +18,7 @@ import {
   useSuperUserRestoresDeletedProgramCourse,
 } from "../../../api/ProgramCourseApi";
 import { ProgramCourse } from "../../../types/entities/program-course";
+import AddCourseToProgram from "../components/AddCourseToProgram";
 
 const SingleProgram = () => {
   const { id } = useParams();
@@ -76,6 +77,8 @@ const SingleProgram = () => {
     show: false,
     data: undefined,
   });
+
+  const [openAddCourseToProgram, setOpenAddCourseToProgram] = useState(false);
 
   const doConfirmDeleteProgram = async () => {
     if (!openDeleteProgram.data) return;
@@ -161,9 +164,13 @@ const SingleProgram = () => {
     superUserGetsProgram({
       id,
     });
-
-    superUserGetProgramCourses({ id, itemsPerPage: 1000, page: 1 });
   }, [id]);
+
+  useEffect(() => {
+    if (id && !openAddCourseToProgram) {
+      superUserGetProgramCourses({ id, itemsPerPage: 1000, page: 1 });
+    }
+  }, [id, openAddCourseToProgram]);
 
   if (loading || loadingCourses) {
     return <BigSectionLoading />;
@@ -360,7 +367,10 @@ const SingleProgram = () => {
           >
             Back
           </Link>
-          <button className="rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+          <button
+            className="rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            onClick={() => setOpenAddCourseToProgram(true)}
+          >
             Add course
           </button>
           <Link
@@ -406,6 +416,13 @@ const SingleProgram = () => {
           )}
         </div>
       </div>
+      {openAddCourseToProgram && (
+        <AddCourseToProgram
+          openAddCourseToProgram={openAddCourseToProgram}
+          setOpenAddCourseToProgram={setOpenAddCourseToProgram}
+          program={program}
+        />
+      )}
 
       <DeleteModal
         data={openDeleteProgram}

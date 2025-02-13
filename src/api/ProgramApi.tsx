@@ -6,7 +6,7 @@ import {
 import { AxiosError } from "axios";
 import { ErrorResponseType } from "../types/response/error-response-type";
 import useAxios from "../hooks/useAxios";
-import { CODE, SUCCESS_CODE } from "../types/enums/error-codes";
+import { CODES, SUCCESS_CODE } from "../types/enums/error-codes";
 
 import { displayErrorToastBasedOnCode } from "../utils/display-error-toast-based-on-code";
 import { Payload, PayloadForm } from "../types/general";
@@ -177,7 +177,7 @@ export const useSuperUserGetsProgram = () => {
 
       console.log(error);
 
-      if (code === CODE.NOT_FOUND) {
+      if (code === CODES.NOT_FOUND) {
         failedToast("Program does not exist");
         setNotFound(true);
         return;

@@ -120,3 +120,38 @@ export const useSuperUserRestoresDeletedProgramCourse = () => {
 
   return { superUserRestoresDeletedProgramCourse, loading };
 };
+
+export const useSuperUserAddsCourseToProgram = () => {
+  const [loading, setLoading] = useState(false);
+
+  const { axios } = useAxios();
+
+  const superUserAddsCourseToProgram = async ({
+    programId,
+    courseId,
+  }: Payload) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post<SingleItemResponseType<ProgramCourse>>(
+        `${API_URL}`,
+        { courseId, programId }
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("Course added successfully");
+      }
+
+      return data.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      displayErrorToastBasedOnCode(code);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { superUserAddsCourseToProgram, loading };
+};

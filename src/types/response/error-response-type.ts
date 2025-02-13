@@ -1,6 +1,6 @@
-import { CODE } from "../enums/error-codes";
+import { CODES } from "../enums/error-codes";
 
 export type ErrorResponseType = {
-  code: CODE;
+  code: CODES;
   message: string;
 };

@@ -13,7 +13,7 @@ import {
 } from "../types/response/success-response-types";
 import { User } from "../types/entities/user";
 import { AxiosError } from "axios";
-import { CODE, SUCCESS_CODE } from "../types/enums/error-codes";
+import { CODES, SUCCESS_CODE } from "../types/enums/error-codes";
 import { setLoadingUser, setUser } from "../store/auth.slice";
 import { useDispatch } from "react-redux";
 import useAxios from "../hooks/useAxios";
@@ -47,16 +47,16 @@ export const useSignUp = () => {
       console.log(error);
 
       switch (code) {
-        case CODE.EMAIL_IN_USE:
+        case CODES.EMAIL_IN_USE:
           failedToast("Email already in use");
           break;
-        case CODE.VALIDATION_REQUEST_ERROR:
+        case CODES.VALIDATION_REQUEST_ERROR:
           failedToast("Make sure you enter the correct info");
           break;
-        case CODE.UNEXPECTED_ERROR:
+        case CODES.UNEXPECTED_ERROR:
           failedToast("Unexpected error occured");
           break;
-        case CODE.ACCOUNT_NOT_ACTIVATED:
+        case CODES.ACCOUNT_NOT_ACTIVATED:
           failedToast(
             "Your account has been created already, check your email to activate it."
           );
@@ -112,10 +112,10 @@ export const useSignin = () => {
       console.log(error);
 
       switch (code) {
-        case CODE.UNABLE_TO_LOGIN:
+        case CODES.UNABLE_TO_LOGIN:
           failedToast("Unable to login");
           break;
-        case CODE.UNEXPECTED_ERROR:
+        case CODES.UNEXPECTED_ERROR:
           failedToast("Unexpected error occured");
           break;
         default:
@@ -158,7 +158,7 @@ export const useLogout = () => {
 
       const code = error.response?.data.code;
       switch (code) {
-        case CODE.UNEXPECTED_ERROR:
+        case CODES.UNEXPECTED_ERROR:
           failedToast("Unable to logout");
           break;
         default:
@@ -212,13 +212,13 @@ export const useGoogleAuth = () => {
       console.log(error);
 
       switch (code) {
-        case CODE.UNABLE_TO_LOGIN:
+        case CODES.UNABLE_TO_LOGIN:
           failedToast("Unable to login");
           break;
-        case CODE.CLIENT_ONLY:
+        case CODES.CLIENT_ONLY:
           failedToast("Super users cannot use this method to login");
           break;
-        case CODE.UNEXPECTED_ERROR:
+        case CODES.UNEXPECTED_ERROR:
           failedToast("Unexpected error occured");
           break;
         default:
@@ -286,13 +286,13 @@ export const useGetProfile = () => {
 
 //       const code = error.response?.data.code;
 //       switch (code) {
-//         case CODE.VALIDATION_REQUEST_ERROR:
+//         case CODES.VALIDATION_REQUEST_ERROR:
 //           failedToast("Make sure you enter the correct info");
 //           break;
-//         case CODE.NOT_FOUND:
+//         case CODES.NOT_FOUND:
 //           failedToast("Account not found");
 //           break;
-//         case CODE.UNEXPECTED_ERROR:
+//         case CODES.UNEXPECTED_ERROR:
 //           failedToast("Unexpected error occured");
 //           break;
 //         default:
@@ -327,19 +327,19 @@ export const useGetProfile = () => {
 
 //       const code = error.response?.data.code;
 //       switch (code) {
-//         case CODE.VALIDATION_REQUEST_ERROR:
+//         case CODES.VALIDATION_REQUEST_ERROR:
 //           failedToast("Make sure you enter the correct info");
 //           break;
-//         case CODE.NOT_FOUND:
+//         case CODES.NOT_FOUND:
 //           failedToast("Account not found");
 //           break;
-//         case CODE.PASSWORD_DOES_NOT_MATCH:
+//         case CODES.PASSWORD_DOES_NOT_MATCH:
 //           failedToast("Wrong current password");
 //           break;
-//         case CODE.PASSWORDS_MUST_BE_THE_SAME:
+//         case CODES.PASSWORDS_MUST_BE_THE_SAME:
 //           failedToast("Make sure that you confirm your new password");
 //           break;
-//         case CODE.UNEXPECTED_ERROR:
+//         case CODES.UNEXPECTED_ERROR:
 //           failedToast("Unexpected error occured");
 //           break;
 //         default:
@@ -440,13 +440,13 @@ export const useActivateAccount = () => {
       console.log(error);
 
       switch (code) {
-        case CODE.NOT_FOUND:
+        case CODES.NOT_FOUND:
           failedToast("User does not exist");
           break;
-        case CODE.VALIDATION_REQUEST_ERROR:
+        case CODES.VALIDATION_REQUEST_ERROR:
           failedToast("Make sure you enter the correct info");
           break;
-        case CODE.UNEXPECTED_ERROR:
+        case CODES.UNEXPECTED_ERROR:
           failedToast("Unexpected error occured");
           break;
         default:
@@ -486,16 +486,16 @@ export const useForgotPassword = () => {
       console.log(error);
 
       switch (code) {
-        case CODE.NOT_FOUND:
+        case CODES.NOT_FOUND:
           failedToast("Account does not exist");
           break;
-        case CODE.VALIDATION_REQUEST_ERROR:
+        case CODES.VALIDATION_REQUEST_ERROR:
           failedToast("Make sure you enter the correct info");
           break;
-        case CODE.ACCOUNT_NOT_ACTIVATED:
+        case CODES.ACCOUNT_NOT_ACTIVATED:
           failedToast("First check your email to activate your account");
           break;
-        case CODE.UNEXPECTED_ERROR:
+        case CODES.UNEXPECTED_ERROR:
           failedToast("Unexpected error occured");
           break;
         default:
@@ -522,7 +522,7 @@ export const useResetPassword = () => {
     try {
       setLoading(true);
 
-      const { data } = await axios.post<SimpleSuccessResponseType>(
+      const { data } = await axios.patch<SimpleSuccessResponseType>(
         `${API_URL}/reset-password`,
         {
           code,
@@ -543,16 +543,16 @@ export const useResetPassword = () => {
       console.log(error);
 
       switch (code) {
-        case CODE.NOT_FOUND:
+        case CODES.NOT_FOUND:
           failedToast("Account does not exist");
           break;
-        case CODE.VALIDATION_REQUEST_ERROR:
+        case CODES.VALIDATION_REQUEST_ERROR:
           failedToast("Make sure you enter the correct info");
           break;
-        case CODE.ACCOUNT_NOT_ACTIVATED:
+        case CODES.ACCOUNT_NOT_ACTIVATED:
           failedToast("First check your email to activate your account");
           break;
-        case CODE.UNEXPECTED_ERROR:
+        case CODES.UNEXPECTED_ERROR:
           failedToast("Unexpected error occured");
           break;
         default:

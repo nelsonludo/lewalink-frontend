@@ -7,7 +7,7 @@ import { Course } from "../types/entities/course";
 import { AxiosError } from "axios";
 import { ErrorResponseType } from "../types/response/error-response-type";
 import useAxios from "../hooks/useAxios";
-import { CODE, SUCCESS_CODE } from "../types/enums/error-codes";
+import { CODES, SUCCESS_CODE } from "../types/enums/error-codes";
 import { failedToast, successToast } from "../utils/toasts";
 import { CourseFormType } from "../types/forms";
 import { displayErrorToastBasedOnCode } from "../utils/display-error-toast-based-on-code";
@@ -134,7 +134,7 @@ export const useSuperUserGetsCourse = () => {
 
       console.log(error);
 
-      if (code === CODE.NOT_FOUND) {
+      if (code === CODES.NOT_FOUND) {
         failedToast("Course does not exist");
         setNotFound(true);
         return;
