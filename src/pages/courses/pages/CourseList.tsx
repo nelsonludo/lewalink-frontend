@@ -163,6 +163,7 @@ const CourseList = () => {
           <div className=" mt-4">
             <NothingSelected
               title="No course"
+              bg=" bg-gray-50"
               description="All courses will be displayed here"
               buttonText="New course"
               action={() => navigate("/dashboard/courses/new")}
@@ -342,7 +343,7 @@ const CourseList = () => {
           </div>
         )}
       </div>
-      {!loading && (
+      {!loading && courses.length > 0 && (
         <div className=" mt-4 flex items-center justify-end">
           <TablePagination
             component="div"

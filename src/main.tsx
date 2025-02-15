@@ -15,4 +15,5 @@ createRoot(document.getElementById("root")!).render(
   </Provider>
 );
 
-// Add course to program (In a modal).
+// Activate and deactivate account.
+// Create admin and editor accounts.
