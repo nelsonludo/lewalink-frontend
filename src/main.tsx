@@ -14,6 +14,3 @@ createRoot(document.getElementById("root")!).render(
     </GoogleOAuthProvider>
   </Provider>
 );
-
-// Activate and deactivate account.
-// Create admin and editor accounts.
