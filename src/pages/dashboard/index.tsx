@@ -7,12 +7,14 @@ import { navigation } from "../../utils/constants.tsx";
 import { AuthInitialStateType } from "../../store/auth.slice";
 import { useSelector } from "react-redux";
 import { UserType } from "../../types/entities/user";
+import { useLogout } from "../../api/AuthApi.tsx";
 
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user }: AuthInitialStateType = useSelector(
     (state: any) => state.authSlice
   );
+  const { loading, logout } = useLogout();
 
   return (
     <>
@@ -166,6 +168,7 @@ export default function Dashboard() {
         </div>
 
         <main className="py-10 lg:pl-72 bg-gray-50 min-h-[100vh]">
+          {!loading && <button onClick={() => logout()}>Logout</button>}
           <div className="px-4 sm:px-6 lg:px-8">
             <Outlet />
           </div>

@@ -260,10 +260,6 @@ export const useGetProfile = () => {
   return { getProfile };
 };
 
-// export const useLogout = () => {
-//
-// };
-
 // export const useUpdateAccount = () => {
 //   const [loading, setLoading] = useState(false);
 //   const dispatch = useDispatch();
