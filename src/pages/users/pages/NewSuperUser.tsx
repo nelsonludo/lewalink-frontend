@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { CreateAccountFormType } from "../../../types/forms";
 import LoadingButton from "../../../components/Buttons/LoadingButton";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   useAdminCreateAdmin,
   useAdminCreateEditor,
@@ -21,8 +21,6 @@ const NewSuperUser = () => {
 
   const watchedPassword = watch("password");
 
-  const navigate = useNavigate();
-
   const { adminCreateAdmin, loading: loadingCreateAdmin } =
     useAdminCreateAdmin();
   const { adminCreateEditor, loading: loadingCreateEditor } =
@@ -31,12 +29,12 @@ const NewSuperUser = () => {
   const onSubmit: SubmitHandler<CreateAccountFormType> = async (data) => {
     if (userType === UserType.Admin) {
       await adminCreateAdmin(data);
-      navigate("/dashboard/users");
+      reset();
     }
 
     if (userType === UserType.Editor) {
       await adminCreateEditor(data);
-      navigate("/dashboard/users");
+      reset();
     }
   };
 
