@@ -190,10 +190,10 @@ const Signup = () => {
 
             <div className="flex justify-end">
               <Link
-                    to="/signup"
+                    to="/signin"
                     className="font-regular text-purple-600 underline underline-offset-1  mt-1 text-sm"
                   >
-                    Sign up
+                    Sign in
                   </Link>
               </div>
           </form>
