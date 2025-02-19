@@ -21,27 +21,38 @@ const Signup = () => {
   };
 
   return (
-    <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <Link to={"/"}>
-            <img
-              alt="Your Company"
-              src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-              className="mx-auto h-10 w-auto"
-            />
-          </Link>
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-            Create an account
-          </h2>
-        </div>
+    
+      <div className="flex justify-center align-center w-full h-screen items-center">
+        <div className="w-[45%] inset-shadow-sm inset-shadow-purple-500 h-fit p-5">
+
+        <div >
+            <Link className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900 flex justify-center items-center" to={"/"}>
+              <div className="w-11 h-11 mr-2 bg-gray-100 shadow-lg shadow-purple-500">
+
+              {/* <img
+                alt=""
+                src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
+                className="mx-auto h-10 w-auto"
+              /> */}
+              </div>
+              <div className="bg-gray-100 py-1 px-5 shadow-lg shadow-purple-500">
+
+              <h2 className="text-center text-2xl/9 font-bold tracking-tight text-gray-900 ">
+              LewaLink
+            </h2>
+              </div>
+            </Link>
+            <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-purple-400">
+              Sign up
+            </h2>
+          </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
               <label
                 htmlFor="fullname"
-                className="block text-sm/6 font-medium text-gray-900"
+                className="block text-sm/6 font-medium text-gray-500"
               >
                 Full name
               </label>
@@ -50,7 +61,7 @@ const Signup = () => {
                   id="fullname"
                   type="text"
                   autoComplete="fullname"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                  className="bg-white w-full border-2 border-purple-100 rounded-md py-3 px-6 text-gray-900 shadow-md shadow-purple-500 placeholder:text-gray-400  focus:border-purple-500 hover:border-purple-500 text-sm transition duration-300 "
                   {...register("name", {
                     required: {
                       value: true,
@@ -67,7 +78,7 @@ const Signup = () => {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm/6 font-medium text-gray-900"
+                className="block text-sm/6 font-medium text-gray-500"
               >
                 Email address
               </label>
@@ -76,7 +87,7 @@ const Signup = () => {
                   id="email"
                   type="email"
                   autoComplete="email"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                  className="bg-white w-full border-2 border-purple-100 rounded-md py-3 px-6 text-gray-900 shadow-md shadow-purple-500 placeholder:text-gray-400  focus:border-purple-500 hover:border-purple-500 text-sm transition duration-300 "
                   {...register("email", {
                     required: {
                       value: true,
@@ -98,7 +109,7 @@ const Signup = () => {
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="password"
-                  className="block text-sm/6 font-medium text-gray-900"
+                  className="block text-sm/6 font-medium text-gray-500"
                 >
                   Password
                 </label>
@@ -108,7 +119,7 @@ const Signup = () => {
                   id="password"
                   type="password"
                   autoComplete="current-password"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                  className="bg-white w-full border-2 border-purple-100 rounded-md py-3 px-6 text-gray-900 shadow-md shadow-purple-500 placeholder:text-gray-400  focus:border-purple-500 hover:border-purple-500 text-sm transition duration-300 "
                   {...register("password", {
                     required: {
                       value: true,
@@ -134,7 +145,7 @@ const Signup = () => {
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="confirm-password"
-                  className="block text-sm/6 font-medium text-gray-900"
+                  className="block text-sm/6 font-medium text-gray-500"
                 >
                   Confirm confirm-password
                 </label>
@@ -144,7 +155,7 @@ const Signup = () => {
                   id="confirm-password"
                   type="password"
                   autoComplete="current-confirm-password"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                  className="bg-white w-full border-2 border-purple-100 rounded-md py-3 px-6 text-gray-900 shadow-md shadow-purple-500 placeholder:text-gray-400  focus:border-purple-500 hover:border-purple-500 text-sm transition duration-300 "
                   {...register("confirmPassword", {
                     required: {
                       value: true,
@@ -170,26 +181,28 @@ const Signup = () => {
               ) : (
                 <button
                   type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="flex w-full justify-center rounded-md bg-purple-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:scale-105 shadow-lg shadow-purple-500 transition duration-300"
                 >
                   Sign up
                 </button>
               )}
             </div>
+
+            <div className="flex justify-end">
+              <Link
+                    to="/signup"
+                    className="font-regular text-purple-600 underline underline-offset-1  mt-1 text-sm"
+                  >
+                    Sign up
+                  </Link>
+              </div>
           </form>
 
-          <p className="mt-10 text-center text-sm/6 text-gray-500">
-            Have an account already?{" "}
-            <Link
-              to="/signin"
-              className="font-semibold text-indigo-600 hover:text-indigo-500"
-            >
-              login instead
-            </Link>
-          </p>
+        </div>
+
         </div>
       </div>
-    </>
+    
   );
 };
 
