@@ -17,7 +17,7 @@ import { Course } from "../../../types/entities/course";
 import { ViewOrUpdateOrDeleteType } from "../../../types/general";
 import ConfirmModal from "../../../components/ConfirmModal";
 
-const CourseList = () => {
+const CoursesList = () => {
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [name, setName] = useState("");
@@ -374,4 +374,4 @@ const CourseList = () => {
   );
 };
 
-export default CourseList;
+export default CoursesList;

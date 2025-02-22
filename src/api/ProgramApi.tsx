@@ -23,17 +23,14 @@ export const useSuperUserGetPrograms = () => {
 
   const { axios } = useAxios();
 
-  const superUserGetPrograms = async ({
-    name,
-    page,
-    itemsPerPage,
-    type,
-    field,
-  }: Payload) => {
+  const superUserGetPrograms = async (payload: Payload) => {
     try {
       setLoading(true);
       const { data } = await axios.get<MultipleItemsResponseType<Program>>(
-        `${API_URL}/super-user-get-programs?name=${name}&type=${type}&field=${field}&page=${page}&itemsPerPage=${itemsPerPage}`
+        `${API_URL}/super-user-get-programs`,
+        {
+          params: { ...payload },
+        }
       );
       if (data.code === SUCCESS_CODE.SUCCESS) {
         setPrograms(data.data);

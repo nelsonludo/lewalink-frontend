@@ -22,11 +22,14 @@ export const useSuperUserGetCourses = () => {
 
   const { axios } = useAxios();
 
-  const superUserGetCourses = async ({ name, page, itemsPerPage }: Payload) => {
+  const superUserGetCourses = async (payload: Payload) => {
     try {
       setLoading(true);
       const { data } = await axios.get<MultipleItemsResponseType<Course>>(
-        `${API_URL}/super-user-get-courses?name=${name}&page=${page}&itemsPerPage=${itemsPerPage}`
+        `${API_URL}/super-user-get-courses`,
+        {
+          params: { ...payload },
+        }
       );
       if (data.code === SUCCESS_CODE.SUCCESS) {
         setCourses(data.data);

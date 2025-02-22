@@ -573,16 +573,14 @@ export const useAdminGetUsers = () => {
 
   const { axios } = useAxios();
 
-  const adminGetUsers = async ({
-    name,
-    page,
-    itemsPerPage,
-    userType,
-  }: Payload) => {
+  const adminGetUsers = async (payload: Payload) => {
     try {
       setLoading(true);
       const { data } = await axios.get<MultipleItemsResponseType<User>>(
-        `${API_URL}/users?name=${name}&userType=${userType}&page=${page}&itemsPerPage=${itemsPerPage}`
+        `${API_URL}/users`,
+        {
+          params: { ...payload },
+        }
       );
       if (data.code === SUCCESS_CODE.SUCCESS) {
         setUsers(data.data);

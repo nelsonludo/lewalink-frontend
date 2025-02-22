@@ -9,7 +9,7 @@ import Home from "./pages/home";
 import OnlyPublic from "./protect-routes/OnlyPublic";
 import Dashboard from "./pages/dashboard";
 import OnlySuperUsers from "./protect-routes/OnlySuperUsers";
-import CourseList from "./pages/courses/pages/CourseList";
+import CoursesList from "./pages/courses/pages/CoursesList";
 import OnlyAdmins from "./protect-routes/OnlyAdmins";
 import SingleCourse from "./pages/courses/pages/SingleCourse";
 import NewCourse from "./pages/courses/pages/NewCourse";
@@ -22,6 +22,10 @@ import SingleProgram from "./pages/programs/pages/SingleProgram";
 import UpdateProgram from "./pages/programs/pages/UpdateProgram";
 import UsersList from "./pages/users/pages/UsersList";
 import NewSuperUser from "./pages/users/pages/NewSuperUser";
+import SchoolsList from "./pages/school/pages/SchoolsList";
+import NewSchool from "./pages/school/pages/NewSchool";
+import UpdateSchool from "./pages/school/pages/UpdateSchool";
+import SingleSchool from "./pages/school/pages/SingleSchool";
 
 const Router = () => {
   return (
@@ -75,7 +79,7 @@ const Router = () => {
             />
           </Route>
           <Route path="courses">
-            <Route index element={<CourseList />} />
+            <Route index element={<CoursesList />} />
             <Route path="new" element={<NewCourse />} />
             <Route path="update/:id" element={<UpdateCourse />} />
             <Route path=":id" element={<SingleCourse />} />
@@ -86,7 +90,12 @@ const Router = () => {
             <Route path="update/:id" element={<UpdateProgram />} />
             <Route path=":id" element={<SingleProgram />} />
           </Route>
-          <Route path="schools" element={<h1>Schools page</h1>} />
+          <Route path="schools">
+            <Route index element={<SchoolsList />} />
+            <Route path="new" element={<NewSchool />} />
+            <Route path="update/:id" element={<UpdateSchool />} />
+            <Route path=":id" element={<SingleSchool />} />
+          </Route>
         </Route>
 
         {/* FALL BACK  */}

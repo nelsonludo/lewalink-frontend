@@ -8,6 +8,7 @@ import { AuthInitialStateType } from "../../store/auth.slice";
 import { useSelector } from "react-redux";
 import { UserType } from "../../types/entities/user";
 import { useLogout } from "../../api/AuthApi.tsx";
+import { IoIosLogOut } from "react-icons/io";
 
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -168,8 +169,12 @@ export default function Dashboard() {
         </div>
 
         <main className="py-10 lg:pl-72 bg-gray-50 min-h-[100vh]">
-          {!loading && <button onClick={() => logout()}>Logout</button>}
           <div className="px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-end items-center mb-4 h-4">
+              <button disabled={loading} onClick={() => logout()}>
+                <IoIosLogOut className=" text-red-600 size-7 font-extrabold hover:size-6.5 transition" />
+              </button>
+            </div>
             <Outlet />
           </div>
         </main>

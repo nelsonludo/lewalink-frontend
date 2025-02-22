@@ -1,8 +1,8 @@
 import { Creator } from "./creator";
 
 export enum SchoolType {
-  PublicStateUniversity = "PublicStateUniversity",
-  PrivateUniversity = "PrivateUniversity",
+  PUBLIC_STATE_UNIVERSITY = "PUBLIC_STATE_UNIVERSITY",
+  PRIVATE_UNIVERSITY = "PRIVATE_UNIVERSITY",
 }
 
 export type ImageUrl = {
@@ -22,10 +22,10 @@ export type School = {
   email: string;
   phoneNumber: string;
   website: string;
-  pictures: string[];
+  pictures?: string[];
   visits: number;
   rating: number;
-  imagesUrls: ImageUrl[];
+  imagesUrls?: ImageUrl[];
 
   createdAt: Date;
   updatedAt: Date;
