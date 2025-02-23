@@ -22,8 +22,8 @@ const Signup = () => {
 
   return (
     <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+      <div className="flex min-h-full flex-1 flex-col justify-center px-4 py-8 sm:px-6 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Link to={"/"}>
             <img
               alt="Your Company"
@@ -31,17 +31,17 @@ const Signup = () => {
               className="mx-auto h-10 w-auto"
             />
           </Link>
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+          <h2 className="mt-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Create an account
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
               <label
                 htmlFor="fullname"
-                className="block text-sm/6 font-medium text-gray-900"
+                className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Full name
               </label>
@@ -50,7 +50,7 @@ const Signup = () => {
                   id="fullname"
                   type="text"
                   autoComplete="fullname"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   {...register("name", {
                     required: {
                       value: true,
@@ -60,14 +60,16 @@ const Signup = () => {
                 />
               </div>
               {errors.name && (
-                <span className=" text-red-700">{errors.name.message}</span>
+                <span className="text-sm text-red-700">
+                  {errors.name.message}
+                </span>
               )}
             </div>
 
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm/6 font-medium text-gray-900"
+                className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Email address
               </label>
@@ -76,7 +78,7 @@ const Signup = () => {
                   id="email"
                   type="email"
                   autoComplete="email"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   {...register("email", {
                     required: {
                       value: true,
@@ -90,7 +92,9 @@ const Signup = () => {
                 />
               </div>
               {errors.email && (
-                <span className=" text-red-700">{errors.email.message}</span>
+                <span className="text-sm text-red-700">
+                  {errors.email.message}
+                </span>
               )}
             </div>
 
@@ -98,7 +102,7 @@ const Signup = () => {
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="password"
-                  className="block text-sm/6 font-medium text-gray-900"
+                  className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   Password
                 </label>
@@ -108,7 +112,7 @@ const Signup = () => {
                   id="password"
                   type="password"
                   autoComplete="current-password"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   {...register("password", {
                     required: {
                       value: true,
@@ -126,7 +130,9 @@ const Signup = () => {
                 />
               </div>
               {errors.password && (
-                <span className=" text-red-700">{errors.password.message}</span>
+                <span className="text-sm text-red-700">
+                  {errors.password.message}
+                </span>
               )}
             </div>
 
@@ -134,9 +140,9 @@ const Signup = () => {
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="confirm-password"
-                  className="block text-sm/6 font-medium text-gray-900"
+                  className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Confirm confirm-password
+                  Confirm password
                 </label>
               </div>
               <div className="mt-2">
@@ -144,7 +150,7 @@ const Signup = () => {
                   id="confirm-password"
                   type="password"
                   autoComplete="current-confirm-password"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   {...register("confirmPassword", {
                     required: {
                       value: true,
@@ -158,7 +164,7 @@ const Signup = () => {
                 />
               </div>
               {errors.confirmPassword && (
-                <span className=" text-red-700">
+                <span className="text-sm text-red-700">
                   {errors.confirmPassword.message}
                 </span>
               )}
@@ -170,7 +176,7 @@ const Signup = () => {
               ) : (
                 <button
                   type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Sign up
                 </button>
@@ -178,13 +184,13 @@ const Signup = () => {
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm/6 text-gray-500">
+          <p className="mt-8 text-center text-sm text-gray-500">
             Have an account already?{" "}
             <Link
               to="/signin"
               className="font-semibold text-indigo-600 hover:text-indigo-500"
             >
-              login instead
+              Login instead
             </Link>
           </p>
         </div>
