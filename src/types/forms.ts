@@ -1,4 +1,5 @@
 import { ProgramFieldType, ProgramType } from "./entities/program";
+import { SchoolType } from "./entities/school";
 
 export type CreateAccountFormType = {
   name: string;
@@ -34,4 +35,17 @@ export type ProgramFormType = {
   type: ProgramType;
   field: ProgramFieldType;
   duration: number;
+};
+
+export type SchoolFormType = {
+  name: string;
+  type: SchoolType;
+  longitude: number;
+  latitude: number;
+  country: string;
+  city: string;
+  description?: string;
+  email?: string;
+  phoneNumber?: string;
+  website?: string;
 };

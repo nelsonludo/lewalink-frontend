@@ -221,7 +221,7 @@ const SchoolsList = () => {
         </div>
         <div className=" mt-3 flex  gap-4">
           <div>
-            <span className=" mb-1 text-sm block">Order by rating</span>
+            <span className=" mb-1 text-xs block">Order by rating</span>
             <select
               id="order-by-rating-type"
               autoComplete="order-by-rating-type-name"
@@ -239,7 +239,7 @@ const SchoolsList = () => {
             </select>
           </div>
           <div>
-            <span className=" mb-1 text-sm block">Order by visits</span>
+            <span className=" mb-1 text-xs block">Order by visits</span>
             <select
               id="order-by-visits-type"
               autoComplete="order-by-visits-type-name"
@@ -296,7 +296,6 @@ const SchoolsList = () => {
                         >
                           Type
                         </th>
-
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
@@ -313,23 +312,26 @@ const SchoolsList = () => {
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          Creator
-                        </th>
-
+                          Visits
+                        </th>{" "}
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
-                          Created at
+                          Rating
                         </th>
-
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        >
+                          Creator
+                        </th>
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
                           Deleted ?
                         </th>
-
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
@@ -355,15 +357,15 @@ const SchoolsList = () => {
                           <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                             {school.country}
                           </td>
-
+                          <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                            {school.visits}
+                          </td>{" "}
+                          <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                            {school.rating}
+                          </td>
                           <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                             {school?.creator?.name}{" "}
                           </td>
-
-                          <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                            {String(school.createdAt)}
-                          </td>
-
                           <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                             {school.isDeleted ? (
                               <span className="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-600/10 ring-inset">

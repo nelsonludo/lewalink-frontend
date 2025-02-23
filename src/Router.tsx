@@ -26,6 +26,7 @@ import SchoolsList from "./pages/school/pages/SchoolsList";
 import NewSchool from "./pages/school/pages/NewSchool";
 import UpdateSchool from "./pages/school/pages/UpdateSchool";
 import SingleSchool from "./pages/school/pages/SingleSchool";
+import Statistics from "./pages/statistics";
 
 const Router = () => {
   return (
@@ -59,7 +60,7 @@ const Router = () => {
             </OnlySuperUsers>
           }
         >
-          <Route path="statistics" element={<h1>Statistices page</h1>} />
+          <Route path="statistics" element={<Statistics />} />
           <Route path="users">
             <Route
               index
