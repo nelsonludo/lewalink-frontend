@@ -12,6 +12,7 @@ export type Payload = {
   field?: string;
   courseId?: string;
   programId?: string;
+  userType?: string;
 };
 
 export type PayloadForm<T> = Payload & { formData?: T };

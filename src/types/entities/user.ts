@@ -2,8 +2,8 @@ import { Creator } from "./creator";
 
 export enum UserType {
   Admin = "Admin",
-  Client = "Client",
   Editor = "Editor",
+  Client = "Client",
 }
 
 export type User = {
@@ -14,6 +14,7 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
   isDeleted?: boolean;
+  isActive?: boolean;
   creator?: Creator;
   accessToken?: string;
   refreshToken?: string;

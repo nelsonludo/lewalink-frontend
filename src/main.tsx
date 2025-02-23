@@ -14,5 +14,3 @@ createRoot(document.getElementById("root")!).render(
     </GoogleOAuthProvider>
   </Provider>
 );
-
-// Add course to program (In a modal).

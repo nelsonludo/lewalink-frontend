@@ -5,7 +5,7 @@ export type Course = {
   code: string;
   title: string;
   description: string;
-  credits: number;
+  credits?: number;
   createdAt: Date;
   updatedAt: Date;
   isDeleted?: boolean;

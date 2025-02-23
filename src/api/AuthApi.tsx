@@ -8,6 +8,7 @@ import {
 import { failedToast, successToast } from "../utils/toasts";
 import { ErrorResponseType } from "../types/response/error-response-type";
 import {
+  MultipleItemsResponseType,
   SimpleSuccessResponseType,
   SingleItemResponseType,
 } from "../types/response/success-response-types";
@@ -20,6 +21,8 @@ import useAxios from "../hooks/useAxios";
 import axiosMain from "axios";
 import { useNavigate } from "react-router-dom";
 import { TokenHelper } from "../utils/tokensHelper";
+import { Payload } from "../types/general";
+import { displayErrorToastBasedOnCode } from "../utils/display-error-toast-based-on-code";
 
 const API_URL = "/api/auth/v1";
 
@@ -256,10 +259,6 @@ export const useGetProfile = () => {
 
   return { getProfile };
 };
-
-// export const useLogout = () => {
-//
-// };
 
 // export const useUpdateAccount = () => {
 //   const [loading, setLoading] = useState(false);
@@ -565,4 +564,231 @@ export const useResetPassword = () => {
   };
 
   return { loading, resetPassword };
+};
+
+export const useAdminGetUsers = () => {
+  const [loading, setLoading] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const { axios } = useAxios();
+
+  const adminGetUsers = async ({
+    name,
+    page,
+    itemsPerPage,
+    userType,
+  }: Payload) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get<MultipleItemsResponseType<User>>(
+        `${API_URL}/users?name=${name}&userType=${userType}&page=${page}&itemsPerPage=${itemsPerPage}`
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        setUsers(data.data);
+        setTotalPages(data.totalPages);
+      }
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      displayErrorToastBasedOnCode(code);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { adminGetUsers, loading, totalPages, users, setUsers };
+};
+
+export const useAdminDeletesUser = () => {
+  const [loading, setLoading] = useState(false);
+
+  const { axios } = useAxios();
+
+  const adminDeletesUser = async ({ id }: Payload) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.delete<SingleItemResponseType<User>>(
+        `${API_URL}/${id}`
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("User deleted successfully");
+      }
+
+      return data.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      displayErrorToastBasedOnCode(code);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { adminDeletesUser, loading };
+};
+
+export const useAdminRestoresDeletedUser = () => {
+  const [loading, setLoading] = useState(false);
+
+  const { axios } = useAxios();
+
+  const adminRestoresDeletedUser = async ({ id }: Payload) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post<SingleItemResponseType<User>>(
+        `${API_URL}/restore-deleted-user/${id}`
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("User restored successfully");
+      }
+
+      return data.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      displayErrorToastBasedOnCode(code);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { adminRestoresDeletedUser, loading };
+};
+
+export const useAdminDeactivatesUser = () => {
+  const [loading, setLoading] = useState(false);
+
+  const { axios } = useAxios();
+
+  const adminDeactivatesUser = async ({ id }: Payload) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post<SingleItemResponseType<User>>(
+        `${API_URL}/admin-deactivates-account/${id}`
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("User deleted successfully");
+      }
+
+      return data.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      displayErrorToastBasedOnCode(code);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { adminDeactivatesUser, loading };
+};
+
+export const useAdminRestoresDeactivatedUser = () => {
+  const [loading, setLoading] = useState(false);
+
+  const { axios } = useAxios();
+
+  const adminRestoresDeactivatedUser = async ({ id }: Payload) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post<SingleItemResponseType<User>>(
+        `${API_URL}/admin-activates-account/${id}`
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("User activated successfully");
+      }
+
+      return data.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      displayErrorToastBasedOnCode(code);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { adminRestoresDeactivatedUser, loading };
+};
+
+export const useAdminCreateAdmin = () => {
+  const [loading, setLoading] = useState(false);
+  const { axios } = useAxios();
+
+  const adminCreateAdmin = async ({
+    name,
+    email,
+    password,
+  }: CreateAccountFormType) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post<SimpleSuccessResponseType>(
+        `${API_URL}/create-admin`,
+        { name, email, password }
+      );
+
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("Admin has been created successfully.");
+      } else {
+        throw new Error();
+      }
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { loading, adminCreateAdmin };
+};
+
+export const useAdminCreateEditor = () => {
+  const [loading, setLoading] = useState(false);
+  const { axios } = useAxios();
+
+  const adminCreateEditor = async ({
+    name,
+    email,
+    password,
+  }: CreateAccountFormType) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post<SimpleSuccessResponseType>(
+        `${API_URL}/create-editor`,
+        { name, email, password }
+      );
+
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("Admin has been created successfully.");
+      } else {
+        throw new Error();
+      }
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { loading, adminCreateEditor };
 };

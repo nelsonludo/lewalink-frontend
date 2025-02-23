@@ -20,6 +20,8 @@ import ProgramsList from "./pages/programs/pages/ProgramsList";
 import NewProgram from "./pages/programs/pages/NewProgram";
 import SingleProgram from "./pages/programs/pages/SingleProgram";
 import UpdateProgram from "./pages/programs/pages/UpdateProgram";
+import UsersList from "./pages/users/pages/UsersList";
+import NewSuperUser from "./pages/users/pages/NewSuperUser";
 
 const Router = () => {
   return (
@@ -54,14 +56,24 @@ const Router = () => {
           }
         >
           <Route path="statistics" element={<h1>Statistices page</h1>} />
-          <Route
-            path="users"
-            element={
-              <OnlyAdmins>
-                <h1>Users page</h1>
-              </OnlyAdmins>
-            }
-          />
+          <Route path="users">
+            <Route
+              index
+              element={
+                <OnlyAdmins>
+                  <UsersList />
+                </OnlyAdmins>
+              }
+            />
+            <Route
+              path="new/:userType"
+              element={
+                <OnlyAdmins>
+                  <NewSuperUser />
+                </OnlyAdmins>
+              }
+            />
+          </Route>
           <Route path="courses">
             <Route index element={<CourseList />} />
             <Route path="new" element={<NewCourse />} />

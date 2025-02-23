@@ -211,6 +211,7 @@ const ProgramsList = () => {
           <div className=" mt-4">
             <NothingSelected
               title="No program"
+              bg=" bg-gray-50"
               description="All programs will be displayed here"
               buttonText="New program"
               action={() => navigate("/dashboard/programs/new")}
@@ -399,7 +400,7 @@ const ProgramsList = () => {
           </div>
         )}
       </div>
-      {!loading && (
+      {!loading && programs.length > 0 && (
         <div className=" mt-4 flex items-center justify-end">
           <TablePagination
             component="div"

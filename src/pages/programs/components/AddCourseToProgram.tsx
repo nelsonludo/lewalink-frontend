@@ -7,6 +7,7 @@ import { Course } from "../../../types/entities/course";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { useSuperUserAddsCourseToProgram } from "../../../api/ProgramCourseApi";
 import LoadingButton from "../../../components/Buttons/LoadingButton";
+import { useDebounce } from "use-debounce";
 
 type Props = {
   openAddCourseToProgram: boolean;
@@ -21,6 +22,7 @@ const AddCourseToProgram = ({
 }: Props) => {
   const [selectedCourses, setSelectedCourses] = React.useState<Course[]>([]);
   const [query, setQuery] = useState("");
+  const [name] = useDebounce(query, 1000);
 
   const {
     courses,
@@ -46,14 +48,14 @@ const AddCourseToProgram = ({
   useEffect(() => {
     if (query.length > 0) {
       superUserGetCourses({
-        name: query,
+        name,
         page: 1,
         itemsPerPage: 5,
       });
     } else {
       setCourses([]);
     }
-  }, [query]);
+  }, [name]);
 
   return (
     <Modal

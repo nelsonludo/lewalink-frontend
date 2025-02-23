@@ -33,7 +33,7 @@ export default function Signin() {
   const initiateGooglePopup = useGoogleLogin({
     flow: "auth-code",
     redirect_uri: "http://localhost:5173",
-    onSuccess: async (response) => {
+    onSuccess: async (response: { code: string }) => {
       let redirect: string;
 
       if (!urlParam || urlParam === "/signin" || urlParam === "signup") {
@@ -69,18 +69,28 @@ export default function Signin() {
   }, [user]);
 
   return (
-    <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-4 py-8 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <Link to={"/"}>
-            <img
-              alt="Your Company"
-              src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-              className="mx-auto h-10 w-auto"
-            />
+    <div className="flex justify-center items-center w-full h-screen">
+      <div className="w-full sm:w-[90%] md:w-[70%] lg:w-[45%] inset-shadow-sm inset-shadow-purple-500 h-fit p-5">
+        <div>
+          <Link
+            className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900 flex justify-center items-center"
+            to={"/"}
+          >
+            <div className="w-11 h-11 mr-2 bg-gray-100 shadow-lg shadow-purple-500">
+              {/* <img
+                alt=""
+                src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
+                className="mx-auto h-10 w-auto"
+              /> */}
+            </div>
+            <div className="bg-gray-100 py-1 px-5 shadow-lg shadow-purple-500">
+              <h2 className="text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+                LewaLink
+              </h2>
+            </div>
           </Link>
-          <h2 className="mt-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign in to your account
+          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-purple-400">
+            Sign in
           </h2>
         </div>
 
@@ -89,16 +99,16 @@ export default function Signin() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
+                className="block text-sm font-medium text-gray-500"
               >
-                Email address
+                Email
               </label>
               <div className="mt-2">
                 <input
                   id="email"
                   type="email"
                   autoComplete="email"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="bg-white w-full border-2 border-purple-100 rounded-md py-3 px-6 text-gray-900 shadow-md shadow-purple-500 placeholder:text-gray-400 focus:border-purple-500 hover:border-purple-500 text-sm transition duration-300"
                   {...register("email", {
                     required: {
                       value: true,
@@ -122,7 +132,7 @@ export default function Signin() {
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-gray-900"
+                  className="block text-sm font-medium text-gray-500"
                 >
                   Password
                 </label>
@@ -132,7 +142,7 @@ export default function Signin() {
                   id="password"
                   type="password"
                   autoComplete="current-password"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="bg-white w-full border-2 border-purple-100 rounded-md py-3 px-6 text-gray-900 shadow-md shadow-purple-500 placeholder:text-gray-400 focus:border-purple-500 hover:border-purple-500 text-sm transition duration-300"
                   {...register("password", {
                     required: {
                       value: true,
@@ -148,12 +158,6 @@ export default function Signin() {
                     },
                   })}
                 />
-                <Link
-                  to="/forgot-password"
-                  className="font-semibold text-indigo-600 hover:text-indigo-500 mt-1 text-sm"
-                >
-                  Forgot password
-                </Link>
               </div>
               {errors.password && (
                 <span className="text-sm text-red-700">
@@ -170,7 +174,7 @@ export default function Signin() {
                   <button
                     type="submit"
                     disabled={loadingGoogleAuth ? true : false}
-                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className="flex w-full justify-center rounded-md bg-purple-500 px-3 py-1.5 text-sm font-semibold text-white hover:scale-105 shadow-lg shadow-purple-500 transition duration-300"
                   >
                     Sign in
                   </button>
@@ -186,28 +190,33 @@ export default function Signin() {
                   <button
                     type="button"
                     disabled={loading ? true : false}
-                    className="w-full flex items-center justify-center py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-blue-500 hover:text-white transition"
+                    className="w-full flex items-center justify-center py-2 bg-gray-100 text-sm font-semibold text-purple-500 rounded-lg hover:scale-105 shadow-lg shadow-purple-500 transition duration-300"
                     onClick={initiateGooglePopup}
                   >
                     <FcGoogle className="mr-2 text-lg" />
-                    Connexion avec Google
+                    Google
                   </button>
                 </div>
               )}
             </div>
-          </form>
 
-          <p className="mt-8 text-center text-sm text-gray-500">
-            No account yet?{" "}
-            <Link
-              to="/signup"
-              className="font-semibold text-indigo-600 hover:text-indigo-500"
-            >
-              Create an account
-            </Link>
-          </p>
+            <div className="flex justify-between">
+              <Link
+                to="/forgot-password"
+                className="font-regular underline underline-offset-1 hover:text-indigo-500 mt-1 text-sm"
+              >
+                Forgotten password
+              </Link>
+              <Link
+                to="/signup"
+                className="font-regular text-purple-600 underline underline-offset-1 mt-1 text-sm"
+              >
+                Sign up
+              </Link>
+            </div>
+          </form>
         </div>
       </div>
-    </>
+    </div>
   );
 }
