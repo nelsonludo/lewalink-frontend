@@ -39,7 +39,7 @@ const Router = () => {
         <Route path="/unauthorized" element={<h1>Unauthorized</h1>} />
         <Route path="/" element={<Navigate to={"/home"} />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset" element={<ResetPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* ONLY LOGGED OUT ROUTES  */}
         <Route
