@@ -19,6 +19,9 @@ import { Sort, ViewOrUpdateOrDeleteType } from "../../../types/general";
 import { SortEnum } from "../../../types/enums/sort";
 import DeleteModal from "../../../components/DeleteModal";
 import ConfirmModal from "../../../components/ConfirmModal";
+import GooglePlacesAutocomplete, {
+  geocodeByPlaceId,
+} from "react-google-places-autocomplete";
 
 const SchoolsList = () => {
   const [page, setPage] = useState(0);
@@ -31,8 +34,7 @@ const SchoolsList = () => {
   const [orderByVisits, setOrderByVisits] = useState<Sort>(SortEnum.desc);
 
   const [search] = useDebounce(name, 1000);
-  const [delayedCity] = useDebounce(city, 1000);
-  const [delayedCountry] = useDebounce(country, 1000);
+  const [googlePlaceValue, setGooglePlaceValue] = useState<any>(null);
 
   const { loading, schools, superUserGetSchools, totalPages, setSchools } =
     useSuperUserGetSchools();
@@ -131,8 +133,8 @@ const SchoolsList = () => {
       page: page + 1,
       itemsPerPage,
       type,
-      city: delayedCity,
-      country: delayedCountry,
+      city,
+      country,
       orderByRating,
       orderByVisits,
     });
@@ -141,11 +143,38 @@ const SchoolsList = () => {
     page,
     itemsPerPage,
     type,
-    delayedCity,
-    delayedCountry,
+    city,
+    country,
     orderByVisits,
     orderByRating,
   ]);
+
+  useEffect(() => {
+    const getAddress = async () => {
+      if (googlePlaceValue) {
+        try {
+          const data = await geocodeByPlaceId(
+            googlePlaceValue?.value?.place_id
+          );
+
+          // let completeAddress = data[0].formatted_address;
+
+          data[0].address_components.forEach((component) => {
+            if (component.types.includes("country")) {
+              setCountry(component.long_name);
+            }
+            if (component.types.includes("locality")) {
+              setCity(component.long_name);
+            }
+          });
+        } catch (error) {
+          console.error("Error fetching address:", error);
+        }
+      }
+    };
+
+    getAddress();
+  }, [googlePlaceValue]);
 
   return (
     <section>
@@ -166,18 +195,18 @@ const SchoolsList = () => {
             </Link>
           </div>
         </div>
-        <div className="relative mt-4 w-full  flex items-center gap-3">
+        <div className="relative mt-4 w-full  grid grid-cols-4 items-center gap-3">
           <input
             id="search"
             name="search"
             type="text"
             placeholder="Search for a school"
-            className="block  py-2 pr-3 pl-9 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6 border rounded-lg flex-grow"
+            className="block  py-2 pr-3 pl-9 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6 border rounded-lg "
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
 
-          <input
+          {/* <input
             id="search"
             name="search"
             type="text"
@@ -195,7 +224,20 @@ const SchoolsList = () => {
             className="block  py-2 px-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6 border rounded-lg "
             value={country}
             onChange={(e) => setCountry(e.target.value)}
-          />
+          /> */}
+
+          <div className=" col-span-2">
+            <GooglePlacesAutocomplete
+              selectProps={{
+                value: googlePlaceValue,
+                onChange: setGooglePlaceValue,
+                // placeholder: "Type the location",
+                placeholder: "Saisir l'emplacement...",
+                className: "react-select-container",
+              }}
+              apiKey={import.meta.env.VITE_GOOGLE_PLACES_API_KEY}
+            />
+          </div>
 
           <select
             id="duration-type"

@@ -1,4 +1,8 @@
 import { ScaleIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
+import GooglePlacesAutocomplete, {
+  geocodeByPlaceId,
+} from "react-google-places-autocomplete";
 
 const cards = [
   { name: "Account balance", href: "#", icon: ScaleIcon, amount: "$30,659.45" },
@@ -10,6 +14,47 @@ const cards = [
 ];
 
 export default function Statistics() {
+  const [googlePlaceValue, setGooglePlaceValue] = useState<any>(null);
+
+  useEffect(() => {
+    const getAddress = async () => {
+      if (googlePlaceValue) {
+        try {
+          const data = await geocodeByPlaceId(
+            googlePlaceValue?.value?.place_id
+          );
+          console.log("Geocode data", data);
+
+          const lat = data[0].geometry.location.lat();
+          const lng = data[0].geometry.location.lng();
+
+          let country = "";
+          let city = "";
+          let completeAddress = data[0].formatted_address;
+
+          data[0].address_components.forEach((component) => {
+            if (component.types.includes("country")) {
+              country = component.long_name;
+            }
+            if (component.types.includes("locality")) {
+              city = component.long_name;
+            }
+          });
+
+          console.log("Complete Address:", completeAddress);
+          console.log("Country:", country);
+          console.log("City:", city);
+          console.log("Latitude:", lat);
+          console.log("Longitude:", lng);
+        } catch (error) {
+          console.error("Error fetching address:", error);
+        }
+      }
+    };
+
+    getAddress();
+  }, [googlePlaceValue]);
+
   return (
     <>
       <div className="min-h-full">
@@ -69,6 +114,19 @@ export default function Statistics() {
           </main>
         </div>
       </div>
+      {/* Testing  */}
+      <GooglePlacesAutocomplete
+        selectProps={{
+          value: googlePlaceValue,
+          onChange: setGooglePlaceValue,
+          // placeholder: "Type the location",
+          placeholder: "Saisir l'emplacement...",
+          className: "react-select-container",
+        }}
+        apiKey={import.meta.env.VITE_GOOGLE_PLACES_API_KEY}
+      />
+
+      {JSON.stringify(googlePlaceValue)}
     </>
   );
 }
