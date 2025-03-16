@@ -9,10 +9,11 @@ import useAxios from "../hooks/useAxios";
 import { SUCCESS_CODE } from "../types/enums/error-codes";
 
 import { displayErrorToastBasedOnCode } from "../utils/display-error-toast-based-on-code";
-import { Payload } from "../types/general";
+import { Payload, PayloadForm } from "../types/general";
 
 import { School } from "../types/entities/school";
 import { successToast } from "../utils/toasts";
+import { SchoolFormType } from "../types/forms";
 
 const API_URL = "/api/school/v1";
 
@@ -111,4 +112,75 @@ export const useSuperUserRestoresDeletedSchool = () => {
   };
 
   return { superUserRestoresDeletedSchool, loading };
+};
+
+export const useSuperUserCreatesSchool = () => {
+  const [loading, setLoading] = useState(false);
+
+  const { axios } = useAxios();
+
+  const superUserCreatesSchool = async ({
+    formData,
+  }: PayloadForm<SchoolFormType>) => {
+    try {
+      console.log(formData);
+
+      const formDataEntry = new FormData();
+      formData = formData as SchoolFormType;
+
+      formDataEntry.append("name", formData.name);
+      formDataEntry.append("type", formData.type);
+      formDataEntry.append("description", formData.description);
+      formDataEntry.append("longitude", formData.longitude);
+      formDataEntry.append("latitude", formData.latitude);
+      formDataEntry.append("country", formData.country);
+      formDataEntry.append("city", formData.city);
+      formDataEntry.append("fullAddressName", formData.fullAddressName);
+
+      for (let i = 0; i < Object.values(formData.images).length; i++) {
+        formDataEntry.append("images", Object.values(formData.images)[i]);
+      }
+
+      if (formData.email) {
+        formDataEntry.append("email", formData.email);
+      }
+
+      if (formData.phoneNumber) {
+        formDataEntry.append("phoneNumber", formData.phoneNumber);
+      }
+
+      if (formData.website) {
+        formDataEntry.append("website", formData.website);
+      }
+
+      setLoading(true);
+      const { data } = await axios.post<SingleItemResponseType<School>>(
+        `${API_URL}`,
+        formDataEntry,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("Program created successfully");
+
+        return data.data;
+      }
+
+      return data.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      displayErrorToastBasedOnCode(code);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { superUserCreatesSchool, loading };
 };

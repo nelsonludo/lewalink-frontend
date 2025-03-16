@@ -19,6 +19,7 @@ export type School = {
   latitude: number;
   country: string;
   city: string;
+  fullAddressName: string;
   email: string;
   phoneNumber: string;
   website: string;
