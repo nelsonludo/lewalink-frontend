@@ -9,6 +9,9 @@ import { useSelector } from "react-redux";
 import { FcGoogle } from "react-icons/fc";
 import { useGoogleLogin } from "@react-oauth/google";
 import { failedToast } from "../../utils/toasts";
+import AuthLayout from "../../components/AuthLayout";
+import AuthInput from "../../components/inputs/AuthInputs";
+import AuthButton from "../../components/Buttons/AuthButton";
 
 export default function Signin() {
   const {
@@ -69,115 +72,84 @@ export default function Signin() {
   }, [user]);
 
   return (
-    <div className="flex justify-center items-center w-full h-screen">
-      <div className="w-full sm:w-[90%] md:w-[70%] lg:w-[45%] inset-shadow-sm inset-shadow-purple-500 h-fit p-5">
-        <div>
-          <Link
-            className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900 flex justify-center items-center"
-            to={"/"}
-          >
-            <div className="w-11 h-11 mr-2 bg-gray-100 shadow-lg shadow-purple-500">
-              {/* <img
-                alt=""
-                src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-                className="mx-auto h-10 w-auto"
-              /> */}
+    <AuthLayout
+      title="Sign in"
+      form={
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-md font-medium text-black"
+            >
+              Email
+            </label>
+            <div className="mt-2">
+              <AuthInput
+                type="email"
+                placeholder=""
+                register={register("email", {
+                  required: {
+                    value: true,
+                    message: "This field is required",
+                  },
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "This should be an email",
+                  },
+                })}
+              />
             </div>
-            <div className="bg-gray-100 py-1 px-5 shadow-lg shadow-purple-500">
-              <h2 className="text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-                LewaLink
-              </h2>
-            </div>
-          </Link>
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-purple-400">
-            Sign in
-          </h2>
-        </div>
+            {errors.email && (
+              <span className="text-md text-red-700">
+                {errors.email.message}
+              </span>
+            )}
+          </div>
 
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div>
+          <div>
+            <div className="flex items-center justify-between">
               <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-500"
+                htmlFor="password"
+                className="block text-md font-medium text-black"
               >
-                Email
+                Password
               </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  type="email"
-                  autoComplete="email"
-                  className="bg-white w-full border-2 border-purple-100 rounded-md py-3 px-6 text-gray-900 shadow-md shadow-purple-500 placeholder:text-gray-400 focus:border-purple-500 hover:border-purple-500 text-sm transition duration-300"
-                  {...register("email", {
-                    required: {
-                      value: true,
-                      message: "This field is required",
-                    },
-                    pattern: {
-                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: "This should be an email",
-                    },
-                  })}
-                />
-              </div>
-              {errors.email && (
-                <span className="text-sm text-red-700">
-                  {errors.email.message}
-                </span>
-              )}
             </div>
-
-            <div>
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-500"
-                >
-                  Password
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  type="password"
-                  autoComplete="current-password"
-                  className="bg-white w-full border-2 border-purple-100 rounded-md py-3 px-6 text-gray-900 shadow-md shadow-purple-500 placeholder:text-gray-400 focus:border-purple-500 hover:border-purple-500 text-sm transition duration-300"
-                  {...register("password", {
-                    required: {
-                      value: true,
-                      message: "This field is required",
-                    },
-                    validate: {
-                      minLength: (value) =>
-                        value.length >= 4 ||
-                        "Must be at least 4 characters long",
-                      maxLength: (value) =>
-                        value.length <= 20 ||
-                        "Must be at most 20 characters long",
-                    },
-                  })}
-                />
-              </div>
-              {errors.password && (
-                <span className="text-sm text-red-700">
-                  {errors.password.message}
-                </span>
-              )}
+            <div className="mt-2">
+              <AuthInput
+                type="password"
+                placeholder=""
+                register={register("password", {
+                  required: {
+                    value: true,
+                    message: "This field is required",
+                  },
+                  validate: {
+                    minLength: (value) =>
+                      value.length >= 4 || "Must be at least 4 characters long",
+                    maxLength: (value) =>
+                      value.length <= 20 ||
+                      "Must be at most 20 characters long",
+                  },
+                })}
+              />
             </div>
+            {errors.password && (
+              <span className="text-md text-red-700">
+                {errors.password.message}
+              </span>
+            )}
+          </div>
 
+          <div className="my-10 space-y-8">
             <div>
               {loading ? (
                 <LoadingLargeButton />
               ) : (
                 <div className="grid gap-3">
-                  <button
-                    type="submit"
-                    disabled={loadingGoogleAuth ? true : false}
-                    className="flex w-full justify-center rounded-md bg-purple-500 px-3 py-1.5 text-sm font-semibold text-white hover:scale-105 shadow-lg shadow-purple-500 transition duration-300"
-                  >
+                  <AuthButton type="submit" loading={false} variant="primary">
                     Sign in
-                  </button>
+                  </AuthButton>
                 </div>
               )}
             </div>
@@ -187,36 +159,35 @@ export default function Signin() {
                 <LoadingLargeButton />
               ) : (
                 <div className="grid gap-3">
-                  <button
+                  <AuthButton
                     type="button"
-                    disabled={loading ? true : false}
-                    className="w-full flex items-center justify-center py-2 bg-gray-100 text-sm font-semibold text-purple-500 rounded-lg hover:scale-105 shadow-lg shadow-purple-500 transition duration-300"
+                    loading={false}
+                    variant="google"
                     onClick={initiateGooglePopup}
                   >
-                    <FcGoogle className="mr-2 text-lg" />
                     Google
-                  </button>
+                  </AuthButton>
                 </div>
               )}
             </div>
+          </div>
 
-            <div className="flex justify-between">
-              <Link
-                to="/forgot-password"
-                className="font-regular underline underline-offset-1 hover:text-indigo-500 mt-1 text-sm"
-              >
-                Forgotten password
-              </Link>
-              <Link
-                to="/signup"
-                className="font-regular text-purple-600 underline underline-offset-1 mt-1 text-sm"
-              >
-                Sign up
-              </Link>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+          <div className="flex justify-between">
+            <Link
+              to="/forgot-password"
+              className="font-regular underline underline-offset-1 hover:text-indigo-500 mt-1 text-md"
+            >
+              Forgotten password
+            </Link>
+            <Link
+              to="/signup"
+              className="font-regular text-[#bb29ff] underline underline-offset-1 mt-1 text-md"
+            >
+              Sign up
+            </Link>
+          </div>
+        </form>
+      }
+    />
   );
 }

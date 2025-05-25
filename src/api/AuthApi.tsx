@@ -46,15 +46,14 @@ export const useSignUp = () => {
     } catch (err) {
       const error = err as AxiosError<ErrorResponseType>;
       const code = error.response?.data.code;
-
-      console.log(error);
+      const message = error.response?.data.message;
 
       switch (code) {
         case CODES.EMAIL_IN_USE:
           failedToast("Email already in use");
           break;
         case CODES.VALIDATION_REQUEST_ERROR:
-          failedToast("Make sure you enter the correct info");
+          failedToast(message || "Make sure you enter the correct info");
           break;
         case CODES.UNEXPECTED_ERROR:
           failedToast("Unexpected error occured");
@@ -112,8 +111,6 @@ export const useSignin = () => {
       const error = err as AxiosError<ErrorResponseType>;
       const code = error.response?.data.code;
 
-      console.log(error);
-
       switch (code) {
         case CODES.UNABLE_TO_LOGIN:
           failedToast("Unable to login");
@@ -157,7 +154,6 @@ export const useLogout = () => {
       }
     } catch (err) {
       const error = err as AxiosError<ErrorResponseType>;
-      console.log(error);
 
       const code = error.response?.data.code;
       switch (code) {
@@ -212,8 +208,6 @@ export const useGoogleAuth = () => {
       const error = err as AxiosError<ErrorResponseType>;
       const code = error.response?.data.code;
 
-      console.log(error);
-
       switch (code) {
         case CODES.UNABLE_TO_LOGIN:
           failedToast("Unable to login");
@@ -251,7 +245,6 @@ export const useGetProfile = () => {
       }
     } catch (err) {
       const error = err as AxiosError<ErrorResponseType>;
-      console.log(error);
     } finally {
       dispatch(setLoadingUser(false));
     }
@@ -281,7 +274,7 @@ export const useGetProfile = () => {
 //       }
 //     } catch (err) {
 //       const error = err as AxiosError<ErrorResponseType>;
-//       console.log(error);
+//
 
 //       const code = error.response?.data.code;
 //       switch (code) {
@@ -322,7 +315,7 @@ export const useGetProfile = () => {
 //       return data;
 //     } catch (err) {
 //       const error = err as AxiosError<ErrorResponseType>;
-//       console.log(error);
+//
 
 //       const code = error.response?.data.code;
 //       switch (code) {
@@ -392,7 +385,6 @@ export const useRefreshToken = () => {
       }
     } catch (err) {
       const error = err as AxiosError<ErrorResponseType>;
-      console.log(error);
 
       failedToast("Your session has expired, login to continue");
 
@@ -435,8 +427,6 @@ export const useActivateAccount = () => {
     } catch (err) {
       const error = err as AxiosError<ErrorResponseType>;
       const code = error.response?.data.code;
-
-      console.log(error);
 
       switch (code) {
         case CODES.NOT_FOUND:
@@ -481,8 +471,6 @@ export const useForgotPassword = () => {
     } catch (err) {
       const error = err as AxiosError<ErrorResponseType>;
       const code = error.response?.data.code;
-
-      console.log(error);
 
       switch (code) {
         case CODES.NOT_FOUND:
@@ -539,8 +527,6 @@ export const useResetPassword = () => {
       const error = err as AxiosError<ErrorResponseType>;
       const code = error.response?.data.code;
 
-      console.log(error);
-
       switch (code) {
         case CODES.NOT_FOUND:
           failedToast("Account does not exist");
@@ -590,8 +576,6 @@ export const useAdminGetUsers = () => {
       const error = err as AxiosError<ErrorResponseType>;
       const code = error.response?.data.code;
 
-      console.log(error);
-
       displayErrorToastBasedOnCode(code);
     } finally {
       setLoading(false);
@@ -620,8 +604,6 @@ export const useAdminDeletesUser = () => {
     } catch (err) {
       const error = err as AxiosError<ErrorResponseType>;
       const code = error.response?.data.code;
-
-      console.log(error);
 
       displayErrorToastBasedOnCode(code);
     } finally {
@@ -652,8 +634,6 @@ export const useAdminRestoresDeletedUser = () => {
       const error = err as AxiosError<ErrorResponseType>;
       const code = error.response?.data.code;
 
-      console.log(error);
-
       displayErrorToastBasedOnCode(code);
     } finally {
       setLoading(false);
@@ -683,8 +663,6 @@ export const useAdminDeactivatesUser = () => {
       const error = err as AxiosError<ErrorResponseType>;
       const code = error.response?.data.code;
 
-      console.log(error);
-
       displayErrorToastBasedOnCode(code);
     } finally {
       setLoading(false);
@@ -713,8 +691,6 @@ export const useAdminRestoresDeactivatedUser = () => {
     } catch (err) {
       const error = err as AxiosError<ErrorResponseType>;
       const code = error.response?.data.code;
-
-      console.log(error);
 
       displayErrorToastBasedOnCode(code);
     } finally {
@@ -748,8 +724,6 @@ export const useAdminCreateAdmin = () => {
       }
     } catch (err) {
       const error = err as AxiosError<ErrorResponseType>;
-
-      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -781,8 +755,6 @@ export const useAdminCreateEditor = () => {
       }
     } catch (err) {
       const error = err as AxiosError<ErrorResponseType>;
-
-      console.log(error);
     } finally {
       setLoading(false);
     }
