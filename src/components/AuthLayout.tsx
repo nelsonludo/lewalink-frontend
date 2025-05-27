@@ -46,6 +46,16 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title, form, isResetPwd }) => {
 
         {/* Title and Form */}
         <div className={`${isResetPwd ? "mt-14" : ""}`}>
+          <div className="flex lg:hidden justify-center items-center mb-8">
+            <img
+              src="/images/LewaLinkLogo.png"
+              alt="Logo"
+              className=" mb-6 w-18 h-18"
+            />
+            <h2 className="text-2xl sm:text-3xl">
+              <strong>Lewa</strong>Link
+            </h2>
+          </div>
           <h2 className="text-center text-3xl sm:text-4xl font-medium tracking-tight text-[#bb29ff]">
             {title}
           </h2>
