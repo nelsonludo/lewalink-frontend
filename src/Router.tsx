@@ -27,6 +27,9 @@ import NewSchool from "./pages/school/pages/NewSchool";
 import UpdateSchool from "./pages/school/pages/UpdateSchool";
 import SingleSchool from "./pages/school/pages/SingleSchool";
 import Statistics from "./pages/statistics";
+import PrimarySchools from "./pages/home/components/PrimarySchools";
+import Univertities from "./pages/home/components/Univertities";
+import SecondarySchools from "./pages/home/components/SecondarySchools";
 
 const Router = () => {
   return (
@@ -35,7 +38,12 @@ const Router = () => {
         {/* PUBLIC ROUTES  */}
         <Route path="/signin" element={<Signin />} />
         <Route path="/activate" element={<ActivateAccount />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/home" element={<Home />}>
+          <Route index element={<Navigate to="universities" replace />} />
+          <Route path="universities" element={<Univertities />} />
+          <Route path="primary-schools" element={<PrimarySchools />} />
+          <Route path="secondary-schools" element={<SecondarySchools />} />
+        </Route>
         <Route path="/unauthorized" element={<h1>Unauthorized</h1>} />
         <Route path="/" element={<Navigate to={"/home"} />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
