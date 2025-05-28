@@ -7,7 +7,7 @@ const Filters = () => {
   );
   const [rating, setRating] = useState<number>(5);
   return (
-    <div className="bg-white shadow-md rounded-xl p-6">
+    <div className="bg-white rounded-xl p-6 h-full">
       <div className="flex justify-between border-b border-gray-200 pb-4 ">
         <h2 className="text-2xl font-bold ">Filters</h2>
         <img src="/images/filter.png" alt="" className="w-6 h-6" />
@@ -65,7 +65,7 @@ const Filters = () => {
             <button
               key={star}
               type="button"
-              className={`flex items-center rounded-lg px-4 py-1 w-full cursor-pointer ${
+              className={`flex items-center rounded-lg px-4 py-2 w-full cursor-pointer ${
                 rating === star ? "bg-[#F4EAFF]" : ""
               }`}
               onClick={() => setRating(star)}

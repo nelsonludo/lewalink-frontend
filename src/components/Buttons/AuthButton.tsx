@@ -17,7 +17,7 @@ const AuthButton: React.FC<AuthButtonProps> = ({
   children,
 }) => {
   const baseClasses =
-    "w-full flex justify-center py-4 text-md font-semibold rounded-full transition duration-300 hover:scale-105";
+    "w-full flex justify-center py-4 text-md font-semibold rounded-full transition duration-300 hover:scale-105 items-center";
   const primaryClasses = "bg-[#bb29ff] text-white";
   const googleClasses =
     "border-2 border-gray-300 bg-inherit text-[#bb29ff] items-center";
