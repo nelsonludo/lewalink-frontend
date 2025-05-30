@@ -11,15 +11,17 @@ const CustomSelectWithFieldset: FC<CustomSelectWithFieldsetProps> = ({
   const [selected, setSelected] = useState("");
 
   return (
-    <fieldset className="relative border border-gray-300 rounded-full px-2 py-2 w-full">
+    <fieldset className="relative border border-gray-300 rounded-full px-2 py-2 w-full h-13 lg:h-full">
       {/* Legend as the label inside the border */}
-      <legend className="px-1 text-sm text-gray-500">{label}</legend>
+      <legend className="px-1 text-[10px] font-bold lg:text-sm text-gray-500">
+        {label}
+      </legend>
 
       {/* Select input */}
       <select
         value={selected}
         onChange={(e) => setSelected(e.target.value)}
-        className="w-full bg-transparent appearance-none outline-none text-sm pl-3 pb-2 text-gray-400"
+        className="w-full bg-transparent appearance-none outline-none text-sm pl-3 pb-2 text-gray-400 absolute left-2 top-0 lg:static lg:pl-3 lg:pb-2"
       >
         <option value="" disabled hidden>
           enter {label}
@@ -29,8 +31,6 @@ const CustomSelectWithFieldset: FC<CustomSelectWithFieldsetProps> = ({
             {option}
           </option>
         ))}
-
-        {/* Example options for schools */}
       </select>
 
       {/* Custom arrow (optional) */}

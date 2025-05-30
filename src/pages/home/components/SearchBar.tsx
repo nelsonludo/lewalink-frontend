@@ -1,14 +1,36 @@
+import { useDispatch } from "react-redux";
 import AuthButton from "../../../components/Buttons/AuthButton";
 import ButtonsThingy from "../../../components/ButtonsThingy";
 import SearchSelect from "../../../components/SearchSelect";
+import { setdisplaySearchBar } from "../../../store/userHome.slice";
 
 const SearchBar = () => {
+  const dispatch = useDispatch();
+
+  const toggleSearchBar = () => {
+    dispatch(setdisplaySearchBar(false)); // or false
+  };
+
   return (
-    <div className="bg-white rounded-xl p-4">
-      <div className="w-[40%]">
-        <ButtonsThingy left="Schools" right="Programs" />
+    <div className="bg-[#F4EAFF]  lg:bg-white rounded-xl py-4 lg:px-4 w-full h-full">
+      <div className="flex items-center px-4 lg:px-1 my-4 lg:my-0">
+        <button
+          onClick={toggleSearchBar}
+          className="cursor-pointer"
+          aria-label="Toggle search bar"
+        >
+          <img
+            src="/images/icons/arrow-back-circleIcon.png"
+            alt=""
+            className="lg:hidden w-10 h-full mr-4"
+          />
+        </button>
+
+        <div className="w-[90%] lg:w-[40%]">
+          <ButtonsThingy left="Schools" right="Programs" />
+        </div>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+      <div className="grid grid-cols md:grid-cols-3 lg:grid-cols-4 p-4 gap-4 bg-white rounded-4xl ">
         <SearchSelect label="School" options={[]} />
         <SearchSelect label="Program" options={[]} />
         <SearchSelect label="City" options={[]} />
@@ -17,9 +39,11 @@ const SearchBar = () => {
         <SearchSelect label="Location" options={[]} />
         <SearchSelect label="By Geo-Localization" options={[]} />
 
-        <AuthButton type="submit" loading={false} variant="primary">
-          Search
-        </AuthButton>
+        <div className="w-[30%] lg:w-full ">
+          <AuthButton type="submit" loading={false} variant="primary">
+            Search
+          </AuthButton>
+        </div>
       </div>
     </div>
   );

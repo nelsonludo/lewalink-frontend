@@ -12,12 +12,12 @@ const Filters = () => {
         <h2 className="text-2xl font-bold ">Filters</h2>
         <img src="/images/filter.png" alt="" className="w-6 h-6" />
       </div>
-      <div className="w-[80%]">
+      <div className="w-[80%] text-xs lg:text-sm  ">
         <div className="my-2">
           <span className="font-semibold text-gray-700">Sort</span>
           <button
             type="button"
-            className={`flex gap-2 items-center mt-2 px-4 py-1 rounded-xl w-full cursor-pointer ${
+            className={`flex md:gap-2 items-center mt-2 px-1 md:px-4 py-1 rounded-xl w-full cursor-pointer ${
               sort === "ascending" ? "bg-[#F4EAFF]" : ""
             }`}
             onClick={() => setSort("ascending")}
@@ -27,7 +27,7 @@ const Filters = () => {
           </button>
           <button
             type="button"
-            className={`flex gap-2 items-center mt-2 px-4 py-1 rounded-xl w-full cursor-pointer ${
+            className={`flex md:gap-2 items-center mt-2 px-1 md:px-4 py-1 rounded-xl w-full cursor-pointer ${
               sort === "descending" ? "bg-[#F4EAFF]" : ""
             }`}
             onClick={() => setSort("descending")}
@@ -40,7 +40,7 @@ const Filters = () => {
           <span className="font-semibold text-gray-700">School Categories</span>
           <button
             type="button"
-            className={`flex gap-2 items-center mt-2 px-4 py-1 rounded-xl w-full cursor-pointer ${
+            className={`flex md:gap-2 items-center mt-2 px-1 md:px-4 py-1 rounded-xl w-full cursor-pointer ${
               schoolCategory === "public" ? "bg-[#F4EAFF]" : ""
             }`}
             onClick={() => setSchoolCategory("public")}
@@ -49,7 +49,7 @@ const Filters = () => {
           </button>
           <button
             type="button"
-            className={`flex gap-2 items-center mt-2 px-4 py-1 rounded-xl w-full cursor-pointer ${
+            className={`flex md:gap-2 items-center mt-2 px-1 md:px-4 py-1 rounded-xl w-full cursor-pointer ${
               schoolCategory === "private" ? "bg-[#F4EAFF]" : ""
             }`}
             onClick={() => setSchoolCategory("private")}
