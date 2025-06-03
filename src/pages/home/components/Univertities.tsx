@@ -2,8 +2,11 @@ import { useState } from "react";
 import Filters from "./Filters";
 import SearchBar from "./SearchBar";
 import SearchResultCard from "../../../components/SearchResultCard";
-import { userHomeInitialStateType } from "../../../store/userHome.slice";
-import { useSelector } from "react-redux";
+import {
+  setdisplayFilters,
+  setdisplayMenu,
+} from "../../../store/userHome.slice";
+
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setdisplaySearchBar } from "../../../store/userHome.slice";
@@ -31,20 +34,19 @@ const Univertities = () => {
       coursesNumber: 120,
     },
   ]);
-  const [displayFilters, setDisplayFilters] = useState(false);
-
-  const { displaySearchBar }: userHomeInitialStateType = useSelector(
-    (state: any) => state.userHomeSlice as userHomeInitialStateType
-  );
-
-  const [displayMenu, setDisplayMenu] = useState(false);
 
   const dispatch = useDispatch();
+
+  const toggleFilters = () => {
+    dispatch(setdisplayFilters(true)); // or false
+  };
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
         dispatch(setdisplaySearchBar(false));
+        dispatch(setdisplayMenu(false));
+        dispatch(setdisplayFilters(false));
       }
     };
 
@@ -73,19 +75,11 @@ const Univertities = () => {
         />
       </div>
       <div className="flex flex-row py-3 px-2 lg:px-10 gap-4">
-        <div className="hidden lg:block lg:w-[25%] ">
-          <Filters />
-        </div>
+        <Filters />
+
         <div className=" w-full lg:w-[75%] ">
-          <div
-            className={` ${
-              displaySearchBar
-                ? "fixed inset-0 z-50 flex items-center justify-center bg-opacity-90"
-                : "hidden"
-            } lg:block`}
-          >
-            <SearchBar />
-          </div>
+          <SearchBar />
+
           <div className="border-b border-gray-400 pb-2 lg:p-4 mb-4 flex justify-between items-center">
             <div>
               <h2 className="text-xl lg:text-2xl font-semibold ">
@@ -95,9 +89,12 @@ const Univertities = () => {
                 Showing {searchResults.length} results
               </h1>
             </div>
-            <div className="flex lg:hidden justify-end">
+            <button
+              className="flex lg:hidden justify-end"
+              onClick={toggleFilters}
+            >
               <img src="/images/filter.png" alt="" className="w-6 h-6" />
-            </div>
+            </button>
           </div>
           <div className="flex flex-col gap-4">
             {searchResults.map((result, index) => (

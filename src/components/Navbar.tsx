@@ -3,7 +3,8 @@
 
 import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { setdisplaySearchBar } from "../store/userHome.slice";
+import { setdisplaySearchBar, setdisplayMenu } from "../store/userHome.slice";
+import Menu from "./Menu";
 
 type Props = {};
 
@@ -12,6 +13,9 @@ const Navbar = ({}: Props) => {
 
   const toggleSearchBar = () => {
     dispatch(setdisplaySearchBar(true)); // or false
+  };
+  const toggleMenu = () => {
+    dispatch(setdisplayMenu(true)); // or false
   };
 
   return (
@@ -22,47 +26,8 @@ const Navbar = ({}: Props) => {
           <strong>Lewa</strong>Link
         </h2>
       </div>
-      <div className="hidden lg:flex items-center justify-between gap-8">
-        <NavLink
-          to="/home/universities"
-          className={({ isActive }: { isActive: boolean }) =>
-            isActive ? "border-b-2 border-[#BB29FF] font-bold pb-1" : "pb-1"
-          }
-        >
-          Universities
-        </NavLink>
-        <NavLink
-          to="/home/secondary-schools"
-          className={({ isActive }: { isActive: boolean }) =>
-            isActive ? "border-b-2 border-[#BB29FF] font-bold pb-1" : "pb-1"
-          }
-        >
-          Secondary schools
-        </NavLink>
-        <NavLink
-          to="/home/primary-schools"
-          className={({ isActive }: { isActive: boolean }) =>
-            isActive ? "border-b-2 border-[#BB29FF] font-bold pb-1" : "pb-1"
-          }
-        >
-          Primary schools
-        </NavLink>
-        <div className="flex items-center text-sm">
-          {/* this image should render based on the language chosen once that's set up */}
-          <img src="/images/cameroun.png" alt="" className="w-4 h-4" />
-          <select name="language" id="language">
-            <option value="en">ENG</option>
-            <option value="fr">FR</option>
-          </select>
-        </div>
-        <button className="cursor-pointer ">
-          <img
-            src="/images/userCircle.png"
-            alt="User profile icon showing a stylized person inside a circle, used for account access in the website navigation bar"
-            className="w-9 h-9"
-          />
-        </button>
-      </div>
+
+      <Menu />
       <div className="flex lg:hidden gap-4 items-center">
         <button
           onClick={toggleSearchBar}
@@ -76,7 +41,7 @@ const Navbar = ({}: Props) => {
           />
         </button>
         <button
-          onClick={toggleSearchBar}
+          onClick={toggleMenu}
           className="cursor-pointer"
           aria-label="Toggle search bar"
         >
