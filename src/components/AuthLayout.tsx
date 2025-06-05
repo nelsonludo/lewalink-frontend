@@ -22,12 +22,12 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title, form, isResetPwd }) => {
       <div className="w-full lg:w-[45%] px-6 sm:px-10 py-10 flex flex-col justify-center">
         {/* Language Switcher - Centered on mobile, right-aligned on large */}
         <div className="flex justify-center lg:justify-end mb-6">
-          <ButtonsThingy left="English" right="French" />
+          <ButtonsThingy programs={["English", "French"]} />
         </div>
 
         {/* Title and Form */}
         <div className={`${isResetPwd ? "mt-14" : ""}`}>
-          <div className="flex lg:hidden justify-center items-center mb-8">
+          <div className="flex lg:hidden justify-center items-center mb-2 lg:mb-8">
             <img
               src="/images/LewaLinkLogo.png"
               alt="Logo"

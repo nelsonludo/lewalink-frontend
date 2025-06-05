@@ -2,9 +2,9 @@
 // import { AuthInitialStateType } from "../store/auth.slice";
 
 import { useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
 import { setdisplaySearchBar, setdisplayMenu } from "../store/userHome.slice";
 import Menu from "./Menu";
+import { Link } from "react-router-dom";
 
 type Props = {};
 
@@ -20,12 +20,12 @@ const Navbar = ({}: Props) => {
 
   return (
     <div className="flex justify-between items-center py-4 px-4 lg:px-12 bg-white">
-      <div className="flex justify-center items-center">
+      <Link to={"/home"} className="flex justify-center items-center">
         <img src="/images/LewaLinkLogo.png" alt="Logo" className="w-10 h-10" />
-        <h2 className="hidden lg:flex text-lg sm:text-2xl">
-          <strong>Lewa</strong>Link
+        <h2 className="hidden lg:flex text-lg sm:text-3xl">
+          <strong>Lewa</strong>link
         </h2>
-      </div>
+      </Link>
 
       <Menu />
       <div className="flex lg:hidden gap-4 items-center">

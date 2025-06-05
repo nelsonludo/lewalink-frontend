@@ -99,6 +99,7 @@ const Univertities = () => {
           <div className="flex flex-col gap-4">
             {searchResults.map((result, index) => (
               <SearchResultCard
+                schoolid="2"
                 schoolName={result.schoolName}
                 speciality={result.speciality}
                 language={result.language}

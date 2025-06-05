@@ -41,7 +41,7 @@ const SearchBar = () => {
           </button>
 
           <div className="w-[90%] lg:w-[40%]">
-            <ButtonsThingy left="Schools" right="Programs" />
+            <ButtonsThingy programs={["Schools", "Programs"]} />
           </div>
         </div>
         <div className="grid grid-cols md:grid-cols-3 lg:grid-cols-4 p-4 gap-4 bg-white rounded-4xl ">

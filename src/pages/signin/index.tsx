@@ -6,7 +6,6 @@ import LoadingLargeButton from "../../components/loading/LoadingLargeButton";
 import { useEffect } from "react";
 import { AuthInitialStateType } from "../../store/auth.slice";
 import { useSelector } from "react-redux";
-import { FcGoogle } from "react-icons/fc";
 import { useGoogleLogin } from "@react-oauth/google";
 import { failedToast } from "../../utils/toasts";
 import AuthLayout from "../../components/AuthLayout";

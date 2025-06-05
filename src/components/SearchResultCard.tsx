@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 
 interface SearchResultCardProps {
+  schoolid: string;
   schoolName: string;
   speciality: string;
   language: string;
@@ -13,6 +14,7 @@ interface SearchResultCardProps {
 }
 
 const SearchResultCard: FC<SearchResultCardProps> = ({
+  schoolid,
   schoolName,
   speciality,
   language,
@@ -24,7 +26,7 @@ const SearchResultCard: FC<SearchResultCardProps> = ({
 }) => {
   return (
     <Link
-      to={""}
+      to={`/home/universities/school/:${schoolid}`}
       className="bg-white rounded-xl p-1 lg:p-6 w-full flex flex-row text-base  text-xs lg:text-sm cursor-pointer hover:shadow-lg transition-shadow duration-200"
     >
       <div className=" w-[20%] rounded-xp mr-1 lg:mr-8">
