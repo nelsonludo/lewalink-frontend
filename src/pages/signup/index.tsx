@@ -21,6 +21,8 @@ const Signup = () => {
 
   const onSubmit: SubmitHandler<CreateAccountFormType> = async (data) => {
     await signUp(data);
+   
+    
   };
 
   return (

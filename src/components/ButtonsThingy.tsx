@@ -1,14 +1,16 @@
-import { FC, useState } from "react";
+import { FC} from "react";
 
 interface ButtonsThingyProps {
-  left?: React.ReactNode;
-  right?: React.ReactNode;
+  selectedProgram?: string;
+  setSelectedProgram?: (program: string) => void;
   variant?: boolean;
   programs?: string[];
 }
 
-const ButtonsThingy: FC<ButtonsThingyProps> = ({ programs }) => {
-  const [selectedProgram, setSelectedProgram] = useState(programs?.[0] || "");
+const ButtonsThingy: FC<ButtonsThingyProps> = ({ programs, selectedProgram, setSelectedProgram }) => {
+  if (!programs || programs.length === 0) {
+    return null; // Return null or a placeholder if no programs are provided
+  }
 
   return (
     <div className="flex rounded-full bg-[#DDB6FF] overflow-hidden mb-4">
@@ -20,7 +22,7 @@ const ButtonsThingy: FC<ButtonsThingyProps> = ({ programs }) => {
               ? "bg-[#bb29ff] text-white"
               : "text-black"
           }`}
-          onClick={() => setSelectedProgram(program)}
+          onClick={() => setSelectedProgram && setSelectedProgram(program)}
         >
           {program}
         </button>

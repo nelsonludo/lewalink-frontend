@@ -29,6 +29,8 @@ const API_URL = "/api/auth/v1";
 export const useSignUp = () => {
   const [loading, setLoading] = useState(false);
   const { axios } = useAxios();
+    const navigate = useNavigate();
+
 
   const signUp = async ({ name, email, password }: CreateAccountFormType) => {
     try {
@@ -40,6 +42,7 @@ export const useSignUp = () => {
 
       if (data.code === SUCCESS_CODE.SUCCESS) {
         successToast("Check your email to activate your account");
+                navigate("/signin");
       } else {
         throw new Error();
       }
@@ -245,6 +248,24 @@ export const useGetProfile = () => {
       }
     } catch (err) {
       const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+      switch (code) {
+        case CODES.NOT_FOUND:
+          failedToast("User not found");
+          break;
+        case CODES.UNEXPECTED_ERROR:
+          failedToast("Unexpected error occured");
+          break;
+        default:
+          failedToast("Something went wrong");
+          break;
+      }
+      dispatch(setUser(null));
+      const { pathname } = window.location;
+      if (pathname !== "/signin" && pathname !== "/signup") {
+        window.location.href = `/signin?url=${pathname}`;
+      }
+      
     } finally {
       dispatch(setLoadingUser(false));
     }

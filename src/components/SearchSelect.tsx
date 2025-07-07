@@ -1,14 +1,17 @@
 import { FC, useState } from "react";
 interface CustomSelectWithFieldsetProps {
   options?: string[];
-
   label?: string;
+  selected: string;
+  setSelected: (value: string) => void;
 }
 const CustomSelectWithFieldset: FC<CustomSelectWithFieldsetProps> = ({
   options,
   label,
+  selected,
+  setSelected,
 }) => {
-  const [selected, setSelected] = useState("");
+  
 
   return (
     <fieldset className="relative border border-gray-300 rounded-full px-2 py-2 w-full h-13 lg:h-full">

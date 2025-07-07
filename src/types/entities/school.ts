@@ -1,6 +1,8 @@
 import { Creator } from "./creator";
 
 export enum SchoolType {
+  SECONDARY_SCHOOL = "SECONDARY_SCHOOL",
+  PRIMARY_SCHOOL = "PRIMARY_SCHOOL",
   PUBLIC_STATE_UNIVERSITY = "PUBLIC_STATE_UNIVERSITY",
   PRIVATE_UNIVERSITY = "PRIVATE_UNIVERSITY",
 }
@@ -19,17 +21,19 @@ export type School = {
   latitude: number;
   country: string;
   city: string;
-  fullAddressName: string;
   email: string;
   phoneNumber: string;
   website: string;
-  pictures?: string[];
   visits: number;
   rating: number;
-  imagesUrls?: ImageUrl[];
+  fullAddressName: string;
+  distance?: number;
 
   createdAt: Date;
   updatedAt: Date;
   isDeleted?: boolean;
   creator?: Creator;
+
+  
 };
+

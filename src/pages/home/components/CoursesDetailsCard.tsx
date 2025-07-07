@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import ButtonsThingy from "../../../components/ButtonsThingy";
 
 type CoursesDetailsCardProps = {
@@ -10,10 +10,15 @@ const CoursesDetailsCard: FC<CoursesDetailsCardProps> = ({
   courses,
   variant,
 }) => {
+  const tabs = ["HND", "Bachelor's", "Masters", "PHD"]; 
+  const [selectedTab, setSelectedTab] = useState(tabs[0]);
+    
+  
+    
   return (
     <div className="flex flex-col gap-1 w-full">
       {variant && (
-        <ButtonsThingy programs={["HND", "Bachelor's", "Masters", "PHD"]} />
+        <ButtonsThingy programs={tabs} selectedProgram={selectedTab} setSelectedProgram={setSelectedTab} />
       )}
       {courses.map((course, index) => (
         <div

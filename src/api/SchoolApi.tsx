@@ -14,6 +14,8 @@ import { Payload, PayloadForm } from "../types/general";
 import { School } from "../types/entities/school";
 import { successToast } from "../utils/toasts";
 import { SchoolFormType } from "../types/forms";
+import { useDispatch } from "react-redux";
+import { setSchools } from "../store/userHome.slice";
 
 const API_URL = "/api/school/v1";
 
@@ -183,4 +185,42 @@ export const useSuperUserCreatesSchool = () => {
   };
 
   return { superUserCreatesSchool, loading };
+};
+
+//user Api's
+export const useUserGetSchools = () => {
+  const [loading, setLoading] = useState(false);
+  const [schools, setCurrentSchools] = useState<School[]>([]);
+    const dispatch = useDispatch();
+
+
+  const { axios } = useAxios();
+
+  const userGetSchools = async (payload: Payload) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get<SingleItemResponseType<School[]>>(
+        `${API_URL}/search`,
+        {
+          params: { ...payload },
+        }
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        setCurrentSchools(data.data);
+        dispatch(setSchools(data.data)); 
+      }
+
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      displayErrorToastBasedOnCode(code);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { userGetSchools, loading, schools, setSchools };
 };

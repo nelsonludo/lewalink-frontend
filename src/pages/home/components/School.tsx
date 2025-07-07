@@ -1,23 +1,17 @@
 import { useParams } from "react-router-dom";
-import ProgramDetailCard from "./ProgramDetailCard";
-import { useState } from "react";
 import Card from "./Card";
 import CoursesDetailsCard from "./CoursesDetailsCard";
 import RatingsAndReviews from "./RatingsAndReviews";
+import { userHomeInitialStateType } from "../../../store/userHome.slice";
+import { useSelector } from "react-redux";
 
 const School = () => {
   const { id } = useParams();
-  const [program, setProgram] = useState({
-    schoolName: "Harvard University",
-    speciality: "Computer Science",
-    Description:
-      "A comprehensive program in computer science covering algorithms, data structures, and software engineering.",
-    time: "Full-time",
-    duration: "4 years",
-    diploma: "Bachelor's Degree",
-    language: "English",
-    coursesNumber: 120,
-  });
+  const { schools }: userHomeInitialStateType = useSelector(
+    (state: any) => state.userHomeSlice as userHomeInitialStateType
+  );
+  const currentSchool = schools.find((school) => school.id === id);
+
 
   return (
     <div className="h-full bg-[#f4eaff]">
@@ -43,25 +37,38 @@ const School = () => {
                 </div>
                 <div className="w-full">
                   <h1 className="text-white text-xl lg:text-4xl font-bold  ">
-                    {program.schoolName}
+                    {currentSchool?.name}
                   </h1>
                   <h2 className="text-white text-2xl ">school sub title</h2>
                 </div>
               </div>
               <div className="w-full ">
                 <h2 className="text-4xl text-[#6DFF29] font-bold">
-                  {program.speciality}
+                  {currentSchool?.type}
                 </h2>
               </div>
               <div className="w-full ">
-                <h2 className="text-md text-white">{program.Description}</h2>
+                <h2 className="text-md text-white">{currentSchool?.description}</h2>
               </div>
               <div className="w-full ">
                 <h2 className="text-md text-white">School Rating</h2>
                 <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <img key={i} src={"/images/emptyStar.png"} alt="" />
-                  ))}
+                  {[...Array(5)].map((_, i) => {
+              const diff = (currentSchool?.rating ?? 0) - i;
+              let starSrc = "/images/emptyStar.png";
+              if (diff >= 1) {
+                starSrc = "/images/fullStar.png";
+              } else if (diff >= 0.5) {
+                starSrc = "/images/halfStar.png";
+              }
+              return (
+                <img
+                  key={i}
+                  src={starSrc}
+                  alt=""
+                />
+              );
+            })}
                 </div>
               </div>
             </div>
@@ -69,24 +76,24 @@ const School = () => {
             <div className="flex flex-col justify-start w-[30%] h-full px-8 py-2">
               <div className="flex my-1 gap-2">
                 <img src="/images/cameroun.png" alt="" className="w-6 h-6" />
-                <h2 className="text-sm text-white">{"program country"}</h2>
+                <h2 className="text-sm text-white">{currentSchool?.country}</h2>
               </div>
               <div className="flex my-1 gap-2">
                 <img src="/images/cameroun.png" alt="" className="w-6 h-6" />
-                <h2 className="text-sm text-white">{"program address"}</h2>
+                <h2 className="text-sm text-white">{currentSchool?.fullAddressName}</h2>
               </div>
               <div className="flex my-1 gap-2">
                 <img src="/images/cameroun.png" alt="" className="w-6 h-6" />
-                <h2 className="text-sm text-white">{"program email"}</h2>
+                <h2 className="text-sm text-white">{currentSchool?.email}</h2>
               </div>
               <div className="flex my-1 gap-2">
                 <img src="/images/cameroun.png" alt="" className="w-6 h-6" />
-                <h2 className="text-sm text-white">{"program telephon"}</h2>
+                <h2 className="text-sm text-white">{currentSchool?.phoneNumber}</h2>
               </div>
-              <div className="flex my-1 gap-2">
+              <a href={currentSchool?.website} className="flex my-1 gap-2">
                 <img src="/images/cameroun.png" alt="" className="w-6 h-6" />
-                <h2 className="text-sm text-white">{"program website"}</h2>
-              </div>
+                <h2 className="text-sm text-white">{currentSchool?.website}</h2>
+              </a>
             </div>
           </div>
         </div>

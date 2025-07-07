@@ -96,7 +96,7 @@ const Filters = () => {
               <span>Private universities</span>
             </button>
           </div>
-          <div className="my-2">
+          {/* <div className="my-2">
             <span className="font-semibold text-gray-700 mt-4">
               School Rating
             </span>
@@ -122,7 +122,7 @@ const Filters = () => {
                 ))}
               </button>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

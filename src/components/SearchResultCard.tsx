@@ -4,29 +4,32 @@ import { Link } from "react-router-dom";
 interface SearchResultCardProps {
   schoolid: string;
   schoolName: string;
-  speciality: string;
-  language: string;
-  duration: string;
-  time: string;
-  diploma: string;
+  type: string;
+  // language: string;
+  // duration: string;
+  distance: number | undefined;
+  // diploma: string;
   location: string;
-  coursesNumber: number;
+  rating: number;
+  // coursesNumber: number;
 }
 
 const SearchResultCard: FC<SearchResultCardProps> = ({
   schoolid,
   schoolName,
-  speciality,
-  language,
-  duration,
-  time,
-  diploma,
+  type,
+  // language,
+  // duration,
+  distance,
+  // diploma,
   location,
-  coursesNumber,
+  rating
+  // coursesNumber,
+  
 }) => {
   return (
     <Link
-      to={`/home/universities/school/:${schoolid}`}
+      to={`/home/universities/school/${schoolid}`}
       className="bg-white rounded-xl p-1 lg:p-6 w-full flex flex-row text-base  text-xs lg:text-sm cursor-pointer hover:shadow-lg transition-shadow duration-200"
     >
       <div className=" w-[20%] rounded-xp mr-1 lg:mr-8">
@@ -42,55 +45,64 @@ const SearchResultCard: FC<SearchResultCardProps> = ({
           <img src="/images/like.png" alt="" className="hidden lg:block" />
         </div>
         <h2 className="text-xl lg:2xl text-[#BB29FF] font-bold">
-          {speciality}
+          {type}
         </h2>
         <h2 className="text-xs text-gray-400">{location}</h2>
-        <h2 className="text-xs text-gray-400">Courses: {coursesNumber}</h2>
+        {/* <h2 className="text-xs text-gray-400">Courses: {coursesNumber}</h2> */}
         <div className="my-2 flex flex-row lg:gap-8 gap-1 text-[9px] lg:text-xs">
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <img
               src="/images/icons/graduation-capIcon.png"
               alt=""
               className="w-4 h-4 lg:w-4 lg:h-4"
             />
             <span className="ml-1">{diploma}</span>
-          </div>
+          </div> */}
           <div className="flex items-center">
             <img
               src="/images/icons/clockIcon.png"
               alt=""
               className="w-3 h-3 lg:w-4 lg:h-4"
             />
-            <span className="ml-1">{time}</span>
+            <span className="ml-1">{distance||0}m away</span>
           </div>
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <img
               src="/images/icons/calendarIcon.png"
               alt=""
               className="w-3 h-3 lg:w-4 lg:h-4"
             />
             <span className="ml-1">{duration}</span>
-          </div>
-          <div className="flex items-center">
+          </div> */}
+          {/* <div className="flex items-center">
             <img
               src="/images/icons/languageIcon.png"
               alt=""
               className="w-3 h-3 lg:w-4 lg:h-4"
             />
             <span className="ml-1">{language}</span>
-          </div>
+          </div> */}
         </div>
         <div
           className={`flex items-center rounded-lg w-full cursor-pointer 
                `}
         >
-          {[...Array(5)].map((_, i) => (
-            <img
-              key={i}
-              src={i < 3 ? "/images/fullStar.png" : "/images/emptyStar.png"}
-              alt=""
-            />
-          ))}
+            {[...Array(5)].map((_, i) => {
+              const diff = rating - i;
+              let starSrc = "/images/emptyStar.png";
+              if (diff >= 1) {
+                starSrc = "/images/fullStar.png";
+              } else if (diff >= 0.5) {
+                starSrc = "/images/halfStar.png";
+              }
+              return (
+                <img
+                  key={i}
+                  src={starSrc}
+                  alt=""
+                />
+              );
+            })}
         </div>
       </div>
     </Link>

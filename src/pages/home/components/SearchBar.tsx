@@ -6,9 +6,27 @@ import {
   setdisplaySearchBar,
   userHomeInitialStateType,
 } from "../../../store/userHome.slice";
+import { useState } from "react";
+import SearchInput from "../../../components/SearchInput";
+import { useUserGetSchools } from "../../../api/SchoolApi";
+import { SchoolType } from "../../../types/entities/school";
 
 const SearchBar = () => {
   const dispatch = useDispatch();
+  const tabs = ["Schools", "Programs"];
+  const [selectedTab, setSelectedTab] = useState(tabs[0]);
+  const [schoolSearch, setSchoolSearch] = useState({
+    type: "",
+    city: "",
+    country: "",
+  });
+
+  const { userGetSchools } = useUserGetSchools();
+
+  const handleSchoolSearch = () => {
+    // Implement search logic here
+    userGetSchools(schoolSearch);
+  };
 
   const toggleSearchBar = () => {
     dispatch(setdisplaySearchBar(false)); // or false
@@ -26,7 +44,13 @@ const SearchBar = () => {
           : "hidden"
       } lg:block`}
     >
-      <div className="bg-[#F4EAFF]  lg:bg-white rounded-xl py-4 lg:px-4 w-full h-full">
+      <form
+        className="bg-[#F4EAFF]  lg:bg-white rounded-xl py-4 lg:px-4 w-full h-full"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSchoolSearch();
+        }}
+      >
         <div className="flex items-center px-4 lg:px-1 my-4 lg:my-0">
           <button
             onClick={toggleSearchBar}
@@ -41,25 +65,116 @@ const SearchBar = () => {
           </button>
 
           <div className="w-[90%] lg:w-[40%]">
-            <ButtonsThingy programs={["Schools", "Programs"]} />
+            <ButtonsThingy
+              programs={tabs}
+              selectedProgram={selectedTab}
+              setSelectedProgram={setSelectedTab}
+            />
           </div>
         </div>
-        <div className="grid grid-cols md:grid-cols-3 lg:grid-cols-4 p-4 gap-4 bg-white rounded-4xl ">
-          <SearchSelect label="School" options={[]} />
-          <SearchSelect label="Program" options={[]} />
-          <SearchSelect label="City" options={[]} />
-          <SearchSelect label="Study Level" options={[]} />
-          <SearchSelect label="Region" options={[]} />
-          <SearchSelect label="Location" options={[]} />
-          <SearchSelect label="By Geo-Localization" options={[]} />
+        {selectedTab === "Schools" ? (
+          <div className="grid grid-cols md:grid-cols-3 lg:grid-cols-4 p-4 gap-4 bg-white rounded-4xl ">
+            <SearchInput
+              label="Country"
+              value={schoolSearch.country}
+              setValue={(value) =>
+                setSchoolSearch({ ...schoolSearch, country: value })
+              }
+            />
+            <SearchInput
+              label="City"
+              value={schoolSearch.city}
+              setValue={(value) =>
+                setSchoolSearch({ ...schoolSearch, city: value })
+              }
+            />
+            <SearchSelect
+              label="Type"
+              options={Object.values(SchoolType)}
+              selected={schoolSearch.type}
+              setSelected={(value) =>
+                setSchoolSearch({ ...schoolSearch, type: value })
+              }
+            />
 
-          <div className="w-[30%] lg:w-full ">
-            <AuthButton type="submit" loading={false} variant="primary">
-              Search
-            </AuthButton>
+            <div className="w-[30%] lg:w-full h-full flex items-center justify-center">
+              <AuthButton
+                type="submit"
+                loading={false}
+                variant="primary"
+                onClick={() => handleSchoolSearch()}
+              >
+                Search
+              </AuthButton>
+            </div>
           </div>
-        </div>
-      </div>
+        ) : (
+          <div className="grid grid-cols md:grid-cols-3 lg:grid-cols-4 p-4 gap-4 bg-white rounded-4xl ">
+            <SearchSelect
+              label="School"
+              options={Object.values(SchoolType)}
+              selected={schoolSearch.type}
+              setSelected={(value) =>
+                setSchoolSearch({ ...schoolSearch, type: value })
+              }
+            />
+            <SearchSelect
+              label="Program"
+              options={Object.values(SchoolType)}
+              selected={schoolSearch.type}
+              setSelected={(value) =>
+                setSchoolSearch({ ...schoolSearch, type: value })
+              }
+            />
+            <SearchSelect
+              label="City"
+              options={Object.values(SchoolType)}
+              selected={schoolSearch.type}
+              setSelected={(value) =>
+                setSchoolSearch({ ...schoolSearch, type: value })
+              }
+            />
+            <SearchSelect
+              label="Study Level"
+              options={Object.values(SchoolType)}
+              selected={schoolSearch.type}
+              setSelected={(value) =>
+                setSchoolSearch({ ...schoolSearch, type: value })
+              }
+            />
+            <SearchSelect
+              label="Region"
+              options={Object.values(SchoolType)}
+              selected={schoolSearch.type}
+              setSelected={(value) =>
+                setSchoolSearch({ ...schoolSearch, type: value })
+              }
+            />
+            <SearchSelect
+              label="Location"
+              options={Object.values(SchoolType)}
+              selected={schoolSearch.type}
+              setSelected={(value) =>
+                setSchoolSearch({ ...schoolSearch, type: value })
+              }
+            />
+            <SearchSelect
+              label="By Geo-Localization"
+              options={Object.values(SchoolType)}
+              selected={schoolSearch.type}
+              setSelected={(value) =>
+                setSchoolSearch({ ...schoolSearch, type: value })
+              }
+            />
+
+            <div className="w-[30%] lg:w-full h-full flex items-center justify-center">
+              <AuthButton type="submit" loading={false} variant="primary">
+                Search
+              </AuthButton>
+            </div>
+          </div>
+        )}
+      </form>
     </div>
   );
 };
