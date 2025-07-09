@@ -10,12 +10,12 @@ import { Payload } from "../types/general";
 
 import { failedToast } from "../utils/toasts";
 import { useDispatch } from "react-redux";
-import { setCurrentSchoolPrograms } from "../store/userHome.slice";
-import { SchoolProgram } from "../types/entities/school-program";
+import { setCurrentSchoolRating } from "../store/userHome.slice";
+import { SchoolRating } from "../types/entities/school-rating";
 
-const API_URL = "/api/school-program/v1";
+const API_URL = "/api/school-rating/v1";
 
-export const useUserGetCurrentSchoolPrograms = () => {
+export const useUserGetCurrentSchoolRating = () => {
   const [loading, setLoading] = useState(false);
 
   const [notFound, setNotFound] = useState(false);
@@ -23,15 +23,15 @@ export const useUserGetCurrentSchoolPrograms = () => {
 
   const { axios } = useAxios();
 
-  const userGetCurrentSchoolPrograms = async ({ id }: Payload) => {
+  const userGetCurrentSchoolRating = async ({ id }: Payload) => {
     setNotFound(false);
     try {
       setLoading(true);
-      const { data } = await axios.get<SingleItemResponseType<SchoolProgram[]>>(
-        `${API_URL}/programs/${id}`
+      const { data } = await axios.get<SingleItemResponseType<SchoolRating>>(
+        `${API_URL}/${id}`
       );
       if (data.code === SUCCESS_CODE.SUCCESS) {
-        dispatch(setCurrentSchoolPrograms(data.data));
+        dispatch(setCurrentSchoolRating(data.data));
       }
 
       return data.data;
@@ -54,7 +54,7 @@ export const useUserGetCurrentSchoolPrograms = () => {
   };
 
   return {
-    userGetCurrentSchoolPrograms,
+    userGetCurrentSchoolRating,
     loading,
     notFound,
   };

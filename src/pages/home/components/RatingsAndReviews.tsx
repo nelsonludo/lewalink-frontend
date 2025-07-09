@@ -1,20 +1,31 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
+import { useUserGetCurrentSchoolRating } from "../../../api/SchoolRatingApi";
+import { useSelector } from "react-redux";
+import { userHomeInitialStateType } from "../../../store/userHome.slice";
 
 type RatingsAndReviewsProps = {
-  averageStars: number;
-  ratingsNumber: number;
+  currentSchoolId?: string;
 };
 
-const RatingsAndReviews: FC<RatingsAndReviewsProps> = ({
-  averageStars,
-  ratingsNumber,
-}) => {
+const RatingsAndReviews: FC<RatingsAndReviewsProps> = ({ currentSchoolId }) => {
+  const { userGetCurrentSchoolRating } = useUserGetCurrentSchoolRating();
+  const { currentSchoolRating }: userHomeInitialStateType = useSelector(
+    (state: any) => state.userHomeSlice as userHomeInitialStateType
+  );
+
+  useEffect(() => {
+    userGetCurrentSchoolRating({
+      id: currentSchoolId ?? "",
+    });
+  }, []);
+
   return (
     <div className="flex flex-col gap-6 p-4">
       <div>
         <h2 className="text-lg font-bold">Rate Us</h2>
         <h2 className="text-md  ">Tell others about your experience</h2>
       </div>
+      {/* user rating section */}
       <div>
         <button
           type="button"
@@ -32,13 +43,13 @@ const RatingsAndReviews: FC<RatingsAndReviewsProps> = ({
       </div>
       <div className="flex gap-8">
         <div className="flex flex-col gap-2 items-center">
-          <h2 className="text-3xl font-bold">{averageStars}</h2>
+          <h2 className="text-3xl font-bold">{currentSchoolRating?.stars}</h2>
           <div className="flex items-center w-full">
             {[...Array(5)].map((_, i) => (
               <img key={i} src={"/images/emptyStar.png"} alt="" />
             ))}
           </div>
-          <h2>{ratingsNumber}</h2>
+          <h2>{}</h2>
         </div>
         <div className="w-full">
           {[...Array(5)].map((_, i) => (

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { School } from "../types/entities/school";
 import { SchoolProgram } from "../types/entities/school-program";
 import { ProgramCourse } from "../types/entities/program-course";
+import { SchoolRating } from "../types/entities/school-rating";
 
 export type userHomeInitialStateType = {
   displaySearchBar: boolean;
@@ -10,6 +11,7 @@ export type userHomeInitialStateType = {
   schools: School[];
   currentSchoolPrograms: SchoolProgram[];
   currentSchoolProgramCourses?: ProgramCourse[];
+  currentSchoolRating?: SchoolRating;
 };
 
 const initialState: userHomeInitialStateType = {
@@ -19,6 +21,7 @@ const initialState: userHomeInitialStateType = {
   schools: [],
   currentSchoolPrograms: [],
   currentSchoolProgramCourses: [],
+  currentSchoolRating: undefined,
 };
 
 const userHome = createSlice({
@@ -46,6 +49,9 @@ const userHome = createSlice({
     ) {
       state.currentSchoolProgramCourses = action.payload;
     },
+    setCurrentSchoolRating(state, action: { payload: SchoolRating }) {
+      state.currentSchoolRating = action.payload;
+    },
   },
 });
 
@@ -56,6 +62,7 @@ export const {
   setSchools,
   setCurrentSchoolPrograms,
   setCurrentSchoolProgramCourses,
+  setCurrentSchoolRating,
 } = userHome.actions;
 
 export default userHome.reducer;

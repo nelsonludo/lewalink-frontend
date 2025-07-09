@@ -97,6 +97,7 @@ const School = () => {
                   {currentSchool?.description}
                 </h2>
               </div>
+
               <div className="w-full ">
                 <h2 className="text-md text-white">School Rating</h2>
                 <div className="flex">
@@ -169,6 +170,7 @@ const School = () => {
             </div>
             <Card child={<img src="/images/mapPlaceHolder.png" />} />
           </div>
+
           <div>
             <div className="flex justify-between items-center border-b border-gray-300 my-4 pb-4">
               <h2 className="text-3xl font-bold text-[#37353A]">
@@ -176,9 +178,7 @@ const School = () => {
               </h2>
             </div>
             <Card
-              child={
-                <RatingsAndReviews averageStars={2.4} ratingsNumber={300300} />
-              }
+              child={<RatingsAndReviews currentSchoolId={currentSchool.id} />}
             />
           </div>
         </div>
