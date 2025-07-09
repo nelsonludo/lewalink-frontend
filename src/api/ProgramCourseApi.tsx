@@ -6,12 +6,14 @@ import {
 import { AxiosError } from "axios";
 import { ErrorResponseType } from "../types/response/error-response-type";
 import useAxios from "../hooks/useAxios";
-import { SUCCESS_CODE } from "../types/enums/error-codes";
+import { CODES, SUCCESS_CODE } from "../types/enums/error-codes";
 
 import { displayErrorToastBasedOnCode } from "../utils/display-error-toast-based-on-code";
 import { Payload } from "../types/general";
-import { successToast } from "../utils/toasts";
+import { failedToast, successToast } from "../utils/toasts";
 import { ProgramCourse } from "../types/entities/program-course";
+import { useDispatch } from "react-redux";
+import { setCurrentSchoolProgramCourses } from "../store/userHome.slice";
 
 const API_URL = "/api/program-course/v1";
 
@@ -154,4 +156,49 @@ export const useSuperUserAddsCourseToProgram = () => {
   };
 
   return { superUserAddsCourseToProgram, loading };
+};
+
+export const useUserGetCurrentSchoolProgramCourses = () => {
+  const [loading, setLoading] = useState(false);
+
+  const [notFound, setNotFound] = useState(false);
+  const dispatch = useDispatch();
+
+  const { axios } = useAxios();
+
+  const userGetCurrentSchoolProgramCourses = async ({ id }: Payload) => {
+    setNotFound(false);
+    try {
+      setLoading(true);
+      const { data } = await axios.get<SingleItemResponseType<ProgramCourse[]>>(
+        `${API_URL}/courses/${id}`
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        dispatch(setCurrentSchoolProgramCourses(data.data));
+      }
+
+      return data.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      if (code === CODES.NOT_FOUND) {
+        failedToast("Program does not exist");
+        setNotFound(true);
+        return;
+      }
+
+      displayErrorToastBasedOnCode(code);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    userGetCurrentSchoolProgramCourses,
+    loading,
+    notFound,
+  };
 };

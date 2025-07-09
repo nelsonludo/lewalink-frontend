@@ -38,7 +38,7 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         {/* PUBLIC ROUTES  */}
-        
+
         <Route path="/activate" element={<ActivateAccount />} />
         <Route path="/home" element={<Home />}>
           <Route index element={<Navigate to="universities" replace />} />
@@ -54,15 +54,8 @@ const Router = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* ONLY LOGGED OUT ROUTES  */}
-        <Route 
-          path="/signin" 
-          element={
-            <OnlyPublic>
-              <Signin />   
-            </OnlyPublic>
-          } 
-        />
-        
+        <Route path="/signin" element={<Signin />} />
+
         <Route
           path="/signup"
           element={

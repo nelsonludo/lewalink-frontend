@@ -6,16 +6,17 @@ import {
 import { AxiosError } from "axios";
 import { ErrorResponseType } from "../types/response/error-response-type";
 import useAxios from "../hooks/useAxios";
-import { SUCCESS_CODE } from "../types/enums/error-codes";
+import { CODES, SUCCESS_CODE } from "../types/enums/error-codes";
 
 import { displayErrorToastBasedOnCode } from "../utils/display-error-toast-based-on-code";
 import { Payload, PayloadForm } from "../types/general";
 
 import { School } from "../types/entities/school";
-import { successToast } from "../utils/toasts";
+import { failedToast, successToast } from "../utils/toasts";
 import { SchoolFormType } from "../types/forms";
 import { useDispatch } from "react-redux";
-import { setSchools } from "../store/userHome.slice";
+import { setCurrentSchoolPrograms, setSchools } from "../store/userHome.slice";
+import { Program } from "../types/entities/program";
 
 const API_URL = "/api/school/v1";
 
@@ -191,8 +192,7 @@ export const useSuperUserCreatesSchool = () => {
 export const useUserGetSchools = () => {
   const [loading, setLoading] = useState(false);
   const [schools, setCurrentSchools] = useState<School[]>([]);
-    const dispatch = useDispatch();
-
+  const dispatch = useDispatch();
 
   const { axios } = useAxios();
 
@@ -207,9 +207,8 @@ export const useUserGetSchools = () => {
       );
       if (data.code === SUCCESS_CODE.SUCCESS) {
         setCurrentSchools(data.data);
-        dispatch(setSchools(data.data)); 
+        dispatch(setSchools(data.data));
       }
-
     } catch (err) {
       const error = err as AxiosError<ErrorResponseType>;
       const code = error.response?.data.code;

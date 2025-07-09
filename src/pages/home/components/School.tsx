@@ -4,14 +4,59 @@ import CoursesDetailsCard from "./CoursesDetailsCard";
 import RatingsAndReviews from "./RatingsAndReviews";
 import { userHomeInitialStateType } from "../../../store/userHome.slice";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useUserGetCurrentSchoolPrograms } from "../../../api/SchoolProgramApi";
+import { useUserGetSchools } from "../../../api/SchoolApi";
+import { SchoolType } from "../../../types/entities/school";
 
 const School = () => {
   const { id } = useParams();
-  const { schools }: userHomeInitialStateType = useSelector(
-    (state: any) => state.userHomeSlice as userHomeInitialStateType
-  );
-  const currentSchool = schools.find((school) => school.id === id);
+  const { userGetSchools } = useUserGetSchools();
+  const { schools, currentSchoolPrograms }: userHomeInitialStateType =
+    useSelector(
+      (state: any) => state.userHomeSlice as userHomeInitialStateType
+    );
 
+  const [programTypes, setProgramTypes] = useState<string[]>([]);
+  const [allPrograms, setAllPrograms] = useState<any[]>([]);
+  const [currentSchool, setCurrentSchool] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  const { userGetCurrentSchoolPrograms } = useUserGetCurrentSchoolPrograms();
+
+  // Fetch schools and programs on mount or when id changes
+  useEffect(() => {
+    setLoading(true);
+    Promise.all([
+      userGetSchools({ type: SchoolType.PRIVATE_UNIVERSITY }),
+      userGetCurrentSchoolPrograms({ id: id ?? "" }),
+    ]).finally(() => setLoading(false));
+  }, [id]);
+
+  // Update currentSchool when schools or id changes
+  useEffect(() => {
+    setCurrentSchool(schools.find((school) => school.id === id));
+  }, [schools, id]);
+
+  // Update programTypes and allPrograms when currentSchoolPrograms changes
+  useEffect(() => {
+    if (currentSchoolPrograms && currentSchoolPrograms.length > 0) {
+      setProgramTypes(currentSchoolPrograms.map((item) => item?.program?.type));
+      setAllPrograms(currentSchoolPrograms.map((item) => item.program));
+    } else {
+      setProgramTypes([]);
+      setAllPrograms([]);
+    }
+  }, [currentSchoolPrograms]);
+
+  // Optionally, show a loading spinner or placeholder while loading
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <span>Loading...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full bg-[#f4eaff]">
@@ -48,27 +93,23 @@ const School = () => {
                 </h2>
               </div>
               <div className="w-full ">
-                <h2 className="text-md text-white">{currentSchool?.description}</h2>
+                <h2 className="text-md text-white">
+                  {currentSchool?.description}
+                </h2>
               </div>
               <div className="w-full ">
                 <h2 className="text-md text-white">School Rating</h2>
                 <div className="flex">
                   {[...Array(5)].map((_, i) => {
-              const diff = (currentSchool?.rating ?? 0) - i;
-              let starSrc = "/images/emptyStar.png";
-              if (diff >= 1) {
-                starSrc = "/images/fullStar.png";
-              } else if (diff >= 0.5) {
-                starSrc = "/images/halfStar.png";
-              }
-              return (
-                <img
-                  key={i}
-                  src={starSrc}
-                  alt=""
-                />
-              );
-            })}
+                    const diff = (currentSchool?.rating ?? 0) - i;
+                    let starSrc = "/images/emptyStar.png";
+                    if (diff >= 1) {
+                      starSrc = "/images/fullStar.png";
+                    } else if (diff >= 0.5) {
+                      starSrc = "/images/halfStar.png";
+                    }
+                    return <img key={i} src={starSrc} alt="" />;
+                  })}
                 </div>
               </div>
             </div>
@@ -80,7 +121,9 @@ const School = () => {
               </div>
               <div className="flex my-1 gap-2">
                 <img src="/images/cameroun.png" alt="" className="w-6 h-6" />
-                <h2 className="text-sm text-white">{currentSchool?.fullAddressName}</h2>
+                <h2 className="text-sm text-white">
+                  {currentSchool?.fullAddressName}
+                </h2>
               </div>
               <div className="flex my-1 gap-2">
                 <img src="/images/cameroun.png" alt="" className="w-6 h-6" />
@@ -88,7 +131,9 @@ const School = () => {
               </div>
               <div className="flex my-1 gap-2">
                 <img src="/images/cameroun.png" alt="" className="w-6 h-6" />
-                <h2 className="text-sm text-white">{currentSchool?.phoneNumber}</h2>
+                <h2 className="text-sm text-white">
+                  {currentSchool?.phoneNumber}
+                </h2>
               </div>
               <a href={currentSchool?.website} className="flex my-1 gap-2">
                 <img src="/images/cameroun.png" alt="" className="w-6 h-6" />
@@ -103,17 +148,14 @@ const School = () => {
         <div className="w-[70%] flex flex-col gap-4">
           <div>
             <div className="flex justify-between items-center border-b border-gray-300 my-4 pb-4">
-              <h2 className="text-3xl font-bold text-[#37353A]">Courses</h2>
+              <h2 className="text-3xl font-bold text-[#37353A]">Programs</h2>
             </div>
             <Card
               child={
                 <CoursesDetailsCard
-                  courses={[
-                    "bananenoienasnetsetn",
-                    "bananenoienasnetsetn",
-                    "bananenoienasnetsetn bananenoienasnetsetn",
-                  ]}
+                  Programs={allPrograms}
                   variant
+                  tabs={programTypes}
                 />
               }
             />

@@ -13,8 +13,7 @@ const Menu = () => {
     (state: any) => state.userHomeSlice as userHomeInitialStateType
   );
 
-    const profileMenuRef = useRef<HTMLDivElement>(null);
-
+  const profileMenuRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useDispatch();
 
@@ -22,9 +21,7 @@ const Menu = () => {
     dispatch(setdisplayMenu(false)); // or false
   };
 
-  
-
- useEffect(() => {
+  useEffect(() => {
     if (!showProfileMenu) return;
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -38,7 +35,7 @@ const Menu = () => {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showProfileMenu]);  
+  }, [showProfileMenu]);
 
   return (
     <div
@@ -63,14 +60,14 @@ const Menu = () => {
             />
           </button>
         </div>
-        <NavLink
+        {/* <NavLink
           to="/home/universities"
           className={({ isActive }: { isActive: boolean }) =>
             isActive ? "border-b-2 border-[#BB29FF] font-bold pb-1" : "pb-1"
           }
         >
           Universities
-        </NavLink>
+        </NavLink> */}
         {/* <NavLink
           to="/home/secondary-schools"
           className={({ isActive }: { isActive: boolean }) =>
@@ -99,7 +96,6 @@ const Menu = () => {
           <button
             className="cursor-pointer flex flex-row gap-2 items-center"
             onClick={() => setShowProfileMenu((prev) => !prev)}
-            
           >
             <span className="lg:hidden">Profile</span>
             <img
@@ -109,10 +105,7 @@ const Menu = () => {
             />
           </button>
           {showProfileMenu && (
-            <ProfileMenu
-              show={showProfileMenu}
-              setShow={setShowProfileMenu}
-            />
+            <ProfileMenu show={showProfileMenu} setShow={setShowProfileMenu} />
           )}
         </div>
       </div>

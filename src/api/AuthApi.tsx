@@ -29,8 +29,7 @@ const API_URL = "/api/auth/v1";
 export const useSignUp = () => {
   const [loading, setLoading] = useState(false);
   const { axios } = useAxios();
-    const navigate = useNavigate();
-
+  const navigate = useNavigate();
 
   const signUp = async ({ name, email, password }: CreateAccountFormType) => {
     try {
@@ -42,7 +41,7 @@ export const useSignUp = () => {
 
       if (data.code === SUCCESS_CODE.SUCCESS) {
         successToast("Check your email to activate your account");
-                navigate("/signin");
+        navigate("/signin");
       } else {
         throw new Error();
       }
@@ -261,11 +260,10 @@ export const useGetProfile = () => {
           break;
       }
       dispatch(setUser(null));
-      const { pathname } = window.location;
-      if (pathname !== "/signin" && pathname !== "/signup") {
-        window.location.href = `/signin?url=${pathname}`;
-      }
-      
+      // const { pathname } = window.location;
+      // if (pathname !== "/signin" && pathname !== "/signup") {
+      //   window.location.href = `/signin?url=${pathname}`;
+      // }
     } finally {
       dispatch(setLoadingUser(false));
     }
