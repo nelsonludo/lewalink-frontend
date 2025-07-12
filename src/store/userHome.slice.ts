@@ -2,16 +2,20 @@ import { createSlice } from "@reduxjs/toolkit";
 import { School } from "../types/entities/school";
 import { SchoolProgram } from "../types/entities/school-program";
 import { ProgramCourse } from "../types/entities/program-course";
-import { SchoolRating } from "../types/entities/school-rating";
+import {
+  SchoolRating,
+  SchoolRatingInfo,
+} from "../types/entities/school-rating";
 
 export type userHomeInitialStateType = {
   displaySearchBar: boolean;
   displayMenu: boolean;
   displayFilters: boolean;
   schools: School[];
+  currentSchool?: School;
   currentSchoolPrograms: SchoolProgram[];
   currentSchoolProgramCourses?: ProgramCourse[];
-  currentSchoolRating?: SchoolRating;
+  currentSchoolRating?: SchoolRating[];
 };
 
 const initialState: userHomeInitialStateType = {
@@ -19,6 +23,7 @@ const initialState: userHomeInitialStateType = {
   displayMenu: false,
   displayFilters: false,
   schools: [],
+  currentSchool: undefined,
   currentSchoolPrograms: [],
   currentSchoolProgramCourses: [],
   currentSchoolRating: undefined,
@@ -40,6 +45,7 @@ const userHome = createSlice({
     setSchools(state, action: { payload: School[] }) {
       state.schools = action.payload;
     },
+
     setCurrentSchoolPrograms(state, action: { payload: SchoolProgram[] }) {
       state.currentSchoolPrograms = action.payload;
     },
@@ -49,8 +55,11 @@ const userHome = createSlice({
     ) {
       state.currentSchoolProgramCourses = action.payload;
     },
-    setCurrentSchoolRating(state, action: { payload: SchoolRating }) {
+    setCurrentSchoolRating(state, action: { payload: SchoolRating[] }) {
       state.currentSchoolRating = action.payload;
+    },
+    setCurrentSchool(state, action: { payload: School }) {
+      state.currentSchool = action.payload;
     },
   },
 });
@@ -63,6 +72,7 @@ export const {
   setCurrentSchoolPrograms,
   setCurrentSchoolProgramCourses,
   setCurrentSchoolRating,
+  setCurrentSchool,
 } = userHome.actions;
 
 export default userHome.reducer;

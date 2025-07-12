@@ -31,7 +31,7 @@ import PrimarySchools from "./pages/home/components/PrimarySchools";
 import Univertities from "./pages/home/components/Univertities";
 import SecondarySchools from "./pages/home/components/SecondarySchools";
 import Program from "./pages/home/components/Program";
-import School from "./pages/home/components/School";
+import SchoolScreen from "./pages/home/components/School";
 
 const Router = () => {
   return (
@@ -44,7 +44,7 @@ const Router = () => {
           <Route index element={<Navigate to="universities" replace />} />
           <Route path="universities" element={<Univertities />} />
           <Route path="universities/program/:id" element={<Program />} />
-          <Route path="universities/school/:id" element={<School />} />
+          <Route path="universities/school/:id" element={<SchoolScreen />} />
           <Route path="primary-schools" element={<PrimarySchools />} />
           <Route path="secondary-schools" element={<SecondarySchools />} />
         </Route>

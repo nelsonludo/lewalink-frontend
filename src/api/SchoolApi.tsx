@@ -6,17 +6,16 @@ import {
 import { AxiosError } from "axios";
 import { ErrorResponseType } from "../types/response/error-response-type";
 import useAxios from "../hooks/useAxios";
-import { CODES, SUCCESS_CODE } from "../types/enums/error-codes";
+import { SUCCESS_CODE } from "../types/enums/error-codes";
 
 import { displayErrorToastBasedOnCode } from "../utils/display-error-toast-based-on-code";
 import { Payload, PayloadForm } from "../types/general";
 
 import { School } from "../types/entities/school";
-import { failedToast, successToast } from "../utils/toasts";
+import { successToast } from "../utils/toasts";
 import { SchoolFormType } from "../types/forms";
 import { useDispatch } from "react-redux";
-import { setCurrentSchoolPrograms, setSchools } from "../store/userHome.slice";
-import { Program } from "../types/entities/program";
+import { setCurrentSchool, setSchools } from "../store/userHome.slice";
 
 const API_URL = "/api/school/v1";
 
@@ -222,4 +221,35 @@ export const useUserGetSchools = () => {
   };
 
   return { userGetSchools, loading, schools, setSchools };
+};
+
+export const useUserGetSingleSchool = () => {
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const { axios } = useAxios();
+
+  const userGetSingleSchool = async ({ id }: Payload) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get<SingleItemResponseType<School>>(
+        `${API_URL}/${id}`
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        dispatch(setCurrentSchool(data.data));
+      }
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      displayErrorToastBasedOnCode(code);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { userGetSingleSchool, loading };
 };

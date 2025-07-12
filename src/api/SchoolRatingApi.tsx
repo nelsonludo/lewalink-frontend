@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { SingleItemResponseType } from "../types/response/success-response-types";
+import {
+  MultipleItemsResponseType,
+  SingleItemResponseType,
+} from "../types/response/success-response-types";
 import { AxiosError } from "axios";
 import { ErrorResponseType } from "../types/response/error-response-type";
 import useAxios from "../hooks/useAxios";
@@ -15,22 +18,45 @@ import { SchoolRating } from "../types/entities/school-rating";
 
 const API_URL = "/api/school-rating/v1";
 
+interface GetSchoolRatingsParams {
+  schoolId?: string; // Optional: filter by school ID
+  ratingCount?: number; // Optional: filter by star count
+  page?: number;
+  itemsPerPage?: number;
+}
+
 export const useUserGetCurrentSchoolRating = () => {
   const [loading, setLoading] = useState(false);
+  const [localCurrentSchoolRating, setlocalCurrentSchoolRating] = useState<
+    SchoolRating[]
+  >([]);
 
   const [notFound, setNotFound] = useState(false);
   const dispatch = useDispatch();
 
   const { axios } = useAxios();
 
-  const userGetCurrentSchoolRating = async ({ id }: Payload) => {
+  const userGetCurrentSchoolRating = async ({
+    schoolId,
+    ratingCount,
+    page = 1,
+    itemsPerPage = 10,
+  }: GetSchoolRatingsParams) => {
     setNotFound(false);
     try {
       setLoading(true);
-      const { data } = await axios.get<SingleItemResponseType<SchoolRating>>(
-        `${API_URL}/${id}`
+      const { data } = await axios.get<MultipleItemsResponseType<SchoolRating>>(
+        `${API_URL}/${schoolId}`,
+        {
+          params: {
+            ratingCount,
+            page,
+            itemsPerPage,
+          },
+        }
       );
       if (data.code === SUCCESS_CODE.SUCCESS) {
+        setlocalCurrentSchoolRating(data.data);
         dispatch(setCurrentSchoolRating(data.data));
       }
 
@@ -57,5 +83,6 @@ export const useUserGetCurrentSchoolRating = () => {
     userGetCurrentSchoolRating,
     loading,
     notFound,
+    localCurrentSchoolRating,
   };
 };

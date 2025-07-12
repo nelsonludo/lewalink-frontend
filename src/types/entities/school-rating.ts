@@ -12,3 +12,8 @@ export type SchoolRating = {
   isDeleted?: boolean;
   creator?: Creator;
 };
+
+export type SchoolRatingInfo = {
+  schoolRating: SchoolRating[];
+  totalItems: number;
+};

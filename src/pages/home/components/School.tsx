@@ -6,23 +6,28 @@ import { userHomeInitialStateType } from "../../../store/userHome.slice";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useUserGetCurrentSchoolPrograms } from "../../../api/SchoolProgramApi";
-import { useUserGetSchools } from "../../../api/SchoolApi";
+import {
+  useUserGetSchools,
+  useUserGetSingleSchool,
+} from "../../../api/SchoolApi";
 import { SchoolType } from "../../../types/entities/school";
+import StarRating from "./StarRating";
 
-const School = () => {
+const SchoolScreen = () => {
   const { id } = useParams();
   const { userGetSchools } = useUserGetSchools();
-  const { schools, currentSchoolPrograms }: userHomeInitialStateType =
+  const { currentSchool, currentSchoolPrograms }: userHomeInitialStateType =
     useSelector(
       (state: any) => state.userHomeSlice as userHomeInitialStateType
     );
 
   const [programTypes, setProgramTypes] = useState<string[]>([]);
   const [allPrograms, setAllPrograms] = useState<any[]>([]);
-  const [currentSchool, setCurrentSchool] = useState<any>(null);
+
   const [loading, setLoading] = useState(true);
 
   const { userGetCurrentSchoolPrograms } = useUserGetCurrentSchoolPrograms();
+  const { userGetSingleSchool } = useUserGetSingleSchool();
 
   // Fetch schools and programs on mount or when id changes
   useEffect(() => {
@@ -35,8 +40,8 @@ const School = () => {
 
   // Update currentSchool when schools or id changes
   useEffect(() => {
-    setCurrentSchool(schools.find((school) => school.id === id));
-  }, [schools, id]);
+    userGetSingleSchool({ id: id ?? "" });
+  }, []);
 
   // Update programTypes and allPrograms when currentSchoolPrograms changes
   useEffect(() => {
@@ -100,18 +105,11 @@ const School = () => {
 
               <div className="w-full ">
                 <h2 className="text-md text-white">School Rating</h2>
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => {
-                    const diff = (currentSchool?.rating ?? 0) - i;
-                    let starSrc = "/images/emptyStar.png";
-                    if (diff >= 1) {
-                      starSrc = "/images/fullStar.png";
-                    } else if (diff >= 0.5) {
-                      starSrc = "/images/halfStar.png";
-                    }
-                    return <img key={i} src={starSrc} alt="" />;
-                  })}
-                </div>
+                <StarRating
+                  max={5}
+                  rating={currentSchool?.rating}
+                  className="flex"
+                />
               </div>
             </div>
 
@@ -168,7 +166,54 @@ const School = () => {
                 School Google Maps
               </h2>
             </div>
-            <Card child={<img src="/images/mapPlaceHolder.png" />} />
+            <Card
+              child={
+                currentSchool?.latitude && currentSchool?.longitude ? (
+                  <iframe
+                    title="School Location"
+                    width="100%"
+                    height="300"
+                    style={{ border: 0, borderRadius: "12px" }}
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                    src={`https://www.google.com/maps?q=${currentSchool.latitude},${currentSchool.longitude}&hl=es;z=14&output=embed`}
+                  />
+                ) : (
+                  <div className="flex flex-col justify-center items-center h-72 text-gray-500">
+                    <span className="text-5xl mb-2 animate-bounce">
+                      <svg
+                        width="48"
+                        height="48"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 21c-4.418 0-8-3.582-8-8a8 8 0 1116 0c0 4.418-3.582 8-8 8zm0-11a3 3 0 100 6 3 3 0 000-6z"
+                        />
+                      </svg>
+                    </span>
+                    <span className="text-lg font-semibold mb-2">
+                      Location Not Available
+                    </span>
+                    <button
+                      className="mt-2 px-4 py-2 bg-[#bb29ff] text-white rounded-lg hover:bg-[#a020f0] transition"
+                      onClick={() =>
+                        window.alert(
+                          "Please contact the school for location details."
+                        )
+                      }
+                    >
+                      Contact School
+                    </button>
+                  </div>
+                )
+              }
+            />
           </div>
 
           <div>
@@ -178,7 +223,12 @@ const School = () => {
               </h2>
             </div>
             <Card
-              child={<RatingsAndReviews currentSchoolId={currentSchool.id} />}
+              child={
+                <RatingsAndReviews
+                  currentSchoolId={currentSchool?.id}
+                  currentSchoolRatingAverage={currentSchool?.rating}
+                />
+              }
             />
           </div>
         </div>
@@ -187,4 +237,4 @@ const School = () => {
   );
 };
 
-export default School;
+export default SchoolScreen;
