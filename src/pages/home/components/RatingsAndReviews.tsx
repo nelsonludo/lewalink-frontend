@@ -1,5 +1,8 @@
 import { FC, useEffect, useState } from "react";
-import { useUserGetCurrentSchoolRating } from "../../../api/SchoolRatingApi";
+import {
+  useUserCreateSchoolRating,
+  useUserGetCurrentSchoolRating,
+} from "../../../api/SchoolRatingApi";
 // import { useSelector } from "react-redux";
 // import { userHomeInitialStateType } from "../../../store/userHome.slice";
 import StarRating from "./StarRating";
@@ -21,6 +24,10 @@ const RatingsAndReviews: FC<RatingsAndReviewsProps> = ({
 }) => {
   const [ratingsPerStar, setRatingsPerStar] = useState<RatingsPerStarType>({});
   const { userGetCurrentSchoolRating } = useUserGetCurrentSchoolRating();
+  const [review, setReview] = useState<string>("");
+  const [userRating, setUserRating] = useState<number | null>(null);
+  const { userCreateSchoolRating } = useUserCreateSchoolRating();
+
   // const { currentSchoolRating }: userHomeInitialStateType = useSelector(
   //   (state: any) => state.userHomeSlice as userHomeInitialStateType
   // );
@@ -54,6 +61,20 @@ const RatingsAndReviews: FC<RatingsAndReviewsProps> = ({
     0
   );
 
+  const handleRate = (rating: number) => {
+    setUserRating(rating);
+  };
+  // Handle submit review
+  const handleSubmitReview = () => {
+    userCreateSchoolRating({
+      schoolId: currentSchoolId ?? "",
+      stars: userRating ?? 0,
+      message: review,
+    });
+    setUserRating(null);
+    setReview("");
+  };
+
   return (
     <div className="flex flex-col gap-6 p-4">
       <div className="flex flex-col justify-center items-center lg:justify-start lg:items-start">
@@ -61,7 +82,28 @@ const RatingsAndReviews: FC<RatingsAndReviewsProps> = ({
         <h2 className="text-xs lg:text-lg w-fit">
           Tell others about your experience
         </h2>
-        <RatingButtons />
+        <RatingButtons onRate={handleRate} />
+        <div className="flex justify-center items-center gap-2">
+          <textarea
+            placeholder="Write a review..."
+            value={review}
+            onChange={(e) => {
+              setReview(e.target.value);
+            }}
+            className="border rounded px-3 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-[#DDB6FF]"
+          />
+          <button
+            className={`px-4 py-2 rounded transition text-white ${
+              !review || !userRating
+                ? "bg-[#b48be3] cursor-not-allowed"
+                : "bg-[#bb29ff] hover:bg-[#a020f0]"
+            }`}
+            onClick={handleSubmitReview}
+            disabled={!review || !userRating}
+          >
+            Submit Review
+          </button>
+        </div>
       </div>
 
       <div className="flex gap-8 flex-wrap justify-center lg:justify-start ">

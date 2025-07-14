@@ -9,12 +9,12 @@ import useAxios from "../hooks/useAxios";
 import { CODES, SUCCESS_CODE } from "../types/enums/error-codes";
 
 import { displayErrorToastBasedOnCode } from "../utils/display-error-toast-based-on-code";
-import { Payload } from "../types/general";
 
-import { failedToast } from "../utils/toasts";
+import { failedToast, successToast } from "../utils/toasts";
 import { useDispatch } from "react-redux";
 import { setCurrentSchoolRating } from "../store/userHome.slice";
 import { SchoolRating } from "../types/entities/school-rating";
+import { School } from "../types/entities/school";
 
 const API_URL = "/api/school-rating/v1";
 
@@ -23,6 +23,11 @@ interface GetSchoolRatingsParams {
   ratingCount?: number; // Optional: filter by star count
   page?: number;
   itemsPerPage?: number;
+}
+interface CreateSchoolRatings {
+  schoolId: string; // Optional: filter by school ID
+  stars: number;
+  message: string;
 }
 
 export const useUserGetCurrentSchoolRating = () => {
@@ -85,4 +90,51 @@ export const useUserGetCurrentSchoolRating = () => {
     notFound,
     localCurrentSchoolRating,
   };
+};
+
+export const useUserCreateSchoolRating = () => {
+  const [loading, setLoading] = useState(false);
+
+  const { axios } = useAxios();
+
+  const userCreateSchoolRating = async ({
+    schoolId,
+    stars,
+    message,
+  }: CreateSchoolRatings) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post<SingleItemResponseType<School>>(
+        `${API_URL}`,
+        {
+          stars,
+          schoolId,
+          message,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (data.code === SUCCESS_CODE.SUCCESS) {
+        successToast("Program created successfully");
+
+        return data.data;
+      }
+
+      return data.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponseType>;
+      const code = error.response?.data.code;
+
+      console.log(error);
+
+      displayErrorToastBasedOnCode(code);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { userCreateSchoolRating, loading };
 };

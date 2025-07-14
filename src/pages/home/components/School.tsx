@@ -75,8 +75,8 @@ const SchoolScreen = () => {
             zIndex: 0,
           }}
         >
-          <div className="bg-black/50 flex w-[70%] h-full">
-            <div className="flex flex-col justify-start items-start w-[70%] h-full px-8 py-4 gap-4">
+          <div className="bg-black/50 flex flex-col sm:flex-row w-full sm:w-[70%] h-full">
+            <div className="flex flex-col justify-start items-start w-full lg:w-[70%] h-full px-2 lg:px-8 py-4 gap-4">
               <div className="flex w-full items-center">
                 <div className=" w-[20%] rounded-xp mr-1 lg:mr-4">
                   <img
@@ -86,14 +86,16 @@ const SchoolScreen = () => {
                   />
                 </div>
                 <div className="w-full">
-                  <h1 className="text-white text-xl lg:text-4xl font-bold  ">
+                  <h1 className="text-white text-sm lg:text-4xl font-bold  ">
                     {currentSchool?.name}
                   </h1>
-                  <h2 className="text-white text-2xl ">school sub title</h2>
+                  <h2 className="text-white text-sm lg:text-2xl ">
+                    school sub title
+                  </h2>
                 </div>
               </div>
               <div className="w-full ">
-                <h2 className="text-4xl text-[#6DFF29] font-bold">
+                <h2 className="text-md lg:text-4xl text-[#6DFF29] font-bold">
                   {currentSchool?.type}
                 </h2>
               </div>
@@ -113,7 +115,7 @@ const SchoolScreen = () => {
               </div>
             </div>
 
-            <div className="flex flex-col justify-start w-[30%] h-full px-8 py-2">
+            <div className="flex flex-col justify-start w-full lg:w-[30%] h-full px-2 lg:px-8 py-2">
               <div className="flex my-1 gap-2">
                 <img src="/images/cameroun.png" alt="" className="w-6 h-6" />
                 <h2 className="text-sm text-white">{currentSchool?.country}</h2>

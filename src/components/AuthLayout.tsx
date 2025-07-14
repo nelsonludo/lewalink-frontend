@@ -1,3 +1,4 @@
+import { useState } from "react";
 import ButtonsThingy from "./ButtonsThingy";
 
 interface AuthLayoutProps {
@@ -7,6 +8,8 @@ interface AuthLayoutProps {
 }
 
 const AuthLayout: React.FC<AuthLayoutProps> = ({ title, form, isResetPwd }) => {
+  const tabs = ["English", "French"];
+  const [selectedTab, setSelectedTab] = useState(tabs[0]);
   return (
     <div className="flex flex-col lg:flex-row w-full min-h-screen">
       {/* Left image section - Hidden on small screens */}
@@ -22,7 +25,11 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title, form, isResetPwd }) => {
       <div className="w-full lg:w-[45%] px-6 sm:px-10 py-10 flex flex-col justify-center">
         {/* Language Switcher - Centered on mobile, right-aligned on large */}
         <div className="flex justify-center lg:justify-end mb-6">
-          <ButtonsThingy programs={["English", "French"]} />
+          <ButtonsThingy
+            programs={tabs}
+            selectedProgram={selectedTab}
+            setSelectedProgram={setSelectedTab}
+          />
         </div>
 
         {/* Title and Form */}

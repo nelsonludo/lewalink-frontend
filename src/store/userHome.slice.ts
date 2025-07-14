@@ -2,10 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { School } from "../types/entities/school";
 import { SchoolProgram } from "../types/entities/school-program";
 import { ProgramCourse } from "../types/entities/program-course";
-import {
-  SchoolRating,
-  SchoolRatingInfo,
-} from "../types/entities/school-rating";
+import { SchoolRating } from "../types/entities/school-rating";
 
 export type userHomeInitialStateType = {
   displaySearchBar: boolean;
