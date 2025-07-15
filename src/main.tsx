@@ -18,3 +18,6 @@ createRoot(document.getElementById("root")!).render(
     </GoogleOAuthProvider>
   </Provider>
 );
+
+// Remove the search by location for that admin.
+// Create an address component that will take in an address object and display certain fields that we choose to display.
