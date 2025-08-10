@@ -179,28 +179,6 @@ const NewSchool = () => {
                   htmlFor="name"
                   className="block text-sm/6 font-medium text-gray-900"
                 >
-                  Search address
-                </label>
-                <div className="mt-2">
-                  <div className="">
-                    <GooglePlacesAutocomplete
-                      selectProps={{
-                        value: googlePlaceValue,
-                        onChange: setGooglePlaceValue,
-                        // placeholder: "Type the location",
-                        placeholder: "Saisir l'emplacement...",
-                        className: "react-select-container w-full",
-                      }}
-                      apiKey={import.meta.env.VITE_GOOGLE_PLACES_API_KEY}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="sm:col-span-2">
-                <label
-                  htmlFor="name"
-                  className="block text-sm/6 font-medium text-gray-900"
-                >
                   School email
                 </label>
                 <div className="mt-2">
@@ -220,7 +198,6 @@ const NewSchool = () => {
                   )}
                 </div>
               </div>
-
               <div className="sm:col-span-2">
                 <label
                   htmlFor="name"
@@ -245,7 +222,6 @@ const NewSchool = () => {
                   )}
                 </div>
               </div>
-
               <div className="sm:col-span-2">
                 <label
                   htmlFor="name"
@@ -305,7 +281,29 @@ const NewSchool = () => {
                   </span>
                 )}
               </div>
-              <div className="sm:col-span-3">
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="name"
+                  className="block text-sm/6 font-medium text-gray-900"
+                >
+                  Search address
+                </label>
+                <div className="mt-2">
+                  <div className="">
+                    <GooglePlacesAutocomplete
+                      selectProps={{
+                        value: googlePlaceValue,
+                        onChange: setGooglePlaceValue,
+                        // placeholder: "Type the location",
+                        placeholder: "Saisir l'emplacement...",
+                        className: "react-select-container w-full",
+                      }}
+                      apiKey={import.meta.env.VITE_GOOGLE_PLACES_API_KEY}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="sm:col-span-2">
                 <label
                   htmlFor="name"
                   className="block text-sm/6 font-medium text-gray-900"

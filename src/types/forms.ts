@@ -40,14 +40,14 @@ export type ProgramFormType = {
 export type SchoolFormType = {
   name: string;
   type: SchoolType;
-  longitude: string;
-  latitude: string;
-  country: string;
-  city: string;
   description: string;
   email?: string;
   phoneNumber?: string;
   website?: string;
-  fullAddressName: string;
   images: File[];
+  fullAddressName: string;
+  longitude: string;
+  latitude: string;
+  country: string;
+  city: string;
 };
