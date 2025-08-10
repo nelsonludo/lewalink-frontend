@@ -14,3 +14,7 @@ body {
   font-family: "Inter", sans-serif;
   background-color: #f4eaff;
 }
+
+.scroll-bar-width-none {
+  scrollbar-width: none;
+}

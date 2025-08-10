@@ -1,40 +1,39 @@
-import { useEffect, useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Filters from "./Filters";
-import SearchBar from "./SearchBar";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import SearchResultCard from "../../../components/SearchResultCard";
 import {
   setdisplayFilters,
   setdisplayMenu,
   setdisplaySearchBar,
-  userHomeInitialStateType,
 } from "../../../store/userHome.slice";
-import { useUserGetSchools } from "../../../api/SchoolApi";
-import { School, SchoolType } from "../../../types/entities/school";
+import { SchoolFilterType, useUserGetSchools } from "../../../api/SchoolApi";
+import SearchFilters from "../../../components/SearchFilters";
+import Pagination from "../../../components/Pagination";
+import MobileFilters from "../../../components/MobileFilters";
+// import MobileFilters from "../../../components/MobileFilters";
 
 const Univertities = () => {
   const dispatch = useDispatch();
-  const { userGetSchools, loading } = useUserGetSchools();
-  const { schools }: userHomeInitialStateType = useSelector(
-    (state: any) => state.userHomeSlice as userHomeInitialStateType
-  );
-  const [searchResults, setSearchResults] = useState<School[]>(schools || []);
+  const { userGetSchools, loading, schools, totalItems, totalPages } =
+    useUserGetSchools();
 
-  // Memoized handler to avoid unnecessary re-renders
-  const toggleFilters = useCallback(() => {
-    dispatch(setdisplayFilters(true));
-  }, [dispatch]);
+  const [filters, setFilters] = useState<SchoolFilterType>({});
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
 
-  // Keep searchResults in sync with schools
-  useEffect(() => {
-    setSearchResults(schools || []);
-  }, [schools]);
+  const handlePageSelected = (page: number) => {
+    setPage(page);
+  };
 
   // Fetch schools on mount
   useEffect(() => {
-    userGetSchools({ type: SchoolType.PRIVATE_UNIVERSITY });
+    userGetSchools({
+      filters,
+      page,
+      pageSize,
+    });
     // eslint-disable-next-line
-  }, []);
+  }, [filters, page, pageSize]);
 
   // Handle responsive UI state
   useEffect(() => {
@@ -65,27 +64,22 @@ const Univertities = () => {
         />
       </div>
       <div className="flex flex-row py-3 px-2 lg:px-10 gap-4">
-        <Filters />
-        <div className="w-full lg:w-[75%]">
-          <SearchBar />
-          <div className="border-b border-gray-400 pb-2 lg:p-4 mb-4 flex justify-between items-center">
-            <div>
-              <h2 className="text-xl lg:text-2xl font-semibold">
-                Search results
-              </h2>
-              <h1 className="text-sm lg:text-md text-gray-400">
-                Showing {searchResults.length} results
-              </h1>
-            </div>
-            <button
-              className="flex lg:hidden justify-end"
-              onClick={toggleFilters}
-              aria-label="Show filters"
-              type="button"
-            >
-              <img src="/images/filter.png" alt="Filter" className="w-6 h-6" />
-            </button>
+        <div className=" w-full">
+          <div className=" mb-3">
+            <MobileFilters
+              filter={filters}
+              setFilters={setFilters}
+              total={schools.length}
+            />
           </div>
+          <div className=" mb-3">
+            <SearchFilters
+              filter={filters}
+              setFilters={setFilters}
+              total={schools.length}
+            />
+          </div>
+
           {loading ? (
             <div className="flex justify-center items-center py-10">
               <svg
@@ -109,9 +103,9 @@ const Univertities = () => {
                 ></path>
               </svg>
             </div>
-          ) : searchResults.length > 0 ? (
+          ) : schools.length > 0 ? (
             <div className="flex flex-col gap-4">
-              {searchResults.map((result) => (
+              {schools.map((result) => (
                 <SearchResultCard
                   key={result.id}
                   schoolid={result.id}
@@ -130,6 +124,18 @@ const Univertities = () => {
               </span>
             </div>
           )}
+
+          <div className="mt-6 flex justify-end">
+            <Pagination
+              padding="p-0"
+              border=""
+              currentPage={page}
+              total={totalPages}
+              pageSize={pageSize}
+              totalItems={totalItems}
+              onPageSelected={handlePageSelected}
+            />
+          </div>
         </div>
       </div>
     </div>

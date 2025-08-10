@@ -15,5 +15,5 @@ export type MultipleItemsResponseType<T> = {
   page: number;
   data: T[];
   code: SUCCESS_CODE;
-  totalItems?: number;
+  totalItems: number;
 };

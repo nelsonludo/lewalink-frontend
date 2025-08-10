@@ -11,13 +11,37 @@ import { SUCCESS_CODE } from "../types/enums/error-codes";
 import { displayErrorToastBasedOnCode } from "../utils/display-error-toast-based-on-code";
 import { Payload, PayloadForm } from "../types/general";
 
-import { School } from "../types/entities/school";
+import { School, SchoolType } from "../types/entities/school";
 import { successToast } from "../utils/toasts";
 import { SchoolFormType } from "../types/forms";
 import { useDispatch } from "react-redux";
-import { setCurrentSchool, setSchools } from "../store/userHome.slice";
+import { setCurrentSchool } from "../store/userHome.slice";
+import { ProgramFieldType, ProgramType } from "../types/entities/program";
 
 const API_URL = "/api/school/v1";
+
+export enum OrderByType {
+  ASC = "asc",
+  DESC = "desc",
+}
+
+export type SchoolFilterType = {
+  name?: string;
+  type?: SchoolType;
+  programName?: string;
+  programMinPrice?: number;
+  programMaxPrice?: number;
+  city?: string;
+  country?: string;
+  orderByRating?: OrderByType;
+  orderByVisits?: OrderByType;
+  orderByDistance?: OrderByType;
+
+  longitude?: string;
+  latitude?: string;
+  programType?: ProgramType;
+  programField?: ProgramFieldType;
+};
 
 export const useSuperUserGetSchools = () => {
   const [loading, setLoading] = useState(false);
@@ -190,23 +214,33 @@ export const useSuperUserCreatesSchool = () => {
 //user Api's
 export const useUserGetSchools = () => {
   const [loading, setLoading] = useState(false);
-  const [schools, setCurrentSchools] = useState<School[]>([]);
-  const dispatch = useDispatch();
+  const [schools, setSchools] = useState<School[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
 
   const { axios } = useAxios();
 
-  const userGetSchools = async (payload: Payload) => {
+  const userGetSchools = async ({
+    filters,
+    page,
+    pageSize,
+  }: {
+    filters: SchoolFilterType;
+    page: number;
+    pageSize: number;
+  }) => {
     try {
       setLoading(true);
-      const { data } = await axios.get<SingleItemResponseType<School[]>>(
-        `${API_URL}/search`,
+      const { data } = await axios.get<MultipleItemsResponseType<School>>(
+        `${API_URL}/search?page=${page}&itemsPerPage=${pageSize}`,
         {
-          params: { ...payload },
+          params: { ...filters },
         }
       );
       if (data.code === SUCCESS_CODE.SUCCESS) {
-        setCurrentSchools(data.data);
-        dispatch(setSchools(data.data));
+        setSchools(data.data);
+        setTotalItems(data.totalItems);
+        setTotalPages(data.totalPages);
       }
     } catch (err) {
       const error = err as AxiosError<ErrorResponseType>;
@@ -220,7 +254,14 @@ export const useUserGetSchools = () => {
     }
   };
 
-  return { userGetSchools, loading, schools, setSchools };
+  return {
+    userGetSchools,
+    loading,
+    schools,
+    setSchools,
+    totalItems,
+    totalPages,
+  };
 };
 
 export const useUserGetSingleSchool = () => {
