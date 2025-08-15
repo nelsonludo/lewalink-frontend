@@ -32,6 +32,7 @@ import Univertities from "./pages/home/components/Univertities";
 import SecondarySchools from "./pages/home/components/SecondarySchools";
 import Program from "./pages/home/components/Program";
 import SchoolScreen from "./pages/home/components/School";
+import FavoritesSchoolsList from "./pages/home/components/FavoritesSchoolsList";
 
 const Router = () => {
   return (
@@ -43,6 +44,7 @@ const Router = () => {
         <Route path="/home" element={<Home />}>
           <Route index element={<Navigate to="universities" replace />} />
           <Route path="universities" element={<Univertities />} />
+          <Route path="favorites" element={<FavoritesSchoolsList />} />
           <Route path="universities/program/:id" element={<Program />} />
           <Route path="universities/school/:id" element={<SchoolScreen />} />
           <Route path="primary-schools" element={<PrimarySchools />} />
