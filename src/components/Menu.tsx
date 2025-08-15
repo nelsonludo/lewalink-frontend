@@ -1,4 +1,3 @@
-import { NavLink } from "react-router-dom";
 import {
   setdisplayMenu,
   userHomeInitialStateType,
@@ -84,14 +83,14 @@ const Menu = () => {
         >
           Primary schools
         </NavLink> */}
-        <div className="flex items-center text-sm">
-          {/* this image should render based on the language chosen once that's set up */}
+        {/* <div className="flex items-center text-sm">
+          {/* this image should render based on the language chosen once that's set up 
           <img src="/images/cameroun.png" alt="" className="w-4 h-4" />
           <select name="language" id="language">
             <option value="en">ENG</option>
             <option value="fr">FR</option>
           </select>
-        </div>
+        </div> */}
         <div className="relative" ref={profileMenuRef}>
           <button
             className="cursor-pointer flex flex-row gap-2 items-center"
