@@ -15,7 +15,10 @@ import { School, SchoolType } from "../types/entities/school";
 import { successToast } from "../utils/toasts";
 import { SchoolFormType } from "../types/forms";
 import { useDispatch } from "react-redux";
-import { setCurrentSchool } from "../store/userHome.slice";
+import {
+  setCurrentSchool,
+  setSchools as globalSetSchools,
+} from "../store/userHome.slice";
 import { ProgramFieldType, ProgramType } from "../types/entities/program";
 
 const API_URL = "/api/school/v1";
@@ -217,6 +220,7 @@ export const useUserGetSchools = () => {
   const [schools, setSchools] = useState<School[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
+  const dispatch = useDispatch();
 
   const { axios } = useAxios();
 
@@ -241,6 +245,7 @@ export const useUserGetSchools = () => {
         setSchools(data.data);
         setTotalItems(data.totalItems);
         setTotalPages(data.totalPages);
+        dispatch(globalSetSchools(data.data));
       }
     } catch (err) {
       const error = err as AxiosError<ErrorResponseType>;

@@ -45,6 +45,15 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ show, setShow }) => {
           </NavLink>
         </li>
         <li>
+          <NavLink
+            to="/home/favorites"
+            className="block px-4 py-2 hover:bg-gray-100"
+            onClick={() => setShow(false)}
+          >
+            Favorites
+          </NavLink>
+        </li>
+        <li>
           <button
             className="w-full text-left px-4 py-2 hover:bg-gray-100"
             onClick={() => {
